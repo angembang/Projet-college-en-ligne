@@ -1,4 +1,8 @@
 <?php
+
+// Strict type declaration
+declare(strict_types=1);
+
 /**
  * Defines a collegian in the platform.
  */
@@ -58,6 +62,14 @@ class Collegian
         int $idLanguage,
         int $idRole
     ) {
+        // Check provided values
+        $this->ensureIsEmptyFirstName($firstName);
+        $this->ensureIsEmptyLastName($lastName);
+        $this->ensureIsValidEmail($email);
+        $this->ensureIsValidPassword($password);
+        $this->ensureIsValidRole($idRole);
+        
+        // Initialization of properties
         $this->id = $id;
         $this->firstName = $firstName;
         $this->lastName = $lastName;
@@ -66,6 +78,103 @@ class Collegian
         $this->idClass = $idClass;
         $this->idLanguage = $idLanguage;
         $this->idRole = $idRole;
+    }
+    
+    /**
+     * Creates a new collegian instance with valid attributes.
+     *
+     * @param string $firstName The first name of the collegian.
+     * @param string $lastName The last name of the collegian.
+     * @param string $email The email address of the collegian.
+     * @param string $password The password of the collegian.
+     * @param int $idRole The identifier of the role of the collegian.
+     *
+     * @return Collegian The created collegian instance.
+     */
+    public static function ensureIsValidCollegian(string $firstName, string $lastName, string $email, string $password, int $idClass, int $idLanguage, int $idRole): self
+    {
+        return new self(null, $firstName, $lastName, $email, $password, $idClass, $idLanguage, $idRole);
+    }
+    
+    /**
+     * Ensures that the first name is not empty.
+     *
+     * @param string $firstName The first name to be checked.
+     *
+     * @throws InvalidArgumentException If the first name is empty.
+     */
+    private function ensureIsEmptyFirstName(string $firstName): void
+    {
+        if (empty($firstName)) {
+            throw new InvalidArgumentException("FirstName can not be empty");
+        }
+    }
+    
+    /**
+     * Ensures that the last name is not empty.
+     *
+     * @param string $lastName The last name to be checked.
+     *
+     * @throws InvalidArgumentException If the last name is empty.
+     */
+    private function ensureIsEmptyLastName(string $lastName): void
+    {
+        if (empty($lastName)) {
+            throw new InvalidArgumentException("LastName can not be empty");
+        }
+    }
+    
+    /**
+     * Ensures the validity of the email address.
+     *
+     * @param string $email The email address to be checked.
+     *
+     * @throws InvalidArgumentException If the email address is not valid.
+     */
+    private function ensureIsValidEmail(string $email): void
+    {
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            throw new InvalidArgumentException(
+                sprintf(
+                    '"%s" is not a valid email address',
+                    $email
+                )
+            );
+        }
+    }
+    
+    /**
+     * Ensures the validity of the password.
+     *
+     * @param string $password The password to be checked.
+     *
+     * @throws InvalidArgumentException If the password is not valid.
+     */
+    private function ensureIsValidPassword(string $password): void
+    {
+        if (
+            strlen($password) < 8 ||
+            !preg_match('/[0-9]/', $password) ||
+            !preg_match('/[A-Z]/', $password) ||
+            !preg_match('/[^a-zA-Z0-9]/', $password)
+        ) {
+            throw new InvalidArgumentException("The password must contain a minimum of 8 characters: at least one capital letter, at least one number, and at least one special character");
+        }
+    }
+    
+    /**
+     * Ensures the validity of the role.
+     *
+     * @param int $idRole The identifier of the role to be checked.
+     *
+     * @throws InvalidArgumentException If the role is not valid.
+     */
+    private function ensureIsValidRole(int $idRole): void
+    {
+        if ($idRole !== 4) {
+            throw new InvalidArgumentException("The collegian role must be user");
+        }
+        
     }
 
     /**

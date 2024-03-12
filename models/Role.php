@@ -4,7 +4,7 @@
 declare(strict_types=1);
 
 /**
- * Represents a role in the platform.
+ * Defines a role in the platform.
  */
 class Role
 {
@@ -28,7 +28,7 @@ class Role
     {
         // Check provided values
         $this->ensureIsEmptyName($name);
-
+        // Initialization of properties
         $this->id = $id;
         $this->name = $name;
     }
