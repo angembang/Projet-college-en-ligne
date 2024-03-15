@@ -2,7 +2,7 @@
 
 /**
  * Class RoleManager
- * Manages the retrieval and persistence of Role objects in the database.
+ * Manages the retrieval and persistence of Role object in the database.
  */
 class RoleManager extends AbstractManager
 {
@@ -18,9 +18,9 @@ class RoleManager extends AbstractManager
         // Prepare the SQL query to insert a new role into the database
         $query = $this->db->prepare("INSERT INTO roles (name) VALUES (:name)");
 
-        // Bind the parameters
+        // Bind parameters
         $parameters = [
-            ":name" => $role->getName(),
+            ":name" => $role->getName()
         ];
         
         // Execute the query
@@ -87,7 +87,9 @@ class RoleManager extends AbstractManager
         $query = $this->db->prepare("SELECT * FROM roles WHERE id = :id");
 
         // Bind the parameters
-        $parameters = [":id" => $roleId];
+        $parameters = [
+            ":id" => $roleId
+            ];
 
         // Execute the query
         $query->execute($parameters);

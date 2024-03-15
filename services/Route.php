@@ -13,6 +13,16 @@ class Router
      */
     public function handleRequest(array $get): void
     {
-        
+        if(isset($get["routde"]))
+        {
+            if($get["route"] === "inscription")
+            {
+                
+            }
+        } else
+        {
+            header("Location: home.html.twig");
+            die;
+        }
     }
 }

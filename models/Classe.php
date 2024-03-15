@@ -7,15 +7,12 @@ class Classe
 {
     /** @var int The unique identifier of the classe. 
     */
-    private int $id;
+    private ?int $id;
 
     /** @var string The level of the classe. 
     */
     private string $level;
 
-    /** @var int The unique identifier of the language associated with the classe. 
-    */
-    private int $idLanguage;
 
     /**
      * Constructor for the Class classe.
@@ -24,11 +21,10 @@ class Classe
      * @param string $level The level of the class.
      * @param int $idLanguage The unique identifier of the language associated with the classe.
      */
-    public function __construct(int $id, string $level, int $idLanguage)
+    public function __construct(?int $id, string $level)
     {
         $this->id = $id;
         $this->level = $level;
-        $this->idLanguage = $idLanguage;
     }
 
     /**
@@ -71,23 +67,4 @@ class Classe
         $this->level = $level;
     }
 
-    /**
-     * Get the unique identifier of the language associated with the classe.
-     *
-     * @return int The unique identifier of the language associated with the classe.
-     */
-    public function getIdLanguage(): int
-    {
-        return $this->idLanguage;
-    }
-
-    /**
-     * Set the unique identifier of the language associated with the classe.
-     *
-     * @param int $idLanguage The unique identifier of the language associated with the classe.
-     */
-    public function setIdLanguage(int $idLanguage): void
-    {
-        $this->idLanguage = $idLanguage;
-    }
 }
