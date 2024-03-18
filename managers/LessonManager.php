@@ -246,6 +246,51 @@ class LessonManager extends AbstractManager
     
     
     /**
+     * Retrieves lessons by their week day.
+     *
+     * @param string $weekDay The day of the week (e.g., "Monday", "Tuesday").
+     *
+     * @return array|null The retrieved lessons or null if not found.
+     */
+    public function findLessonsByWeekDay(string $weekDay): ?array
+    {
+        $query = $this->db->prepare("SELECT * FROM lessons 
+        JOIN timeTables ON lessons.idTimeTable = timeTables.id 
+        WHERE timeTables.weekDay = :weekDay");
+    
+        // Bind parameters
+        $parameters = [
+            ":weekDay" => $weekDay
+        ];
+
+        $query->execute($parameters);
+
+        $lessonsData = $query->fetchAll(PDO::FETCH_ASSOC);
+
+        if($lessonsData)
+        {
+            $lessons = [];
+
+            foreach($lessonsData as $lessonData)
+            {
+                $lesson = new Lesson(
+                    $lessonData["id"],
+                    $lessonData["name"],
+                    $lessonData["idClass"],
+                    $lessonData["idTeacher"],
+                    $lessonData["idTimeTable"]
+                );
+                $lessons[] = $lesson;
+            }
+
+            return $lessons;
+        }
+        // No lessons found for the given day
+        return null;
+    }
+    
+    
+    /**
      * Updates a lesson in the database.
      *
      * @param Lesson $lesson The lesson to be updated.
