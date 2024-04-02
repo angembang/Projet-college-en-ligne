@@ -1,0 +1,15 @@
+/* register form*/
+.firstNameField,
+.lastNameField,
+.emailField,
+.passwordField,
+.confirmPasswordField,
+.idClassField,
+.idLanguageField{
+    display: none;
+}
+
+/* login form */
+.alert-message {
+    display: none;
+}
