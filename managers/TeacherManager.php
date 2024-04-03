@@ -8,11 +8,11 @@ class TeacherManager extends AbstractManager
     /**
      * Creates a teacher and persists him in the database.
      *
-     * @param Teacher|null $teacher The teacher object to be created.
+     * @param Teacher $teacher The teacher object to be created.
      *
      * @return teacher The created teacher object with the assigned identifier.
      */
-    public function createTeacher(?Teacher $teacher): Teacher
+    public function createTeacher(Teacher $teacher): Teacher
     {
         
         // Prepare the SQL query to insert a new teacher into the database
@@ -116,6 +116,53 @@ class TeacherManager extends AbstractManager
         }
         // teacher not found
         return null;
+    }
+    
+    
+    /**
+     * Retrieves all teachers from the database
+     * 
+     * @return array|null An array of teacher object representing all teachers store into the database, or null if no teacher is found
+     *
+     */
+    public function findAll(): ?array
+    {
+        // Prepare SQL query to select all teachers
+        $query = $this->db->prepare("SELECT * FROM teachers");
+        
+        // Execute the query
+        $query->execute();
+        
+        // Fetch teachers data from the database
+        $teachersData = $query->fetchAll(PDO::FETCH_ASSOC);
+        
+        // Check if teachers data is not empty
+        if($teachersData)
+        {
+            $teachers = [];
+            
+            // Loop through each teacher data
+            foreach($teachersData as $teacherData)
+            {
+                // Create a teacher object for each teacher data
+                $teacher = new Teacher(
+                    $teacherData["id"],
+                    $teacherData["firstName"],
+                    $teacherData["lastName"],
+                    $teacherData["email"],
+                    $teacherData["password"],
+                    $teacherData["idRole"]
+                    );
+                    
+                    // Add the created teacher object to the teachers array
+                    $teachers[] = $teacher;
+            }
+            // Return the array of teacher objects
+            return $teachers;
+        }
+        // Return null if no teachers are found
+        return null;
+        
     }
     
     
