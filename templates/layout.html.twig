@@ -1,19 +1,25 @@
 <!DOCTYPE html>
 <html lang="fr">
     <heead>
+        <!-- Document metadata -->
         <meta charset="UTF-8">
         <meta name ="viewport" content="width=device-width, initial-scale=1.0">
+        <!-- External stylesheet -->
         <link rel="stylesheet" href="./assets/styles/css/style.css" />
+        <!-- TinyMCE script for rich text editing -->
         <script src="https://cdn.tiny.cloud/1/tezye03wmjsy94ybj3g8ccpeytbwk52p08mdwxp73zvujffe/tinymce/7/tinymce.min.js" referrerpolicy="origin"></script>
     </heead>
     <body>
         <header>
+            <!-- Header content block -->
             {% block header %} {% endblock %}
         </header>
         <main>
+            <!-- Main content block -->
             {% block main %} {% endblock %}
         </main>
         <footer>
+            <!-- Footer content block -->
             {% block footer %} {% endblock %}
         </footer>
         
