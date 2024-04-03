@@ -1,0 +1,26 @@
+{% extends "layout.html.twig" %}
+
+{% block header %}
+
+{% endblock %}
+
+{% block main %}
+
+<h1>Cours du jour</h1>
+{% for classLevel, lessons in lessonsByClass %}
+    <h2>{{ classLevel }}</h2>
+    <ul>
+        {% for lesson in lessons %}
+            <li>
+                <p>{{ lesson.name }}</p>
+                <a href="index.php?route=cours&lesson_id={{ lesson.id }}" 
+                class="lesson-link" data-remaining-time=
+                "{{ remainsTimeByLesson[lesson.id] }}"></a>
+            </li>
+        {% endfor %}
+    </ul>
+{% endfor %}
+
+<script type="module" src="./assets/js/main.js"></script>
+
+{% endblock %}
