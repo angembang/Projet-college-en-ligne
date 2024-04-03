@@ -18,7 +18,6 @@ class AuthLoginController extends AbstractController
     public function checkLogin() : void
     {
         if($_SERVER["REQUEST_METHOD"] === "POST") {
-            
             // Check if required fields are set
             if(isset($_POST["email"]) && isset($_POST["password"])) {
                 
@@ -52,7 +51,6 @@ class AuthLoginController extends AbstractController
                     
                     // Check if any user is found
                     if($principal || $teacherReferent || $teacher || $collegian) {
-                        
                         // Get the password of the user retrieve into the database
                         $user = $principal ?? $teacherReferent ?? $teacher ?? $collegian;
                         $userPassword = $user->getPassword();
@@ -71,7 +69,6 @@ class AuthLoginController extends AbstractController
                             
                             // Redirection based on the user's role
                             switch ($roleName) {
-                                
                                 case "Principal":
                                     $_SESSION["user"] = $principal->getId();
                                     $this->renderJson(["success" => true, "role" => "Principal"]);
@@ -94,7 +91,6 @@ class AuthLoginController extends AbstractController
                             }
                             
                         } else {
-                            
                             // Password not match | Show error message
                             $this->renderJson(["error" => "Mot de passe incorrect"]);
                             
@@ -103,7 +99,6 @@ class AuthLoginController extends AbstractController
                     
                         
                     } else {
-                        
                         // user not found | Show error message
                         $this->renderJson(["error" => "Pas de compte avec cet email"]);
                     }
@@ -116,7 +111,6 @@ class AuthLoginController extends AbstractController
                 
                 
             } else {
-                
                 // Missing informations
                 $this->renderJson(["error" => "Veuillez renseigner tous les champs"]);
                 
@@ -124,7 +118,6 @@ class AuthLoginController extends AbstractController
              
         
          } else {
-             
              // Form not submitted via POST method
              $_SESSION["error-message"] = "Le formulaire n'est pas soumis par la méthode POST";
             $this->render("login.html.twig", []);
