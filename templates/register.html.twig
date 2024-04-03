@@ -1,0 +1,102 @@
+{% extends "layout.html.twig" %}
+
+{% block main %}
+    
+    <h1>Inscription</h1>
+    
+    {% if error_message is defined %}
+        <section class="alert-message">
+            <h2>{{error_message}}</h2>
+            <button type="button" class="close-btn-error">Fermer</button>
+        </section>
+    {% endif %}
+    
+    <!-- Registration Form -->
+    <form action = "index.php?route=checkRegister" method = "post">
+        <fieldset>
+            
+            <!-- Token field -->
+            <input type="hidden" name="csrf-token" id="csrf-token" value="{{ csrf_token }}" />
+            
+            <!-- Role selection field -->
+            <fieldset id="role">
+                <label for="idRole">Role :</label>
+                <select id="idRole" name="idRole">
+                    <option value="" disabled selected>Choisissez un rôle</option>
+                    <!-- Loop to display role selection options -->
+                    {% for role in roles %}
+                        <option value="{{ role.id }}">
+                            {{ role.name }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </fieldset>
+                
+            <!-- First name field (displayed based on selected role) -->
+            <fieldset class="firstNameField">
+                <label for="firstName">Prénom :</label>
+                <input type="text" id="firstName" name="firstName">
+            </fieldset>
+            
+            <!-- Last name field (displayed based on selected role) -->
+            <fieldset class="lastNameField">
+                <label for="lastName">Nom :</label>
+                <input type="text" id="lastName" name="lastName">
+            </fieldset>
+            
+            <!-- Email field (displayed based on selected role) -->
+            <fieldset class="emailField">
+                <label for="email">Email :</label>
+                <input type="email" id="email" name="email">
+            </fieldset>
+            
+            <!-- Password field (displayed based on selected role) -->
+            <fieldset class="passwordField">
+                <label for="password">Mot de passe :</label>
+                <input type="password" id="password" name="password">
+            </fieldset>
+            
+            <!-- Confirm password field (displayed based on selected role) -->
+            <fieldset class="confirmPasswordField">
+                <label for="confirmPassword">Confirmer le mot de passe :</label>
+                <input type="password" id="confirmPassword" name="confirmPassword">
+            </fieldset>
+            
+            <!-- Class field (displayed based on selected role) -->
+            <fieldset class="idClassField">
+                <label for="idClass">Classe :</label>
+                <select id="idClass" name="idClass">
+                    <option value="" disabled selected>Choisissez une classe</option>
+                    <!-- Loop to display class selection options -->
+                    {% for classe in classes %}
+                        <option value="{{ classe.getId() }}">
+                            {{ classe.getLevel() }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </fieldset>
+            
+            <!-- Language field (displayed based on selected role) -->
+            <fieldset class="idLanguageField">
+                <label for="idLanguage">Langue :</label>
+                <select id="idLanguage" name="idLanguage">
+                    <option value="" disabled selected>Choisissez une langue</option>
+                    <!-- Loop to display language selection options -->
+                    {% for language in languages %}
+                        <option value="{{ language.getId() }}">
+                            {{ language.getName() }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </fieldset>
+            
+            <!-- Registration button -->
+            <button type="submit" id="submitButton">S'inscrire</button>
+            
+        </fieldset>
+        
+    </form>
+    
+    <script type="module" src="./assets/js/main.js"></script>
+
+{% endblock %}
