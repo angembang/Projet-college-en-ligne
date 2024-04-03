@@ -1,0 +1,68 @@
+<!-- Extends the layout.html.twig  template to the page -->
+{% extends "layout.html.twig" %}
+
+
+{% block main %}
+
+    
+    <h1>Ajout des cours</h1>
+    
+    <!-- Add lesson form -->
+    <form action="index.php?route=checkAddLesson" method="post">
+        
+        <fieldset>
+            
+            <!-- The lesson name field  -->
+            <fieldset>
+                <label for="name">Nom du cours:</label>
+                <input type="text" id="name" name="name">
+            </fieldset>
+            
+            <!-- The classe field  -->
+            <fieldset>
+                <label for="idClass">Classe :</label>
+                <select id="idClass" name="idClass">
+                    <!-- loop to display classe selection options -->
+                    {% for lesson in lessons %}
+                        <option value ="{{classe.getId()}}">
+                            {{ classe.getLevel }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </fieldset>
+            
+            <!-- The teacher fiel -->
+            <fieldset>
+                <label for="idTeacher">Professeur :</label>
+                <select id="idTeacher" name="idTeacher">
+                    <!-- Loop to display teacher selection optiobs -->
+                    {% for teacher in teachers %}
+                        <option value = "{{ teacher.getId() }}">
+                            {{ teacher.getFirstName() }} 
+                            {{ teacher.getLastName }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </fieldset>
+            
+            <!-- the timeTable field -->
+            <fieldset>
+                <label for="idTimeTable">Horaire :</label>
+                <select id="idTimeTable" name="idTimeTable">
+                    <!-- Loop to display timeTable selection options -->
+                    {% for timeTable in timesTables %}
+                        <option value = "{{ timeTable.getId() }}">
+                            {{ timeTable.getWeekDay() }} 
+                            {{ timeTable.getStartTime() }} 
+                            {{ timeTable.getEndTime() }}
+                        </option>
+                </select>
+            </fieldset>
+        
+        </fieldset>
+        
+        <!-- Registration button -->
+        <button type="submit" value="Submit">Ajouter</button>
+    
+    </form>
+{% endblock %}

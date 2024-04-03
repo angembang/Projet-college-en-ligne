@@ -1,0 +1,22 @@
+{% extends "layout.html.twig" %}
+
+{% block header %}
+
+{% endblock %}
+
+{% block main %}
+
+    <h1>{{ lessonName }}</h1>
+        <section>
+        {% for course in courses %}
+            <h2>{{ course.subject }}</h2>
+            <img src ="{{ course.image }}" alt ="" >
+            <div>{{ course.content }}</div>
+            <aside>
+                <p>{{ course.summary }}</p>
+            </aside>
+        </section>    
+        {% endfor %}
+    </ul>
+
+{% endblock %}

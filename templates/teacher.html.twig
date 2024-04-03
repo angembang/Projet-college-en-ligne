@@ -1,0 +1,21 @@
+{% extends "layout.html.twig" %}
+
+{% block main %}
+    
+    <h1>Professeurs</h1>
+    <ul>
+        {% for teacher in teachers %}
+            <li>{{teacher.firstName}}  {{teacher.lastName}}</li>
+        {% endfor %}
+    </ul>
+    
+     <h1>Professeurs référents</h1>
+     <ul>
+        {% for teacherReferent in teachersReferents %}
+            <li>{{teacherReferent.firstName}} {{teacherReferent.lastName}}</li>
+        {% endfor %}
+    </ul>
+    
+    
+        
+{% endblock %}
