@@ -11,9 +11,24 @@ class TeacherReferent
     private ?int $id;
 
     /**
-     * @var int The unique identifier of the teacher.
+     * @var string The first name of the teacherReferent.
      */
-    private int $idTeacher;
+    private string $firstName;
+
+    /**
+     * @var string The last name of the teacherReferent.
+     */
+    private string $lastName;
+
+    /**
+     * @var string The email of the teacherReferent.
+     */
+    private string $email;
+
+    /**
+     * @var string The password of the teacherReferent.
+     */
+    private string $password;
 
     /**
      * @var int The unique identifier of the class.
@@ -29,14 +44,20 @@ class TeacherReferent
      * TeacherReferent constructor.
      *
      * @param int|null $id The unique identifier of the teacherReferent. 
-     * @param int $idTeacher The unique identifier of the teacher.
+     * @param string $firstName The first name of the teacherReferent.
+     * @param string $lastName The last name of the teacherReferent.
+     * @param string $email The email of the teacherReferent.
+     * @param string $password The password of the teacherReferent.
      * @param int $idClass The unique identifier of the class.
      * @param int $idRole The role ID of the teacherReferent.
      */
-    public function __construct(?int $id, int $idTeacher, int $idClass, int $idRole)
+    public function __construct(?int $id, string $firstName, string $lastName, string $email, string $password, int $idClass, int $idRole)
     {
         $this->id = $id;
-        $this->idTeacher = $idTeacher;
+        $this->firstName = $firstName;
+        $this->lastName = $lastName;
+        $this->email = $email;
+        $this->password = $password;
         $this->idClass = $idClass;
         $this->idRole = $idRole;
     }
@@ -62,23 +83,83 @@ class TeacherReferent
     }
 
     /**
-     * Get the unique identifier of the teacher.
+     * Get the first name of the teacherReferent.
      *
-     * @return int The unique identifier of the teacher.
+     * @return string The first name of the teacherReferent.
      */
-    public function getIdTeacher(): int
+    public function getFirstName(): string
     {
-        return $this->idTeacher;
+        return $this->firstName;
     }
 
     /**
-     * Set the unique identifier of the teacher.
+     * Set the first name of the teacherReferent.
      *
-     * @param int $idTeacher The unique identifier of the teacher.
+     * @param string $firstName The first name of the teacherReferent.
      */
-    public function setIdTeacher(int $idTeacher): void
+    public function setFirstName(string $firstName): void
     {
-        $this->idTeacher = $idTeacher;
+        $this->firstName = $firstName;
+    }
+
+    /**
+     * Get the last name of the teacherReferent.
+     *
+     * @return string The last name of the teacherReferent.
+     */
+    public function getLastName(): string
+    {
+        return $this->lastName;
+    }
+
+    /**
+     * Set the last name of the teacherReferent.
+     *
+     * @param string $lastName The last name of teacherReferent.
+     */
+    public function setLastName(string $lastName): void
+    {
+        $this->lastName = $lastName;
+    }
+
+    /**
+     * Get the email of the teacherReferent.
+     *
+     * @return string The email of the teacherReferent.
+     */
+    public function getEmail(): string
+    {
+        return $this->email;
+    }
+
+    /**
+     * Set the email of the teacherReferent.
+     *
+     * @param string $email The email of the teacherReferent.
+     */
+    public function setEmail(string $email): void
+    {
+        $this->email = $email;
+    }
+
+    /**
+     * Get the password of the teacherReferent.
+     *
+     * @return string The password of the teacherReferent.
+     */
+    public function getPassword(): string
+    {
+        return $this->password;
+    }
+
+    /**
+     * Set the password of the teacherReferent.
+     *
+     * @param string $password The password of the teacherReferent.
+     */
+    public function setPassword(string $password): void
+    {
+        $this->password = $password;
     }
 
     /**

@@ -8,11 +8,11 @@ class CollegianManager extends AbstractManager
     /**
      * Creates a new collegian and persists him in the database.
      *
-     * @param Collegian|null $collegian The collegian object to be created.
+     * @param Collegian $collegian The collegian object to be created.
      *
      * @return Collegian The created collegian object with the assigned identifier.
      */
-    public function createCollegian(?Collegian $collegian): Collegian
+    public function createCollegian(Collegian $collegian): Collegian
     {
         
         // Prepare the SQL query to insert a new collegian into the database

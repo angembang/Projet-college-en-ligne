@@ -8,11 +8,11 @@ class PrincipalManager extends AbstractManager
     /**
      * Creates a principal and persists him in the database.
      *
-     * @param Principal|null $principal The principal object to be created.
+     * @param Principal $principal The principal object to be created.
      *
      * @return principal The created principal object with the assigned identifier.
      */
-    public function createPrincipal(?Principal $principal): Principal
+    public function createPrincipal(Principal $principal): Principal
     {
         
         // Prepare the SQL query to insert a new principal into the database
@@ -26,7 +26,7 @@ class PrincipalManager extends AbstractManager
             ":lastName" => $principal->getLastName(),
             ":email" => $principal->getEmail(),
             ":password" => $principal->getPassword(),
-            ":idRole" => $principal->getIdRole()
+            ":idRole" => $principal->getIdRole(),
             ];
             
         // Execute the query

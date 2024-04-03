@@ -8,11 +8,11 @@ class ClasseManager extends AbstractManager
     /**
      * Creates a new classe and persists its in the database.
      *
-     * @param Classe|null $classe The classe object to be created.
+     * @param Classe $classe The classe object to be created.
      *
      * @return Classe The created classe object with the assigned identifier.
      */
-    public function createClasse(?Classe $classe): Classe
+    public function createClasse(Classe $classe): Classe
     {
         
         // Prepare the SQL query to insert a new classe into the database
@@ -105,6 +105,49 @@ class ClasseManager extends AbstractManager
         // classe not found
         return null;
     }
+    
+    
+    /**
+     * Retrieves all classes from the database.
+     *
+     * @return array|null An array of Classe objects representing all classes stored in the database, or null if no classes is found.
+     */
+    public function findAll(): ?array
+    {
+        // Prepare SQL query to select all classes
+        $query = $this->db->prepare("SELECT * FROM classes");
+    
+        // Execute the query
+        $query->execute();
+    
+        // Fetch classes data from the database
+        $classesData = $query->fetchAll(PDO::FETCH_ASSOC);
+    
+        // Check if classes data is not empty
+        if($classesData)
+        {
+            $classes = [];
+        
+            // Loop through each class data
+            foreach($classesData as $classData)
+            {
+                // Create a Classe object for each class data
+                $classe = new Classe(
+                    $classData["id"],
+                    $classData["level"]
+                );
+            
+                // Add the created Classe object to the classes array
+                $classes[] = $classe;
+            }
+        
+            // Return the array of Classe objects
+            return $classes;
+        }
+    
+    // Return null if no classes are found
+    return null;
+}
     
     
 }

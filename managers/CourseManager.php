@@ -8,30 +8,24 @@ class CourseManager extends AbstractManager
     /**
      * Creates a new course of a lesson and persists its in the database.
      *
-     * @param Course|null $course The course object to be created.
+     * @param Course $course The course object to be created.
      *
      * @return Course The created course object with the assigned identifier.
      */
-    public function createCourse(?Course $course): Course
+    public function createCourse(Course $course): Course
     {
         
         // Prepare the SQL query to insert a new course into the database
         $query = $this->db->prepare("INSERT INTO courses 
-        (idLesson, unlockDate, subject, summary, content, images, audio, video, fichierPDF, link) 
-        VALUES (:idLesson, :unlockDate, :subject, :summary, :content, :images, :audio, :video, :fichierPDF, :link)");
+        (idLesson, unlockDate, subject, content) 
+        VALUES (:idLesson, :unlockDate, :subject, :content)");
         
         // Bind the parameters
         $parameters = [
             ":idLesson" => $course->getIdLesson(),
             ":unlockednlockDate" => $course->getUnlockDate(),
             ":subject" => $course->getSubject(),
-            ":summary" => $course->getSummary(),
-            ":content" => $course->getContent(), 
-            ":images" => $course->getImages(),
-            ":audio" => $course->getAudio(),
-            ":video" => $course->getVideo(),
-            ":fichierPDF" => $course->getFichierPDF(),
-            ":link" => $course->getLink()
+            ":content" => $course->getContent()
             ];
             
         // Execute the query
@@ -50,23 +44,23 @@ class CourseManager extends AbstractManager
     
     
     /**
-     * Retrieves Courses by their lessonName.
+     * Retrieves Courses by their lesson unique identifier.
      *
-     * @param string $courseLessonName The lesson name of the course.
+     * @param int $courseLessonId The lesson identifier of the course.
      *
      * @return Array|null Retrieved courses or null if not found.
      */
-    public function findCoursesByLessonName(int $courseLessonId): ?array
+    public function findCoursesByLessonId(int $courseLessonId): ?array
     {
         $query = $this->db->prepare("SELECT courses.*, lessons.* 
         FROM courses
         JOIN lessons 
-        ON idLesson = lessons.id 
-        WHERE id = :id");
+        ON courses.IdLesson = lessons.id 
+        WHERE idLesson = :idLesson");
         
         // Bind parameters
         $parameters = [
-            ":id" => $courseLessonName
+            ":idLesson" => $courseLessonId
             ];
         
         $query->execute($parameters);
@@ -75,22 +69,16 @@ class CourseManager extends AbstractManager
         
         if($coursesData)
         {
-            $course = [];
+            $courses = [];
             
-            foreach($coursesData as $courseDate)
+            foreach($coursesData as $courseData)
             {
                 $course = new Course(
-                    $courseData["id"],
-                    $courseData["IdLesson"],
-                    $courseData["unlockDate"],
-                    $courseData["subject"],
-                    $courseData["summary"],
-                    $courseData["content"],
-                    $courseData["images"],
-                    $courseData["audio"],
-                    $courseData["video"],
-                    $courseData["fichierPDF"],
-                    $courseData["link"],
+                $courseData["id"],
+                $courseData["idLesson"],
+                $courseData["unlockDate"],
+                $courseData["subject"],
+                $courseData["content"]
                 );
                 $courses[] = $course;
             }
@@ -129,13 +117,7 @@ class CourseManager extends AbstractManager
                 $courseData["IdLesson"],
                 $courseData["unlockDate"],
                 $courseData["subject"],
-                $courseData["summary"],
-                $courseData["content"],
-                $courseData["images"],
-                $courseData["audio"],
-                $courseData["video"],
-                $courseData["fichierPDF"],
-                $courseData["link"],
+                $courseData["content"]
                 );
                 
             return $course;
@@ -172,13 +154,7 @@ class CourseManager extends AbstractManager
                 $courseData["IdLesson"],
                 $courseData["unlockDate"],
                 $courseData["subject"],
-                $courseData["summary"],
-                $courseData["content"],
-                $courseData["images"],
-                $courseData["audio"],
-                $courseData["video"],
-                $courseData["fichierPDF"],
-                $courseData["link"],
+                $courseData["content"]
                 );
                 
             return $course;
@@ -215,13 +191,7 @@ class CourseManager extends AbstractManager
                 $courseData["IdLesson"],
                 $courseData["unlockDate"],
                 $courseData["subject"],
-                $courseData["summary"],
-                $courseData["content"],
-                $courseData["images"],
-                $courseData["audio"],
-                $courseData["video"],
-                $courseData["fichierPDF"],
-                $courseData["link"],
+                $courseData["content"]
                 );
                 
             return $course;
@@ -247,14 +217,7 @@ class CourseManager extends AbstractManager
             SET idLesson = :idLesson,
             unlockDate = :unlockDate,
             subject = :subject,
-            summary = :summary,
-            content = :content,
-            images = :images,
-            audio = :audio,
-            video = :video,
-            fichierPDF = :fichierPDF,
-            link = :link
-            WHERE subject = :subject");
+            content = :content");
 
         // Bind parameters with their values
         $parameters = [
@@ -262,14 +225,8 @@ class CourseManager extends AbstractManager
             ":idLesson" => $course->getIdLesson(),
             ":unlockDate" => $course->getUnlockDate(),
             ":subject" => $course->getSubject(),
-            ":summary" => $course->getSummary(),
             ":content" => $course->getContent(),
-            ":images" => $course->getImages(),
-            ":audio" => $course->getAudio(),
-            ":video" => $course->getVideo(),
-            ":fichierPDF" => $course->getFichierPDF(),
-            ":link" => $course->getLink()
-        ];
+            ];
 
         // Execute the query with parameters
        $success = $query->execute($parameters);

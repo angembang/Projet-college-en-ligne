@@ -6,23 +6,26 @@
 class TeacherReferentManager extends AbstractManager
 {
     /**
-     * Creates a teacherReferent and persists him in the database.
+     * Creates a teacher referent and persists him in the database.
      *
-     * @param TeacherReferent|null $teacherReferent The teacherReferent object to be created.
+     * @param TeacherReferent $teacherReferent The teacherReferent object to be created.
      *
      * @return teacherReferent The created teacherReferent object with the assigned identifier.
      */
-    public function createTeacherReferent(?TeacherReferent $teacherReferent): TeacherReferent
+    public function createTeacherReferent(TeacherReferent $teacherReferent): TeacherReferent
     {
         
-        // Prepare the SQL query to insert a new teacherReferent into the database
+        // Prepare the SQL query to insert a new teacher into the database
         $query = $this->db->prepare("INSERT INTO teachersReferents 
-        (idTeacher, idClass, idRole) 
-        VALUES (:idTeacher, :idClass, :idRole)");
+        (firstName, lastName, email, password, idClass, idRole) 
+        VALUES (:firstName, :lastName, :email, :password, :idClass, :idRole)");
         
         // Bind the parameters
         $parameters = [
-            ":idTeacher" => $teacherReferent->getIdTeacher(),
+            ":firstName" => $teacherReferent->getFirstName(),
+            ":lastName" => $teacherReferent->getLastName(),
+            ":email" => $teacherReferent->getEmail(),
+            ":password" => $teacherReferent->getPassword(),
             ":idClass" => $teacherReferent->getIdClass(),
             ":idRole" => $teacherReferent->getIdRole()
             ];
@@ -33,7 +36,7 @@ class TeacherReferentManager extends AbstractManager
         // Retrieve the last inserted identifier
         $teacherReferentId = $this->db->lastInsertId();
         
-        // Set the identifier for the created teacherReferent
+        // Set the identifier for the created teacher
         $teacherReferent->setId($teacherReferentId);
         
         // Return the created teacherReferent object
@@ -78,23 +81,19 @@ class TeacherReferentManager extends AbstractManager
     
     
     /**
-     * Retrieves a teacherReferent by his idTeacher.
+     * Retrieves a teacher referent by his email.
      *
-     * @param String $teacherReferentIdTeacher The idTeacher of the teacherReferent.
+     * @param String $teacherReferentEmail The email of the teacherReferent.
      *
      * @return TeacherReferent|null The retrieved teacherReferent or null if not found.
      */
-    public function findTeacherReferentByIdTeacher(int $teacherReferentIdTeacher): ?TeacherReferent
+    public function findTeacherReferentByEmail(string $teacherReferentEmail): ?TeacherReferent
     {
-        $query = $this->db->prepare("SELECT teachersReferents.*, teachers.* 
-        FROM teachersReferents 
-        JOIN teachers
-        ON idTeacher = teachers.id
-        WHERE id = :id");
+        $query = $this->db->prepare("SELECT * FROM teachersReferents WHERE email = :email");
         
         // Bind parameters
         $parameters = [
-            ":id" => $teacherReferentIdTeacher
+            ":email" => $teacherReferentEmail
             ];
         
         $query->execute($parameters);
@@ -105,7 +104,10 @@ class TeacherReferentManager extends AbstractManager
         {
             $teacherReferent = new TeacherReferent(
                 $teacherReferentData["id"],
-                $teacherReferentData["idTeacher"],
+                $teacherReferentData["firstName"],
+                $teacherReferentData["lastName"],
+                $teacherReferentData["email"],
+                $teacherReferentData["password"],
                 $teacherReferentData["idClass"],
                 $teacherReferentData["idRole"]
                 );
@@ -156,6 +158,56 @@ class TeacherReferentManager extends AbstractManager
         // teacherReferent not found
         return null;
     }
+    
+    
+     /**
+     * Retrieves all teachers referents from the database
+     * 
+     * @return array|null An array of teacherReferent object representing all teachersReferents store into the database, or null if no teacher is found
+     *
+     */
+    public function findAll(): ?array
+    {
+        // Prepare SQL query to select all teachersReferent
+        $query = $this->db->prepare("SELECT * FROM teachersReferents");
+        
+        // Execute the query
+        $query->execute();
+        
+        // Fetch teachersReferent data from the database
+        $teachersReferentsData = $query->fetchAll(PDO::FETCH_ASSOC);
+        
+        // Check if teachers data is not empty
+        if($teachersReferentsData)
+        {
+            $teachersReferents = [];
+            
+            // Loop through each teacherReferent data
+            foreach($teachersReferentsData as $teacherReferentData)
+            {
+                // Create a teacher object for each teacher data
+                $teacherReferent = new TeacherReferent(
+                    $teacherReferentData["id"],
+                    $teacherReferentData["firstName"],
+                    $teacherReferentData["lastName"],
+                    $teacherReferentData["email"],
+                    $teacherReferentData["password"],
+                    $teacherReferentData["idClass"],
+                    $teacherReferentData["idRole"]
+                    );
+                    
+                    // Add the created teacherReferent object to the teachersReferents array
+                    $teachersReferents[] = $teacherReferent;
+            }
+            // Return the array of teacher objects
+            return $teachersReferents;
+        }
+        // Return null if no teachersReferents are found
+        return null;
+        
+    }
+    
+    
     
     
     /**

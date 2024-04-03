@@ -34,7 +34,7 @@ class Collegian
 
     /** @var int The unique identifier of the language associated with the collegian. 
     */
-    private int $idLanguage;
+    private ?int $idLanguage;
 
     /** @var int The unique identifier of the role assigned to the collegian. 
     */
@@ -59,7 +59,7 @@ class Collegian
         string $email,
         string $password,
         int $idClass,
-        int $idLanguage,
+        ?int $idLanguage,
         int $idRole
     ) {
         // Check provided values
@@ -171,8 +171,8 @@ class Collegian
      */
     private function ensureIsValidRole(int $idRole): void
     {
-        if ($idRole !== 4) {
-            throw new InvalidArgumentException("The collegian role must be user");
+        if ($idRole !== 5) {
+            throw new InvalidArgumentException("The collegian role must be collégien");
         }
         
     }
@@ -302,7 +302,7 @@ class Collegian
      *
      * @return int The unique identifier of the language associated with the collegian.
      */
-    public function getIdLanguage(): int
+    public function getIdLanguage(): ?int
     {
         return $this->idLanguage;
     }
@@ -312,7 +312,7 @@ class Collegian
      *
      * @param int $idLanguage The unique identifier of the language associated with the collegian.
      */
-    public function setIdLanguage(int $idLanguage): void
+    public function setIdLanguage(?int $idLanguage): void
     {
         $this->idLanguage = $idLanguage;
     }

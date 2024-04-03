@@ -9,11 +9,11 @@ class RoleManager extends AbstractManager
     /**
      * Creates a new role and persists it in the database.
      *
-     * @param Role|null $role The role object to be created.
+     * @param Role $role The role object to be created.
      *
      * @return Role The created role object with the assigned identifier.
      */
-    public function createRole(?Role $role): Role
+    public function createRole(Role $role): Role
     {
         // Prepare the SQL query to insert a new role into the database
         $query = $this->db->prepare("INSERT INTO roles (name) VALUES (:name)");
@@ -112,4 +112,47 @@ class RoleManager extends AbstractManager
         // Return null if no role was found
         return null;
     }
+    
+    
+    /**
+     * Retrieves all roles from the database.
+     *
+     * @return array|null An array of role objects representing all roles stored in the database, or null if no roles is found.
+     */
+    public function findAll(): ?array
+    {
+        // Prepare SQL query to select all roles
+        $query = $this->db->prepare("SELECT * FROM roles");
+    
+        // Execute the query
+        $query->execute();
+    
+        // Fetch roles data from the database
+        $rolesData = $query->fetchAll(PDO::FETCH_ASSOC);
+    
+        // Check if roles data is not empty
+        if($rolesData)
+        {
+            $roles = [];
+        
+            // Loop through each role data
+            foreach($rolesData as $roleData)
+            {
+                // Create a role object for each role data
+                $role = new Role(
+                    $roleData["id"],
+                    $roleData["name"]
+                );
+            
+                // Add the created role object to the roles array
+                $roles[] = $role;
+            }
+        
+            // Return the array of role objects
+            return $roles;
+        }
+    
+    // Return null if no roles are found
+    return null;
+}
 }

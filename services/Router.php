@@ -14,30 +14,80 @@ class Router
      */
     public function handleRequest(array $get): void
     {
-        // Instantiate the LessonController
+        // Instantiate the necessary controllers
+        $lessonController = new LessonController();
         $lessonController = new LessonController(); 
+        $authLoginController = new AuthLoginController();
+        $pageController = new PageController();
+        $authRegisterController = new AuthRegisterController();
+        $showController = new ShowController();
         
+        // Check if a route is provided
         if(isset($get["route"]))
         {
-            if($get["route"] === "inscription")
-            {
+            // Switch statement for routing
+            switch($get["route"]) {
+                case "inscription":
+                    $authRegisterController->register(); 
+                    break;
+                    
+                case "checkRegister":
+                    $authRegisterController->checkRegister();
+                    break;
                 
-            } else if($get["route"] === "connexion")
-            {
+                case "connexion":
+                    $authLoginController->login();
+                    break;
+                    
+                case "checkLogin":
+                    $authLoginController->checkLogin(); 
+                    break;
+                    
+                case "super-admin":
+                    $pageController->homePrincipal();
+                    break;
+                    
+                case "teacher":
+                    $showController->showAllTeachers();
+                    break;
+                    
+                case "cours":
+                    // Check if lesson_id is provided
+                    if (isset($get["lesson_id"])) {
+                        $lessonController->showCoursesByIdLesson($get["lesson_id"]);
+                    } else {
+                        // Redirect to error page if lesson_id is not provided
+                        echo "error";
+                    }
+                    break;
                 
-            } else if($get["route"] === "cours")
-            {
-                
-            } else if($get["route"] === "lessonList")
-            {
-                // Call the lessonList method from LessonController
-                $lessonController->lessonListOfTheDay(); 
-            }
-        } else
-        {
-            // If route is not provided, redirect to home page 
-            header("Location: home.html.twig"); 
-            die;
-        }
+                case "ajouter-lesson":
+                    $lessonController->addLesson();
+                    break;
+                    
+                case "checkAddLesson":
+                    $lessonController->checkAddLesson();
+                    break;
+                    
+                case "lesson":
+                    $lessonController->lessonsListOfTheDay(); 
+                    break;
+                    
+                case "ajouter-cours":
+                    $lessonController->addCourse();
+                    break;
+                    
+                default:
+                    $pageController->home(); 
+                    break;
+                } 
+            
+            } 
+            else {
+                // Route is not provided/ render the home page
+                $pageController->home();
+                die;
+        } 
     }
+        
 }

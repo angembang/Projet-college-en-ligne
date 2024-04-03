@@ -8,11 +8,11 @@ class LessonManager extends AbstractManager
     /**
      * Creates a new lesson and persists its in the database.
      *
-     * @param Lesson|null $lesson The lesson object to be created.
+     * @param Lesson $lesson The lesson object to be created.
      *
      * @return Lesson The created lesson object with the assigned identifier.
      */
-    public function createLesson(?Lesson $lesson): Lesson
+    public function createLesson(Lesson $lesson): Lesson
     {
         
         // Prepare the SQL query to insert a new lesson into the database
@@ -245,21 +245,28 @@ class LessonManager extends AbstractManager
     }
     
     
+    
     /**
-     * Retrieves lessons by their week day.
+     * Retrieves lessons for a specific class and week day.
      *
-     * @param string $weekDay The day of the week (e.g., "Monday", "Tuesday").
+     * Retrieves lessons scheduled for a particular class on a given week day.
      *
-     * @return array|null The retrieved lessons or null if not found.
+     * @param string $className The name of the class.
+     * @param string $weekDay The week day for which lessons are to be retrieved.
+     *
+     * @return array|null An array of Lesson objects representing the lessons scheduled for the specified class and week day, or null if no lessons are found.
      */
-    public function findLessonsByWeekDay(string $weekDay): ?array
+    public function findLessonsByClassLevelAndWeekDay(string $classLevel, string $weekDay): ?array
     {
-        $query = $this->db->prepare("SELECT * FROM lessons 
-        JOIN timeTables ON lessons.idTimeTable = timeTables.id 
-        WHERE timeTables.weekDay = :weekDay");
+        $query = $this->db->prepare("SELECT lessons.*, classes.*, timesTables.* 
+        FROM lessons 
+        JOIN classes ON idClass = classes.id
+        JOIN timesTables ON lessons.idTimeTable = timesTables.id 
+        WHERE classes.level = :classLevel AND timesTables.weekDay = :weekDay");
     
         // Bind parameters
         $parameters = [
+            "classLevel" => $classLevel,
             ":weekDay" => $weekDay
         ];
 
@@ -288,6 +295,48 @@ class LessonManager extends AbstractManager
         // No lessons found for the given day
         return null;
     }
+    
+    
+    /**
+     * Retrieves all lessons from the database.
+     *
+     * @return array|null An array of lesson objects representing all lessons stored in the database, or null if no roles is found.
+     */
+    public function findAll(): ?array
+    {
+        // Prepare SQL query to select all lessons
+        $query = $this->db->prepare("SELECT * FROM lessons");
+
+        // Execute the query
+        $query->execute();
+
+        // Fetch lessons data from the database
+        $lessonsData = $query->fetchAll(PDO::FETCH_ASSOC);
+
+        // Initialize an empty array to store lesson objects
+        $lessons = [];
+
+        // Check if lessons data is not empty
+        if ($lessonsData) {
+            // Loop through each lesson data
+            foreach ($lessonsData as $lessonData) {
+                // Create a lesson object for each lesson data
+                $lesson = new Lesson(
+                    $lessonData["id"],
+                    $lessonData["name"],
+                    $lessonData["idClass"],
+                    $lessonData["idTeacher"],
+                    $lessonData["idTimeTable"]
+                );
+
+            // Add the created lesson object to the lessons array
+            $lessons[] = $lesson;
+        }
+    }
+
+    // Return the array of lesson objects
+    return $lessons;
+}
     
     
     /**
