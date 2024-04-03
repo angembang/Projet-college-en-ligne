@@ -1,12 +1,18 @@
 {% extends "layout.html.twig" %}
 
 {% block main %}
+    <!-- Title of the page -->
     <h1>Formulaire d'ajout de cours</h1>
+    <!-- Form for adding a new course -->
     <form action="" method="post" enctype="multipart/form-data">
+        <!-- Fieldset for lesson selection -->
         <fieldset>
             <fieldset>
+                <!-- Label for lesson ID -->
                 <label for="idLesson">ID de la leçon :</label>
+                <!-- Dropdown for selecting a lesson -->
                 <select id="idLesson" name="idLesson" required>
+                    <!-- Default disabled option -->
                     <option value="" disabled selected>Sélectionner une leçon</option>
                     <!-- Loop to display lesson selection options -->
                     {% for lesson in lessons %}
@@ -14,21 +20,32 @@
                     {% endfor %}
                 </select>   
             </fieldset>
+            <!-- Fieldset for unlock date -->
             <fieldset>
+                <!-- Label for unlock date -->
                 <label for="unlockdate">Date de déblocage :</label>
+                <!-- Input field for selecting unlock date -->
                 <input type="date" id="unlockdate" name="unlockdate" required>    
             </fieldset>
+            <!-- Fieldset for subject -->
             <fieldset>
+                <!-- Label for subject -->
                 <label for="subject">Sujet :</label>
+                <!-- Input field for subject -->
                 <input type="text" id="subject" name="subject" required>    
             </fieldset>
+            <!-- Fieldset for content -->
             <fieldset>
-                <label for="content">Contenu :</label><br>
+                <!-- Label for content -->
+                <label for="content">Contenu :</label>
+                <!-- Textarea for content -->
                 <textarea id="content" name="content" required></textarea>   
             </fieldset>
+             <!-- Submit button -->
             <button type="submit">Ajouter le cours</button>
         </fieldset>
     </form>
+    <!-- Importing JavaScript module for client-side validation -->
     <script type="module" src="./assets/js/main.js"></script>
     
 {% endblock %}
