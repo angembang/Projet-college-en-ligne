@@ -6,17 +6,16 @@
 
 {% block main %}
 
+    <!-- Title of the lesson -->
     <h1>{{ lessonName }}</h1>
-        <section>
+        <!-- Loop through courses -->
         {% for course in courses %}
-            <h2>{{ course.subject }}</h2>
-            <img src ="{{ course.image }}" alt ="" >
-            <div>{{ course.content }}</div>
-            <aside>
-                <p>{{ course.summary }}</p>
-            </aside>
-        </section>    
-        {% endfor %}
-    </ul>
+            <section>
+                <!-- Course subject -->
+                <h2>{{ course.subject }}</h2>
+                <!-- Course content -->
+                <div>{{ course.content }}</div>
+            </section> 
+             {% endfor %}
 
 {% endblock %}
