@@ -240,5 +240,94 @@ class LessonController extends AbstractController
         }
     }
     
+    
+    /**
+     * Retrieves all lessons associated with the logged-in collegian's class and returns them as JSON.
+     *
+     * @return string|null A JSON string representing an array of lessons or null if none are found.
+     */
+    public function getAllLessonsByLoggedInCollegianClassId(): ?string
+    {
+        // Check if the user is logged in and is a collegian
+        if (isset($_SESSION['user']) && $_SESSION['role'] === 'Collégien') {
+            // Retrieve the class identifier from the session
+            // Using the 'classId' key retrieved during login
+            $collegianClassId = $_SESSION['classId']; 
+    
+            // Call the method to retrieve all lessons for this class
+            $lessonManager = new LessonManager();
+            $lessons = $lessonManager->findLessonByIdClass($collegianClassId);
 
+            // Encode lessons array to JSON
+            return json_encode($lessons);
+        }
+
+        // If the user is not logged in as a collegian or if the class identifier is not found, return null
+        return null;
+    }
+    
+    
+    /**
+     * Searches for courses by lesson name and renders the corresponding view.
+     */
+    public function searchCoursesByLessonName(): void
+    {
+        try {
+            // Retrieve the lesson name to search for from the GET request
+            $lessonName = $_GET['lessonName'] ?? null;
+
+            // Throw an Exception if no lesson name is retrieved
+            if (!$lessonName) {
+                throw new Exception("Veuillez renseigner le nom du cours");
+            }
+
+            // Get all lessons associated with the logged-in collegian's class
+            $lessons = $this->getAllLessonsByLoggedInCollegianClassId();
+
+            // Throw an exception if no lessons are found or the user is not logged in as a collegian
+            if (!$lessons) {
+                throw new Exception("Aucune leçon trouvée pour cette classe");
+            }
+
+            // Flag to indicate if a matching lesson is found
+            $lessonFound = false;
+
+            // Loop through lessons to find matches with the provided lesson name
+            foreach ($lessons as $lesson) {
+                // Check if the lesson name matches the provided lesson name
+                if (strcasecmp($lesson->getName(), $lessonName) === 0) {
+                    // Set the flag to true if a matching lesson is found
+                    $lessonFound = true;
+                    break; // Exit the loop if a matching lesson is found
+                }
+            }
+
+            // Throw an Exception if no matching lesson is found
+            if (!$lessonFound) {
+                throw new Exception("Aucune leçon trouvée avec ce nom");
+            }
+
+            // Retrieve the ID of the lesson
+            $lessonId = $lesson->getId();
+
+            // Instantiate the course manager for finding courses by lesson ID
+            $courseManager = new CourseManager();
+            $courses = $courseManager->findCoursesByLessonId($lessonId);
+
+            // Throw an Exception if no courses are found
+            if (!$courses) {
+                throw new Exception("Aucun contenu du cours trouvé");
+            }
+
+            // Render the view of courses with the retrieved data
+            $this->render("lessonCourses.html.twig", [
+                "lessonName" => $lessonName,
+                "courses" => $courses
+            ]);
+
+        } catch (Exception $e) {
+            // Output the exception message
+            echo $e->getMessage();
+        }
+    }
 }

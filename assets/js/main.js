@@ -3,6 +3,7 @@ import { validateRolesForm } from "././modules/validator.js";
 import { updateRemainingTime } from "././modules/countdown.js";
 import { configureTinyMCE } from "././modules/tinyMCE-config.js";
 import {showLoginError} from "././modules/login.js";
+import {completionSearchCoursesByLessonName} from "././modules/searchLessonCourses.js";
 
 
 // Listen for the DOMContentLoaded event
@@ -11,10 +12,10 @@ document.addEventListener("DOMContentLoaded", () => {
     // Select all inputs fields in the form
     const roles = document.querySelectorAll("#role select");
     
-    // Ajout de l'écouteur d'événements "input" à chaque champ de saisie
+    //Adding the 'input' event listener to each input field
     roles.forEach((role) => {
         role.addEventListener("click", (event) => {
-            // Appel de la fonction de validation du formulaire lorsque l'utilisateur quitte un champ de saisie
+            // Call the form validation function when the user exits an input field
             validateRolesForm();
             
         });
@@ -24,9 +25,12 @@ document.addEventListener("DOMContentLoaded", () => {
     // Call the function to update the remaining time for lesson links
     updateRemainingTime();
     
-    // Appeler la fonction pour configurer TinyMCE
+    // Call the function to set up TinyMCE
     configureTinyMCE();
     
-    // Appeler la fonction d'affichage d'erreur de connexion
+    // Call the function to display connection error
     showLoginError();
+    
+    // Call the function for lesson name autocompletion
+    completionSearchCoursesByLessonName();
 });

@@ -1,7 +1,19 @@
 {% extends "layout.html.twig" %}
 
 {% block header %}
-
+    <header>
+        <!-- Search bar -->
+        <form action="index.php?route=search-course" method="GET">
+            <!-- Label for the input field -->
+            <label for="lessonName">Saisissez le nom du cours</label>
+            <!-- Input field for entering the lesson name -->
+            <input type="text" name="lessonName" placeholder="Rechercher un cours">
+            <!-- Suggestions list -->
+            <ul id="suggestions-list"></ul>
+            <!-- Submit button for initiating the search -->
+            <button type="submit">Rechercher</button>
+        </form>
+    </header>
 {% endblock %}
 
 {% block main %}

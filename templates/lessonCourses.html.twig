@@ -1,0 +1,15 @@
+{% extends "layout.html.twig" %}
+
+{% block main %}
+
+<!-- Name of the lesson -->
+<h1>{{ lessonName }}</h1>
+<!-- Loop through courses of the lesson -->
+{% for course in courses %}
+    <!-- Display the course -->
+    <h2>{{ course.subject }}</h2>
+    <div>{{ course.content }}</div>
+{% endfor %}
+    
+
+{% endblock %}

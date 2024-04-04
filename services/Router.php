@@ -77,6 +77,13 @@ class Router
                     $lessonController->addCourse();
                     break;
                     
+                case "search-course":
+                    $lessonController->searchCoursesByLessonName();
+                    
+                case "classe-lessons":
+                    $lessonController->getAllLessonsByLoggedInCollegianClassId();    
+                    break;
+                    
                 default:
                     $pageController->home(); 
                     break;

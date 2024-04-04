@@ -81,7 +81,12 @@ class AuthLoginController extends AbstractController
                                     break;
                                 
                                 case "Collégien":
-                                    $this->renderJson(["success" => true, "role" => "Collégien"]);
+                                    // Get the class id of the collegian
+                                    $collegianClassId = $collegian->getIdClass();
+                                    $_SESSION["user"] = $collegian->getId();
+                                    $_SESSION['classId'] = $collegianClassId;
+                                    $_SESSION["role"] = "Collégien";
+                                    $this->renderJson(["success" => true, "role" => "Collégien", "classId" => $collegianClassId]);
                                     break;
                                 
                                 default:
