@@ -74,6 +74,7 @@ function showLoginError() {
         // Hide alert message
         alertMessage.style.display = "none"; 
     });
+    
 }
 
 // Export the function

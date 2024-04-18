@@ -19,6 +19,7 @@ class PageController extends AbstractController
         $this->render("home.html.twig", []);
     }
     
+    
     /**
      * Renders the principal home page.
      *
@@ -30,5 +31,18 @@ class PageController extends AbstractController
     {
         $this->render("superAdminHome.html.twig", []);
         
+    }
+    
+    
+    /**
+     * Renders the about page.
+     *
+     * This method is responsible for rendering the about page view.
+     *
+     * @return void
+     */
+    public function about(): void
+    {
+        $this->render("about.html.twig", []);
     }
 }

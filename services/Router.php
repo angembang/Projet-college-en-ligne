@@ -84,6 +84,10 @@ class Router
                     $lessonController->getAllLessonsByLoggedInCollegianClassId();    
                     break;
                     
+                case "about":
+                    $pageController->about();    
+                    break;
+                    
                 default:
                     $pageController->home(); 
                     break;
