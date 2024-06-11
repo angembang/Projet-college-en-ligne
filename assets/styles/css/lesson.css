@@ -1,0 +1,131 @@
+header, 
+footer {
+    background-color: #A30707;
+    height: 10%;
+    display: flex;
+    align-items: center;
+}
+
+header i,
+header nav ul li a, 
+header h1 {
+    color: white;
+    margin: 0.5rem 1rem 0.5rem 1.5rem; 
+}
+
+header i, 
+h1 {
+    font-size: 2rem;    
+}
+
+header nav ul {
+    list-style: none;
+    margin: 0;
+    padding: 0.5rem;
+    font-size: 14px;
+}
+
+#menu .display-none {
+    display: none;
+}
+
+#menu-icon, 
+.search-logout-container button {
+    border: none;
+    background-color: inherit;
+}
+
+
+main {
+    background-color: #1F203E;
+    height: 80%;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    color: white;
+}
+
+.search-logout-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 3rem;
+    position: relative; /* Ajout de position relative */
+}
+
+.search-logout-container form input, .search-logout-container form button, .search-logout-container  button {
+    padding: 0.5rem;    
+}
+
+.search-logout-container form input {
+    background-color: #D9D9D9;
+    border-radius: 10px;
+    padding: 1rem 2rem 1rem 4rem;
+    margin-left: 0.8rem;
+    position: relative; /* Ajout de position relative */
+}
+
+.search-logout-container form i {
+    color: #072D67;
+    font-size: 1.5rem;
+    position: absolute; /* Ajout de position absolue */
+    left: 2rem; /* Ajustement de la position */
+    top: 34%; /* Ajustement de la position */
+    transform: translateY(-50%); /* Ajustement de la position */
+}
+
+.fa-circle-arrow-up {
+    color: #A30707;
+    font-size: 2rem;
+    margin-top: -2rem;
+}
+
+main ul {
+    color: white;
+    font-size: 1.5rem;
+}
+
+.lesson-title {
+    text-align: center;
+    font-size: 2rem;
+    border-bottom: 2px solid red; /* Adds a red solid border at the bottom */
+    width: 80%; /* Adjusts the width of the bottom border */
+    margin: auto; /* Centers the title horizontally */
+}
+.lesson-title::after {
+    content: "";
+    display: block;
+    border-bottom: 2px solid red;
+    margin-top: 10px; /* Adjust this value to increase or decrease the space between the title and the border */
+}
+
+.lesson-info {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+}
+
+.lesson-info a {
+    color: white;
+    background-color: #3D12E0;
+    padding: 0.3rem 1rem 0.5rem 1rem;
+    text-decoration: none;
+    border-radius: 15px;
+}
+h3 {
+    font-size: 2rem;
+    margin-left: 0.8rem;
+}
+
+
+
+footer {
+    flex-direction: column;
+    justify-content: center;
+}
+footer a {
+    color: white;
+    font-size: 12px;
+    
+}
