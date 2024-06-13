@@ -25,14 +25,14 @@
 
     <!-- Title for the login page -->
     <h2>Connexion</h2>
-        
-        <!-- Alert message section -->
-        <section class="alert-message">
-            <!-- Error message placeholder -->
-            <h2 id="error-message"></h2>
-            <!-- Button to close the error message -->
-            <button type="button" class="close-btn-error">Fermer</button>
-        </section>
+    
+    <!-- Alert message section -->
+    <section class="alert-message">
+        <!-- Error message placeholder -->
+        <h3 id="error-message"></h3>
+        <!-- Button to close the error message -->
+        <button type="button" class="close-btn-error">Fermer</button>
+    </section>
     
     <!-- Login form -->
     <form action="index.php?route=checkLogin" method="POST" id="login-form">
@@ -43,7 +43,7 @@
         <fieldset>
             <!-- Email input field -->
             <label for="email">Email:</label>
-            <input type="email" id="email" name="email" placeholder="Email" required>
+            <input type="email" id="email" name="email" placeholder="Email" autocomplete="email" required>
         </fieldset>
         <fieldset>
             <!-- Password input field -->

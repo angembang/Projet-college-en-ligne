@@ -16,7 +16,13 @@ class PageController extends AbstractController
      */
     public function home(): void
     {
-        $this->render("home.html.twig", []);
+        // Retrieve all roles from the database
+        $roleManager = new RoleManager();
+        $roles = $roleManager->findAllSortedByName();
+        
+        // Pass the roles to the view
+        $this->render("home.html.twig", ['roles' => $roles]);
+        
     }
     
     

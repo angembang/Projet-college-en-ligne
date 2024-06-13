@@ -28,10 +28,9 @@
 
 {% block main %}
     <!-- Main content links -->
-    <p><a href = "index.php?route=connexion">Collégien</a></p>
-    <p><a href = "index.php?route=connexion">Professeur</a></p>
-    <p><a href = "index.php?route=connexion">Professeurs référents</a></p>
-    <p><a href = "index.php?route=connexion">Principal</a></p>
+    {% for role in roles %}
+        <p><a href="index.php?route=connexion&role={{ role.id }}">{{ role.name }}</a></p>
+    {% endfor %}
 {% endblock %}
 
 

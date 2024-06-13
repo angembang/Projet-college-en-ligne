@@ -27,5 +27,9 @@ abstract class AbstractManager
             $_ENV["DB_USER"],
             $_ENV["DB_PASSWORD"]
         );
+        
+        // Set the PDO connection to use UTF-8 (utf8mb4 for full Unicode support)
+        //$this->db->exec("SET NAMES 'utf8mb4'");
+        //$this->db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     }
 }

@@ -103,7 +103,7 @@ class LessonController extends AbstractController
                 // Retrieve lessons for the current day by class level
                 $lessonList = $lessonManager->findLessonsByClassLevelAndWeekDay($classLevel, $weekDay);
             
-                // Pour chaque leçon, récupérer l'horaire correspondant
+                // Foreach lesson, retrieve the correspondant time tabe
                 foreach($lessonList as $lesson) {
                     $lessonIdTimeTable = $lesson->getIdTimeTable();
                     $timeTableManager = new TimeTableManager();
@@ -196,7 +196,173 @@ class LessonController extends AbstractController
     }
     
     
+    /**
+     * Convert YouTube video URL to embeddable format
+     * @param string $url
+     * @return string
+     */
+    private function convertYouTubeUrlToEmbed(string $url): string
+    {
+        $regex = '/https:\/\/www\.youtube\.com\/watch\?v=([a-zA-Z0-9_-]+)/';
+        $replace = 'https://www.youtube.com/embed/$1';
+        return preg_replace($regex, $replace, $url);
+    }
+
     
+    
+    /*
+     * Process the form submission to add a new course.
+     * Handles form validation, file uploads, and database insertion.
+     */
+    public function checkAddCourse(): void 
+{
+    error_reporting(E_ALL);
+    ini_set('display_errors', 1);
+
+    try {
+        if ($_SERVER["REQUEST_METHOD"] === "POST") {
+            $errors = [];
+            $debug = [];
+
+            if (!isset($_POST["idLesson"]) || 
+                !isset($_POST["unlockdate"]) ||
+                !isset($_POST["subject"]) ||
+                !isset($_POST["summary"]) ||
+                !isset($_POST["content"])) {
+                $errors[] = "Veuillez remplir tous les champs obligatoires";
+            }
+
+            $idLesson = $_POST["idLesson"];
+            $unlockdate = $_POST["unlockdate"];
+            $subject = htmlspecialchars($_POST["subject"], ENT_QUOTES, 'UTF-8');
+            $summary = htmlspecialchars($_POST["summary"], ENT_QUOTES, 'UTF-8');
+            $content = htmlspecialchars($_POST["content"], ENT_QUOTES, 'UTF-8');
+            $videoUrl = $_POST['video'];
+            $image = $audio = $fichierpdf = $link = null;
+
+            // Validate YouTube URL and convert to embed format
+            if (!empty($videoUrl)) {
+                if (!preg_match('/^https:\/\/www\.youtube\.com\/watch\?v=[\w-]+$/', $videoUrl)) {
+                    $errors[] = "Le lien YouTube n'est pas valide.";
+                } else {
+                    $videoUrl = $this->convertYouTubeUrlToEmbed($videoUrl);
+                }
+            }
+
+            // Validate file uploads
+            $allowedImageTypes = ['image/jpeg', 'image/png', 'image/gif'];
+            $allowedAudioTypes = ['audio/mpeg', 'audio/wav'];
+            $allowedPdfType = ['application/pdf'];
+
+            // Define the base upload directory
+            $uploadDir = realpath(__DIR__ . '/../uploads');
+            $debug[] = "Base upload directory: " . ($uploadDir !== false ? $uploadDir : "Non trouvé");
+
+            if ($uploadDir === false) {
+                $errors[] = "Le répertoire de téléchargement n'existe pas.";
+            } else {
+                $imageDir = $uploadDir . '/images/';
+                $audioDir = $uploadDir . '/audios/';
+                $pdfDir = $uploadDir . '/pdfs/';
+
+                // Create directories if they do not exist
+                if (!is_dir($imageDir) && !mkdir($imageDir, 0777, true) && !is_dir($imageDir)) {
+                    $errors[] = "Échec de la création du répertoire des images.";
+                }
+                if (!is_dir($audioDir) && !mkdir($audioDir, 0777, true) && !is_dir($audioDir)) {
+                    $errors[] = "Échec de la création du répertoire des audios.";
+                }
+                if (!is_dir($pdfDir) && !mkdir($pdfDir, 0777, true) && !is_dir($pdfDir)) {
+                    $errors[] = "Échec de la création du répertoire des PDF.";
+                }
+
+                if (empty($errors)) {
+                    if (!empty($_FILES['image']['name'])) {
+                        if (!in_array($_FILES['image']['type'], $allowedImageTypes)) {
+                            $errors[] = "Le format de l'image n'est pas valide. Seuls les formats JPEG, PNG et GIF sont acceptés.";
+                        } else {
+                            $imagePath = $imageDir . basename($_FILES['image']['name']);
+                            $debug[] = "Chemin de l'image : " . $imagePath;
+                            if (!move_uploaded_file($_FILES['image']['tmp_name'], $imagePath)) {
+                                $errors[] = "Erreur lors du téléchargement de l'image.";
+                            } else {
+                                $image = '/collège/Projet-college-en-ligne/uploads/images/' . basename($_FILES['image']['name']);
+                            }
+                        }
+                    }
+
+                    if (!empty($_FILES['audio']['name'])) {
+                        if (!in_array($_FILES['audio']['type'], $allowedAudioTypes)) {
+                            $errors[] = "Le format de l'audio n'est pas valide. Seuls les formats MP3 et WAV sont acceptés.";
+                        } else {
+                            $audioPath = $audioDir . basename($_FILES['audio']['name']);
+                            $debug[] = "Chemin de l'audio : " . $audioPath;
+                            if (!move_uploaded_file($_FILES['audio']['tmp_name'], $audioPath)) {
+                                $errors[] = "Erreur lors du téléchargement de l'audio.";
+                            } else {
+                                $audio = '/collège/Projet-college-en-ligne/uploads/audios/' . basename($_FILES['audio']['name']);
+                            }
+                        }
+                    }
+
+                    if (!empty($_FILES['fichierpdf']['name'])) {
+                        if (!in_array($_FILES['fichierpdf']['type'], $allowedPdfType)) {
+                            $errors[] = "Le format du fichier PDF n'est pas valide. Seuls les fichiers PDF sont acceptés.";
+                        } else {
+                            $pdfPath = $pdfDir . basename($_FILES['fichierpdf']['name']);
+                            $debug[] = "Chemin du fichier PDF : " . $pdfPath;
+                            if (!move_uploaded_file($_FILES['fichierpdf']['tmp_name'], $pdfPath)) {
+                                $errors[] = "Erreur lors du téléchargement du fichier PDF.";
+                            } else {
+                                $fichierpdf = '/collège/Projet-college-en-ligne/uploads/pdfs/' . basename($_FILES['fichierpdf']['name']);
+                            }
+                        }
+                    }
+                }
+            }
+
+            if (empty($errors)) {
+                $courseManager = new CourseManager();
+                $createdAt = date('Y-m-d H:i:s');
+                $courseModel = new Course(
+                    null,
+                    $idLesson,
+                    $unlockdate,
+                    $subject,
+                    $summary,
+                    $content,
+                    $image,
+                    $audio,
+                    $videoUrl,
+                    $fichierpdf,
+                    $link,
+                    $createdAt
+                );
+                $course = $courseManager->createCourse($courseModel);
+
+                if ($course) {
+                    echo "Cours ajouté avec succès";
+                } else {
+                    echo "Échec lors de l'ajout de cours";
+                }
+            } else {
+                foreach ($errors as $error) {
+                    echo $error . "<br>";
+                }
+            }
+
+            foreach ($debug as $message) {
+                echo "DEBUG: " . $message . "<br>";
+            }
+        } else {
+            echo "Le formulaire n'a pas été soumis par la méthode POST";
+        }
+    } catch (Exception $e) {
+        echo "Une erreur est survenue : " . $e->getMessage();
+        error_log("An error occurred during the operation: " . $e->getMessage() . $e->getCode());
+    }
+}
+
     
     /**
      * Retrieves and renders the courses associated with a specific lesson.
@@ -225,8 +391,8 @@ class LessonController extends AbstractController
         
             // Check if courses were found
             if ($courses) {
-                // Render the courses in a view
-                $this->render("cours.html.twig", [
+                // Render courses in a view
+                $this->render("lessonCourses.html.twig", [
                     "courses" => $courses,
                     "lessonName" => $lessonName 
                 ]);

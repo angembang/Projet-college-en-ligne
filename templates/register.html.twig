@@ -1,22 +1,43 @@
 {% extends "layout.html.twig" %}
 
+{% block head %}
+    <!-- Include parent block content -->
+    {{ parent () }}
+    <!-- Include additional stylesheet -->
+    <link rel="stylesheet" type="text/css" href="./assets/styles/css/login.css"> 
+{% endblock %}
+
+{% block header %}
+    <!-- Hamburger menu icon -->
+    <i class="fas fa-bars" id="menu-icon"></i>
+    
+    <!-- Menu -->
+    <nav id="menu">
+        <ul>
+            <li><a href="#">A Propos</a></li>
+        </ul>
+    </nav>
+    <!-- Title of the plateform-->
+    <h1>Collège en ligne</h1>
+{% endblock %}
+
 {% block main %}
     
-    <h1>Inscription</h1>
+    <h2>Inscription</h2>
     
     {% if error_message is defined %}
         <section class="alert-message">
-            <h2>{{error_message}}</h2>
+            <h3 id="error-message"></h3>
             <button type="button" class="close-btn-error">Fermer</button>
         </section>
     {% endif %}
     
     <!-- Registration Form -->
-    <form action = "index.php?route=checkRegister" method = "post">
+    <form action="index.php?route=checkRegister" method="POST" id="register-form">
         <fieldset>
             
             <!-- Token field -->
-            <input type="hidden" name="csrf-token" id="csrf-token" value="{{ csrf_token }}" />
+            <input type="hidden" name="csrf-token" id="csrf-token" value="{{ csrf_token }}" >
             
             <!-- Role selection field -->
             <fieldset id="role">
@@ -96,7 +117,11 @@
         </fieldset>
         
     </form>
-    
-    <script type="module" src="./assets/js/main.js"></script>
 
+{% endblock %}
+{% block footer %}
+    <!-- Footer links -->
+    <a href="#">Mentions légales</a>
+    <a href="#">Politique de confidentialité</a>
+    <a href="#">Gestion des cookies</a>
 {% endblock %}

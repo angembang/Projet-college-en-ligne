@@ -7,6 +7,7 @@
 function showLoginError() {
     // Get the login form element
     const loginForm = document.getElementById("login-form");
+
     // Get the alert message element
     const alertMessage = document.querySelector(".alert-message");
     // Get the error message element
@@ -25,13 +26,13 @@ function showLoginError() {
             // Set request method to POST
             method: "POST",
             // Set request body with form data
-            body: formData,
+            body: formData
         };
         
         // Retrieve information from the server to validate login credentials
         fetch("index.php?route=checkLogin", options)
         .then(response => {
-             // Check if the response is OK 
+             // Check if the response is different thaan OK 
             if (!response.ok) {
                 throw new Error('Réponse du serveur non valide');
             }
@@ -47,7 +48,7 @@ function showLoginError() {
                 } else if (data.role === "Professeur référent" || data.role === "Professeur") {
                     window.location.href = "adminHome.html.twig";
                 } else if (data.role === "Collégien") {
-                    window.location.href = "userHome.html.twig";
+                    window.location.href = "index.php?route=lesson";
                 } else {
                     // Role is not defined or not handled
                     console.error("Rôle non géré:", data.role);
@@ -78,4 +79,4 @@ function showLoginError() {
 }
 
 // Export the function
-export { showLoginError };
+export {showLoginError};

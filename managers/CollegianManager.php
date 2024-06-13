@@ -6,13 +6,15 @@
 class CollegianManager extends AbstractManager
 {
     /**
-     * Creates a new collegian and persists him in the database.
+     * Creates a new collegian and persists its in the database.
      *
      * @param Collegian $collegian The collegian object to be created.
      *
-     * @return Collegian The created collegian object with the assigned identifier.
+     * @return Collegian|null The created collegian object with the assigned identifier, or null if not created.
+     * 
+     * @throws 
      */
-    public function createCollegian(Collegian $collegian): Collegian
+    public function createCollegian(Collegian $collegian): ?Collegian
     {
         
         // Prepare the SQL query to insert a new collegian into the database
@@ -20,7 +22,7 @@ class CollegianManager extends AbstractManager
         (firstName, lastName, email, password, idClass, idLanguage, idRole) 
         VALUES (:firstName, :lastName, :email, :password, :idClass, :idLanguage, :idRole)");
         
-        // Bind the parameters
+        // Bind parameters
         $parameters = [
             ":firstName" => $collegian->getFirstName(),
             ":lastName" => $collegian->getLastName(),
@@ -299,6 +301,10 @@ class CollegianManager extends AbstractManager
         $success = $query->execute($parameters);
 
         // Return true if the deletion was successful, false if not
-        return $success;
-    }
+        if ($success) {
+            return true;
+        } 
+        return false;
+    }    
+
 }

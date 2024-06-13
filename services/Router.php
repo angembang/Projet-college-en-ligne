@@ -10,6 +10,7 @@ class Router
      * Handles the incoming request based on the provided $_GET parameters.
      *
      * @param array $get The associative array of $_GET parameters.
+     * 
      * @return void
      */
     public function handleRequest(array $get): void
@@ -23,8 +24,7 @@ class Router
         $showController = new ShowController();
         
         // Check if a route is provided
-        if(isset($get["route"]))
-        {
+        if(isset($get["route"])) {
             // Switch statement for routing
             switch($get["route"]) {
                 case "inscription":
@@ -41,6 +41,10 @@ class Router
                     
                 case "checkLogin":
                     $authLoginController->checkLogin(); 
+                    break;
+                    
+                case "edit-password":
+                    $authLoginController->editLogin();
                     break;
                     
                 case "super-admin":
@@ -77,8 +81,22 @@ class Router
                     $lessonController->addCourse();
                     break;
                     
+                case "check-addCourse":
+                    $lessonController->checkAddCourse();
+                    break;
+                    
+                //case "search-course":
+                    //$lessonController->searchCoursesByLessonName();
+                    
                 case "search-course":
-                    $lessonController->searchCoursesByLessonName();
+                    // Check if lesson_id is provided
+                    if (isset($get["lesson_name"])) {
+                        $lessonController->searchCoursesByLessonName($get["lesson_name"]);
+                    } else {
+                        // Redirect to error page if lesson_id is not provided
+                        echo "error";
+                    }
+                    break;
                     
                 case "classe-lessons":
                     $lessonController->getAllLessonsByLoggedInCollegianClassId();    

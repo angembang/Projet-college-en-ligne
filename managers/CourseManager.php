@@ -13,40 +13,45 @@ class CourseManager extends AbstractManager
      * @return Course The created course object with the assigned identifier.
      */
     public function createCourse(Course $course): Course
-    {
-        
-        // Prepare the SQL query to insert a new course into the database
-        $query = $this->db->prepare("INSERT INTO courses 
-        (idLesson, unlockDate, subject, content) 
-        VALUES (:idLesson, :unlockDate, :subject, :content)");
-        
-        // Bind the parameters
-        $parameters = [
-            ":idLesson" => $course->getIdLesson(),
-            ":unlockednlockDate" => $course->getUnlockDate(),
-            ":subject" => $course->getSubject(),
-            ":content" => $course->getContent()
-            ];
-            
-        // Execute the query
-        $query->execute($parameters);
-        
-        // Retrieve the last inserted identifier
-        $courseId = $this->db->lastInsertId();
-        
-        // Set the identifier for the created course
-        $course->setId($courseId);
-        
-        // Return the created lesson object
-        return $course;
-    }
+{
+    // Prepare the SQL query to insert a new course into the database
+    $query = $this->db->prepare("INSERT INTO courses 
+    (idLesson, unlockDate, subject, summary, content, image, audio, video, fichierpdf, link, created_at) 
+    VALUES (:idLesson, :unlockDate, :subject, :summary, :content, :image, :audio, :video, :fichierpdf, :link, :created_at)");
+
+    // Bind the parameters
+    $parameters = [
+        ":idLesson" => $course->getIdLesson(),
+        ":unlockDate" => $course->getUnlockDate(),
+        ":subject" => $course->getSubject(),
+        ":summary" => $course->getSummary(),
+        ":content" => $course->getContent(), 
+        ":image" => $course->getImage(),
+        ":audio" => $course->getAudio(),
+        ":video" => $course->getVideo(),
+        ":fichierpdf" => $course->getFichierpdf(),
+        ":link" => $course->getLink(),
+        ":created_at" => $course->getCreatedAt() 
+    ];
     
+    // Execute the query
+    $query->execute($parameters);
+    
+    // Retrieve the last inserted identifier
+    $courseId = $this->db->lastInsertId();
+    
+    // Set the identifier for the created course
+    $course->setId($courseId);
+    
+    // Return the created lesson object
+    return $course;
+}
     
     
     /**
-     * Retrieves Courses by their lesson unique identifier.
+     * Retrieves Courses by their lessonName.
      *
-     * @param int $courseLessonId The lesson identifier of the course.
+     * @param string $courseLessonName The lesson name of the course.
      *
      * @return Array|null Retrieved courses or null if not found.
      */
@@ -78,7 +83,14 @@ class CourseManager extends AbstractManager
                 $courseData["idLesson"],
                 $courseData["unlockDate"],
                 $courseData["subject"],
-                $courseData["content"]
+                $courseData["summary"],
+                $courseData["content"],
+                $courseData["image"],
+                $courseData["audio"],
+                $courseData["video"],
+                $courseData["fichierpdf"],
+                $courseData["link"],
+                $courseData["created_at"]
                 );
                 $courses[] = $course;
             }
@@ -117,7 +129,14 @@ class CourseManager extends AbstractManager
                 $courseData["IdLesson"],
                 $courseData["unlockDate"],
                 $courseData["subject"],
-                $courseData["content"]
+                $courseData["summary"],
+                $courseData["content"],
+                $courseData["image"],
+                $courseData["audio"],
+                $courseData["video"],
+                $courseData["fichierpdf"],
+                $courseData["link"],
+                $courseData["created_at"]
                 );
                 
             return $course;
@@ -154,7 +173,14 @@ class CourseManager extends AbstractManager
                 $courseData["IdLesson"],
                 $courseData["unlockDate"],
                 $courseData["subject"],
-                $courseData["content"]
+                $courseData["summary"],
+                $courseData["content"],
+                $courseData["image"],
+                $courseData["audio"],
+                $courseData["video"],
+                $courseData["fichierpdf"],
+                $courseData["link"],
+                $courseData["created_at"]
                 );
                 
             return $course;
@@ -191,7 +217,14 @@ class CourseManager extends AbstractManager
                 $courseData["IdLesson"],
                 $courseData["unlockDate"],
                 $courseData["subject"],
-                $courseData["content"]
+                $courseData["summary"],
+                $courseData["content"],
+                $courseData["image"],
+                $courseData["audio"],
+                $courseData["video"],
+                $courseData["fichierpdf"],
+                $courseData["link"],
+                $courseData["created_at"]
                 );
                 
             return $course;
@@ -217,7 +250,15 @@ class CourseManager extends AbstractManager
             SET idLesson = :idLesson,
             unlockDate = :unlockDate,
             subject = :subject,
-            content = :content");
+            summary = :summary,
+            content = :content,
+            images = :image,
+            audio = :audio,
+            video = :video,
+            fichierpdf = :fichierpdf,
+            link = :link
+            created-_at = :created_at
+            WHERE subject = :subject");
 
         // Bind parameters with their values
         $parameters = [
@@ -225,8 +266,15 @@ class CourseManager extends AbstractManager
             ":idLesson" => $course->getIdLesson(),
             ":unlockDate" => $course->getUnlockDate(),
             ":subject" => $course->getSubject(),
+            ":summary" => $course->getSummary(),
             ":content" => $course->getContent(),
-            ];
+            ":images" => $course->getImages(),
+            ":audio" => $course->getAudio(),
+            ":video" => $course->getVideo(),
+            ":fichierpdf" => $course->getFichierpdf(),
+            ":link" => $course->getLink(),
+            ":created_at" => $course->getCreatedAt()
+        ];
 
         // Execute the query with parameters
        $success = $query->execute($parameters);

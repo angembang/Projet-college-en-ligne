@@ -154,5 +154,47 @@ class RoleManager extends AbstractManager
     
     // Return null if no roles are found
     return null;
-}
+    }
+
+
+    /**
+     * Fetch all roles from the database sorted by name in ascending order.
+     *
+     * @return array An array of role records fetched from the database.
+     */
+    public function findAllSortedByName(): array
+    {
+        // Prepare SQL query to select all roles
+        $query = $this->db->prepare("SELECT * FROM roles ORDER BY name ASC");
+    
+        // Execute the query
+        $query->execute();
+    
+        // Fetch roles data from the database
+        $rolesData = $query->fetchAll(PDO::FETCH_ASSOC);
+    
+        // Check if roles data is not empty
+        if($rolesData)
+        {
+            $roles = [];
+        
+            // Loop through each role data
+            foreach($rolesData as $roleData)
+            {
+                // Create a role object for each role data
+                $role = new Role(
+                    $roleData["id"],
+                    $roleData["name"]
+                );
+            
+                // Add the created role object to the roles array
+                $roles[] = $role;
+            }
+        
+            // Return the array of role objects
+            return $roles;
+        }
+        // Return null if no roles are found
+        return null;
+    }
 }

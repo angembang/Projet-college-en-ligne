@@ -3,7 +3,7 @@ function updateCountdown(link, remainTimeContent) {
     // Check if the remaining time is less than or equal to zero
     if (remainTimeContent <= 0) {
         // If the remaining time is exhausted, update the link text to indicate "Accéder au cours"
-        link.textContent = "Accéder au cours";
+        link.textContent = "Accéder";
         // Exit the function as time has elapsed
         return;
     }
@@ -19,6 +19,8 @@ function updateCountdown(link, remainTimeContent) {
 
     // Display the remaining time in the link
     link.textContent = formattedTime;
+    link.style.color = "red";
+    link.style.background = "white";
 }
 
 // Function to start the countdown timer
@@ -50,7 +52,10 @@ function updateRemainingTime() {
         const remainingTimeText = link.dataset.remainingTime;
         
         // If the remaining time is "Accéder au cours", do nothing
-        if (remainingTimeText === "Accéder au cours") {
+        if (remainingTimeText === "Accéder") {
+            // Make the link clickable
+            link.style.pointerEvents = "auto";
+            // Exit the function as time has elapsed
             return;
         }
         
@@ -67,10 +72,13 @@ function updateRemainingTime() {
         
         // If the total remaining seconds is less than or equal to 0, update the link text to "Accéder au cours"
         if (totalRemainingSeconds <= 0) {
-            link.textContent = "Accéder au cours";
+            link.textContent = "Accéder";
             return;
         }
         
+        // Disable the link if the remaining time is not yet reached
+        link.style.pointerEvents = "none";
+
         // Start countdown for the remaining time
         startCountdown(link, totalRemainingSeconds);
     });
