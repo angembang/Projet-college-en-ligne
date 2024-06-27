@@ -68,7 +68,10 @@ class TeacherReferentManager extends AbstractManager
         {
             $teacherReferent = new TeacherReferent(
                 $teacherReferentData["id"],
-                $teacherReferentData["idTeacher"],
+                $teacherReferentData["firstName"],
+                $teacherReferentData["lastName"],
+                $teacherReferentData["email"],
+                $teacherReferentData["password"],
                 $teacherReferentData["idClass"],
                 $teacherReferentData["idRole"],
                 );

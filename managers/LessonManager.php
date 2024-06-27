@@ -127,8 +127,8 @@ class LessonManager extends AbstractManager
     {
         $query = $this->db->prepare("SELECT lessons.*, classes.* 
         FROM lessons
-        JOIN idClass ON classes.id
-        WHERE id = :id");
+        JOIN classes ON lessons.Idclass = classes.id
+        WHERE idClass = :id");
         
         // Bind parameters
         $parameters = [
@@ -294,6 +294,48 @@ class LessonManager extends AbstractManager
         }
         // No lessons found for the given day
         return null;
+    }
+    
+    
+    /*
+     * Searches courses of lesson by lesson name
+     *
+     * @return array|null The array of retrieved courses, null if not found
+     *
+     * @throws PDOException if an error occurs during the database operation
+     */
+    public function searchLessonByName(string $lessonName): ?int
+    {
+        try {
+            // Prepare the query to retrieve courses by lesson id
+            $query = $this->db->prepare("Select * from lessons WHERE name = :name");
+            
+            // Bind Parameter
+            $parameter = [
+                ":name" => $lessonName
+                ];
+            // Execute the query
+            $query->execute($parameter);
+            
+            $lessonData = $query->fetch(PDO::FETCH_ASSOC);
+            
+            if( $lessonData) {
+                $lesson = new Lesson(
+                    $lessonData["id"],
+                    $lessonData["name"],
+                    $lessonData["idClass"],
+                    $lessonData["idTeacher"],
+                    $lessonData["idTimeTable"]
+                );
+                $lessonId = $lesson->getId();
+                return $lessonId;
+            }
+            return null;
+           
+            
+        } catch(PDOException $e) {
+            throw new PDOException("An error occurred during the database operation: " . $e->getMessage());
+        }
     }
     
     

@@ -140,15 +140,23 @@ class CollegianManager extends AbstractManager
     public function findCollegiansByClassId(int $collegianClassId): ?array
     {
         // Use a JOIN query to fetch collegian information based on the class level.
-        $query = $this->db->prepare("SELECT collegians.*, classes.* 
+        $query = $this->db->prepare("SELECT 
+        collegians.id AS collegian_id, 
+            collegians.firstName, 
+            collegians.lastName, 
+            collegians.email, 
+            collegians.password, 
+            collegians.idClass, 
+            collegians.idLanguage, 
+            collegians.idRole, 
+            classes.level AS class_level 
         FROM collegians
-        JOIN classes
-        ON idClass = classes.id
-        WHERE id = :id");
+        JOIN classes ON collegians.idClass = classes.id
+        WHERE collegians.idClass = :idClass");
 
         // Bind parameters with their values
         $parameters = [
-            ":id" => $collegianClassId
+            ":idClass" => $collegianClassId
         ];
 
         // Execute the query with parameters
@@ -165,7 +173,7 @@ class CollegianManager extends AbstractManager
             foreach($collegiansData as $collegianData)
             {
                 $collegian = new Collegian(
-                    $collegianData["id"],
+                    $collegianData["collegian_id"],
                     $collegianData["firstName"],
                     $collegianData["lastName"],
                     $collegianData["email"],

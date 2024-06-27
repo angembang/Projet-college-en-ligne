@@ -21,7 +21,6 @@ class Router
         $authLoginController = new AuthLoginController();
         $pageController = new PageController();
         $authRegisterController = new AuthRegisterController();
-        $showController = new ShowController();
         
         // Check if a route is provided
         if(isset($get["route"])) {
@@ -43,6 +42,10 @@ class Router
                     $authLoginController->checkLogin(); 
                     break;
                     
+                case "register-login":
+                    $authRegisterController->registerLogin(); 
+                    break;
+                    
                 case "edit-password":
                     $authLoginController->editLogin();
                     break;
@@ -52,7 +55,27 @@ class Router
                     break;
                     
                 case "teacher":
-                    $showController->showAllTeachers();
+                    $pageController->showAllTeachers();
+                    break;
+                    
+                case "collegian":
+                    $pageController->showAllcollegiansOfTheClass();
+                    break;
+                    
+                case "delete-collegian":
+                    $pageController->deleteCollegian();
+                    break;
+                    
+                case "edit-collegian":
+                    $pageController->editCollegian();
+                    break;
+                    
+                case "admin":
+                    $pageController->homeTeacherReferent();
+                    break;
+                    
+                case "sub-admin":
+                    $pageController->homeTeacher();
                     break;
                     
                 case "cours":
@@ -85,17 +108,8 @@ class Router
                     $lessonController->checkAddCourse();
                     break;
                     
-                //case "search-course":
-                    //$lessonController->searchCoursesByLessonName();
-                    
                 case "search-course":
-                    // Check if lesson_id is provided
-                    if (isset($get["lesson_name"])) {
-                        $lessonController->searchCoursesByLessonName($get["lesson_name"]);
-                    } else {
-                        // Redirect to error page if lesson_id is not provided
-                        echo "error";
-                    }
+                    $lessonController->searchCoursesByLessonName();
                     break;
                     
                 case "classe-lessons":

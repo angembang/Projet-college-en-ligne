@@ -75,7 +75,10 @@ class AuthLoginController extends AbstractController
                                     break;
                                 
                                 case "Professeur référent":
-                                
+                                    $_SESSION["user"] = $teacherReferent->getId();
+                                    $this->renderJson(["success" => true, "role" => "Professeur référent"]);
+                                    break;
+                                    
                                 case "Professeur":
                                      $this->renderJson(["success" => true, "role" => "Professeur"]);
                                     break;

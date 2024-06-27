@@ -57,11 +57,7 @@ class CourseManager extends AbstractManager
      */
     public function findCoursesByLessonId(int $courseLessonId): ?array
     {
-        $query = $this->db->prepare("SELECT courses.*, lessons.* 
-        FROM courses
-        JOIN lessons 
-        ON courses.IdLesson = lessons.id 
-        WHERE idLesson = :idLesson");
+        $query = $this->db->prepare("SELECT * FROM courses WHERE idLesson = :idLesson ORDER BY created_at DESC");
         
         // Bind parameters
         $parameters = [

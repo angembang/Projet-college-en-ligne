@@ -1,11 +1,11 @@
 // Import the form validation function from validator.js
-import {burgerMenu} from "././modules/home.js";
-import {validateRolesForm} from "././modules/validator.js";
-import {updateRemainingTime} from "././modules/countdown.js";
-import {configureTinyMCE} from "././modules/tinyMCE-config.js";
-import {showLoginError} from "././modules/login.js";
-import {completionSearchCoursesByLessonName} from "././modules/searchLessonCourses.js";
-
+import {burgerMenu} from "./modules/home.js";
+import {validateRolesForm} from "./modules/validator.js";
+import {updateRemainingTime} from "./modules/countdown.js";
+import {configureTinyMCE} from "./modules/tinyMCE-config.js";
+import {showLoginError} from "./modules/login.js";
+import {completionSearchCoursesByLessonName} from "./modules/searchLessonCourses.js";
+import {registerLogin} from "./modules/registerLogin.js";
 
 
 // Listen for the DOMContentLoaded event
@@ -34,6 +34,9 @@ document.addEventListener("DOMContentLoaded", () => {
     
     // Call the function to display connection error
     showLoginError();
+    
+    // Call the function to display connection error
+    registerLogin();
     
     // Call the function for lesson name autocompletion
     completionSearchCoursesByLessonName();

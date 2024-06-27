@@ -45,8 +45,11 @@ function showLoginError() {
                 // Check user's role and redirect accordingly
                 if (data.role === "Principal") {
                     window.location.href = "index.php?route=super-admin";
-                } else if (data.role === "Professeur référent" || data.role === "Professeur") {
-                    window.location.href = "adminHome.html.twig";
+                } else if (data.role === "Professeur référent") {
+                    window.location.href = "index.php?route=admin";
+                } else if(data.role === "Professeur") {
+                    window.location.href="index.php?route=sub-admin";
+                    
                 } else if (data.role === "Collégien") {
                     window.location.href = "index.php?route=lesson";
                 } else {

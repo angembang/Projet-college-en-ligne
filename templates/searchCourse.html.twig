@@ -42,7 +42,7 @@
         <!-- Logout button with an icon -->
         <button type="button" onclick="logout()">
             <!-- Logout icon -->
-            <i class="fa-solid fa-power-off"></i>
+            <i class="fa-solid fa-circle-arrow-up"></i>
         </button>
     </div>
     
@@ -60,36 +60,28 @@
             {% if course.fichierpdf %}
             <a href="{{ course.fichierpdf }}" download>Télécharger PDF</a>
             {% endif %}
-            
-            <!-- Image of the course -->
-            {% if course.image %}
-            <img src="{{ course.image }}" alt="image sur {{ course.title }}">
-            {% endif %}
         
             <!-- Course summary -->
             <section class="course-summary-section">
                 <h4>Résumé du cours</h4>
                 <p class="course-summary">{{ course.summary }}</p>
             </section>
-            
+        
+            <!-- Image of the course -->
+            {% if course.image %}
+            <img src="{{ course.image }}" alt="image sur {{ course.title }}">
+            {% endif %}
+        
+            <!-- Course content -->
+            <h5>Contenu du cours </h5>
+            <div  class="courses-container overflow-auto pr-3">{{ course.content }}</div>
+        
             <!-- YouTube video -->
             {% if course.video %}
             <div class="youtube-video">
                 <iframe width="350" height="250" src="{{ course.video }}" frameborder="0" allowfullscreen></iframe>
             </div>
             {% endif %}
-        
-            <!-- Course content -->
-            <h5>Contenu du cours </h5>
-            <div  class="courses-container overflow-auto pr-3">{{ course.content }}</div>
-            
-            <!-- Course link -->
-            {% if course.link %}
-            <div class="course-link">
-                <a href="{{ course.link }}" target="_blank">Cliquez ici pour plus de ressources</a>
-            </div>
-            {% endif %}
-            
         </section> 
         {% endfor %}
     </section>

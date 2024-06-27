@@ -1,0 +1,33 @@
+{% extends "layout.html.twig" %}
+
+{% block main %}
+    <h2>Collégiens de la {{ className }}</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Prénom</th>
+                <th>Nom</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for collegian in collegians %}
+                <tr>
+                    <td>{{ collegian.id }}</td> 
+                    <td>{{ collegian.firstName }}</td>
+                    <td>{{ collegian.lastName }}</td> 
+                    <td>
+                        <a href="index.php?route=edit-collegian&id={{ collegian.id }}" title="Edit">
+                            <i class="fas fa-edit"></i>
+                        </a>
+                        <a href="index.php?route=delete-collegian&id={{ collegian.id }}" title="Delete" onclick="return confirm('Are you sure you want to delete this collegian?');">
+                            <i class="fas fa-trash"></i>
+                        </a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    
+{% endblock %}

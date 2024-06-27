@@ -1,7 +1,7 @@
 header, 
 footer {
     background-color: #A30707;
-    height: 10%;
+    height: 75px;
     display: flex;
     align-items: center;
 }
@@ -34,11 +34,16 @@ header nav ul {
     border: none;
     background-color: inherit;
 }
+.search-logout-container button {
+    font-size: 2rem;
+    color: red;
+    
+}
 
 
 main {
     background-color: #1F203E;
-    height: 80%;
+    height: auto;
     flex-direction: column;
     align-items: center;
     justify-content: center;
@@ -50,8 +55,9 @@ main {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 3rem;
-    position: relative; /* Ajout de position relative */
+    gap: 0.1rem;
+    position: relative; 
+    margin-bottom: 0.7rem;
 }
 
 .search-logout-container form input, .search-logout-container form button, .search-logout-container  button {
@@ -63,23 +69,27 @@ main {
     border-radius: 10px;
     padding: 1rem 2rem 1rem 4rem;
     margin-left: 0.8rem;
-    position: relative; /* Ajout de position relative */
+    position: relative;
 }
 
 .search-logout-container form i {
     color: #072D67;
     font-size: 1.5rem;
-    position: absolute; /* Ajout de position absolue */
-    left: 2rem; /* Ajustement de la position */
-    top: 34%; /* Ajustement de la position */
-    transform: translateY(-50%); /* Ajustement de la position */
+    position: absolute; 
+    left: 2.5rem; 
+    top: 50%; 
+    transform: translateY(-50%); 
 }
 
 .fa-circle-arrow-up {
-    color: #A30707;
+    /*color: #A30707;*/
+    color: white;
     font-size: 2rem;
     margin-top: -2rem;
+    border: solid 6px #A30707;;
+    border-radius: 50%;
 }
+
 
 main ul {
     color: white;
@@ -97,7 +107,7 @@ main ul {
     content: "";
     display: block;
     border-bottom: 2px solid red;
-    margin-top: 10px; /* Adjust this value to increase or decrease the space between the title and the border */
+    margin-top: 10px;
 }
 
 .lesson-info {
@@ -113,6 +123,8 @@ main ul {
     text-decoration: none;
     border-radius: 15px;
 }
+
+
 h3 {
     font-size: 2rem;
     margin-left: 0.8rem;
