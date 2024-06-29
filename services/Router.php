@@ -78,10 +78,20 @@ class Router
                     $pageController->homeTeacher();
                     break;
                     
+                case "teacher-courses":
+                    // Check if lesson_id is provided
+                    if (isset($get["lesson_id"])) {
+                        $lessonController->showTeacherCoursesByLessonId((int)$get["lesson_id"]);
+                    } else {
+                        // Redirect to error page if lesson_id is not provided
+                        echo "error";
+                    }
+                    break;
+                    
                 case "cours":
                     // Check if lesson_id is provided
                     if (isset($get["lesson_id"])) {
-                        $lessonController->showCoursesByIdLesson($get["lesson_id"]);
+                        $lessonController->showCoursesByIdLesson((int)$get["lesson_id"]);
                     } else {
                         // Redirect to error page if lesson_id is not provided
                         echo "error";
@@ -102,6 +112,22 @@ class Router
                     
                 case "ajouter-cours":
                     $lessonController->addCourse();
+                    break;
+                    
+                case "update-course":
+                    $lessonController->updateCourse();
+                    break;
+                    
+                case "delete-course":
+                    $lessonController->deleteCourse();
+                    break;
+                    
+                case "checkUpdateCourse":
+                    $lessonController->checkUpdateCourse();
+                    break;
+                    
+                case "upload":
+                    $lessonController->upload();
                     break;
                     
                 case "check-addCourse":

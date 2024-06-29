@@ -183,6 +183,11 @@ class LessonController extends AbstractController
     }
     
     
+    /**
+     * Display the add course form with necessary data
+     * 
+     * @return void
+     */
     public function addCourse(): void
     {
     
@@ -442,6 +447,168 @@ class LessonController extends AbstractController
     
     
     /**
+     * 
+     * 
+     */
+    public function updateCourse(): void
+    {
+        if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['id'])) {
+            $courseId = (int) $_GET['id'];
+            $courseManager = new CourseManager();
+            $course = $courseManager->findCourseById($courseId);
+
+            $lessonManager = new LessonManager();
+            $lessons = $lessonManager->findAll();
+
+            if ($course) {
+                $this->render("editCourseForm.html.twig", [
+                    "course" => $course,
+                    "lessons" => $lessons
+                ]);
+            } else {
+                echo "Cours non trouvé.";
+            }
+        } else {
+            echo "Méthode de requête non valide.";
+        }
+    }
+    
+    
+    /**
+     * Updates the course
+     * 
+     */
+    public function checkUpdateCourse(): void 
+    {
+        // Check if the request method is POST and the course ID is set
+        if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id'])) {
+            $courseId = (int) $_POST['id'];
+            $courseManager = new CourseManager();
+
+            // Retrieve the current course to get the existing course data
+            $currentCourse = $courseManager->findCourseById($courseId);
+            if (!$currentCourse) {
+                $this->renderJson(["success" => false, "message" => "Cours non trouvé."]);
+                return;
+            }
+
+            // Retrieve form data
+            $idLesson = $_POST["idLesson"];
+            $unlockdate = $_POST["unlockdate"];
+            $subject = htmlspecialchars($_POST["subject"], ENT_QUOTES, 'UTF-8');
+            $summary = htmlspecialchars($_POST["summary"], ENT_QUOTES, 'UTF-8');
+            $content = htmlspecialchars($_POST["content"], ENT_QUOTES, 'UTF-8');
+            $videoUrl = $_POST['video'];
+            $link = $_POST["link"];
+            $image = $currentCourse->getImage(); // Use the existing image by default
+            $audio = $currentCourse->getAudio(); // Use the existing audio by default
+            $fichierpdf = $currentCourse->getFichierpdf(); // Use the existing PDF by default
+            $createdAt = $currentCourse->getCreatedAt(); // Keep the existing creation date
+            
+             // Handle uploaded files
+            $allowedImageTypes = ['image/jpeg', 'image/png', 'image/gif'];
+            $allowedAudioTypes = ['audio/mpeg', 'audio/wav'];
+            $allowedPdfType = ['application/pdf'];
+
+            $uploadDir = realpath(__DIR__ . '/../uploads');
+
+            if ($uploadDir !== false) {
+                $imageDir = $uploadDir . '/images/';
+                $audioDir = $uploadDir . '/audios/';
+                $pdfDir = $uploadDir . '/pdfs/';
+
+                // Create directories if they do not exist
+                if (!is_dir($imageDir)) {
+                mkdir($imageDir, 0777, true);
+                }
+                if (!is_dir($audioDir)) {
+                    mkdir($audioDir, 0777, true);
+                }
+                if (!is_dir($pdfDir)) {
+                    mkdir($pdfDir, 0777, true);
+                }
+
+                // Process image upload
+                if (!empty($_FILES['image']['name']) && in_array($_FILES['image']['type'], $allowedImageTypes)) {
+                    $imagePath = $imageDir . basename($_FILES['image']['name']);
+                    move_uploaded_file($_FILES['image']['tmp_name'], $imagePath);
+                    $image = '/collège/Projet-college-en-ligne/uploads/images/' . basename($_FILES['image']['name']);
+                }
+
+                // Process audio upload
+                if (!empty($_FILES['audio']['name']) && in_array($_FILES['audio']['type'], $allowedAudioTypes)) {
+                    $audioPath = $audioDir . basename($_FILES['audio']['name']);
+                    move_uploaded_file($_FILES['audio']['tmp_name'], $audioPath);
+                    $audio = '/collège/Projet-college-en-ligne/uploads/audios/' . basename($_FILES['audio']['name']);
+                }
+
+                // Process PDF upload
+                if (!empty($_FILES['fichierpdf']['name']) && in_array($_FILES['fichierpdf']['type'], $allowedPdfType)) {
+                    $pdfPath = $pdfDir . basename($_FILES['fichierpdf']['name']);
+                    move_uploaded_file($_FILES['fichierpdf']['tmp_name'], $pdfPath);
+                    $fichierpdf = '/collège/Projet-college-en-ligne/uploads/pdfs/' . basename($_FILES['fichierpdf']['name']);
+                }
+            }
+
+            // Update the course
+            $course = new Course(
+                $courseId,
+                $idLesson,
+                $unlockdate,
+                $subject,
+                $summary,
+                $content,
+                $image,
+                $audio,
+                $videoUrl,
+                $fichierpdf,
+                $link,
+                $createdAt // Keep the existing creation date
+            );
+             // Save the updated course
+            $updatedCourse = $courseManager->updateCourse($course);
+
+            // Return JSON response based on the update result
+            if ($updatedCourse) {
+                $this->renderJson(["success" => true, "message" => "Cours mis à jour avec succès."]);
+            } else {
+                $this->renderJson(["success" => false, "message" => "Échec de la mise à jour du cours."]);
+            }
+        } else {
+            // Return JSON response if the request method is invalid
+            $this->renderJson(["success" => false, "message" => "Méthode de requête non valide."]);
+        }
+    }
+    
+    
+    /**
+     * Handles the course deletion process.
+     * 
+     */
+    public function deleteCourse(): void 
+    {
+        // Check if the request method is GET and the course ID is set
+        if ($_SERVER["REQUEST_METHOD"] === "GET" && isset($_GET["id"])) {
+            $courseId = (int)$_GET["id"];
+            $courseManager = new CourseManager();
+        
+            // Attempt to delete the course by its ID
+            $deleted = $courseManager->deleteCourseById($courseId);
+        
+            // Return JSON response based on the deletion result
+            if ($deleted) {
+                $this->renderJson(["success" => true, "message" => "Cours supprimé avec succès."]);
+            } else {
+                $this->renderJson(["success" => false, "message" => "Échec de la suppression du cours."]);
+            }
+        } else {
+            // Return JSON response if the request method is invalid
+            $this->renderJson(["success" => false, "message" => "Méthode de requête non valide."]);
+        }
+    }
+    
+    
+    /**
      * Searches for courses by lesson name and renders the corresponding view.
      */
     public function searchCoursesByLessonName(): void
@@ -474,6 +641,128 @@ class LessonController extends AbstractController
     } catch(Exception $e) {
         echo "Une erreur s'est produite lors de l'opération: " . $e->getMessage();
     }
+        
+    }
+    
+    
+    /**
+     * 
+     * 
+     */
+    /*public function upload()
+    {
+        try {
+            // Destination directory for uploads
+            $uploadDir = realpath(__DIR__ . '/../uploads');
+            $errorMessages = [];
+            $uploadOk = 1;
+
+            // Debug: Output the real path to the target directory
+            error_log("Base upload directory: " . ($uploadDir !== false ? $uploadDir : "Not found"));
+
+            if ($uploadDir === false) {
+                $errorMessages[] = "Upload directory does not exist.";
+                $uploadOk = 0;
+            }
+
+            $imageDir = $uploadDir . '/images/';
+
+            // Create directory if it does not exist
+            if (!is_dir($imageDir) && !mkdir($imageDir, 0777, true) && !is_dir($imageDir)) {
+                $errorMessages[] = "Failed to create image directory.";
+                $uploadOk = 0;
+            }
+
+            if ($uploadOk == 1) {
+                $targetFile = $imageDir . basename($_FILES["file"]["name"]);
+                $imageFileType = strtolower(pathinfo($targetFile, PATHINFO_EXTENSION));
+
+                // Check if image file is an actual image or fake image
+                $check = getimagesize($_FILES["file"]["tmp_name"]);
+                if ($check === false) {
+                    $errorMessages[] = 'File is not an image.';
+                    $uploadOk = 0;
+                }
+
+                // Check if file already exists
+                if (file_exists($targetFile)) {
+                    $errorMessages[] = 'Sorry, file already exists.';
+                    $uploadOk = 0;
+                }
+
+                // Check file size
+                if ($_FILES["file"]["size"] > 5000000) { // 5MB limit
+                    $errorMessages[] = 'Sorry, your file is too large.';
+                    $uploadOk = 0;
+                }
+
+                // Allow certain file formats
+                if (!in_array($imageFileType, ["jpg", "png", "jpeg", "gif"])) {
+                    $errorMessages[] = 'Sorry, only JPG, JPEG, PNG & GIF files are allowed.';
+                    $uploadOk = 0;
+                }
+
+                // Check if $uploadOk is set to 0 by an error
+                if ($uploadOk == 0) {
+                    echo json_encode(['error' => implode(' ', $errorMessages)]);
+                } else {
+                    if (move_uploaded_file($_FILES["file"]["tmp_name"], $targetFile)) {
+                        echo json_encode(['location' => '/uploads/images/' . basename($_FILES["file"]["name"])]);
+                    } else {
+                        echo json_encode(['error' => 'Sorry, there was an error uploading your file.']);
+                    }
+                }
+            } else {
+                echo json_encode(['error' => implode(' ', $errorMessages)]);
+            }
+        } catch (Exception $e) {
+            echo json_encode(['error' => 'An error occurred: ' . $e->getMessage()]);
+            error_log("An error occurred during the upload: " . $e->getMessage() . $e->getCode());
+        }
+    }*/
+    
+    
+    /**
+     * Retrieves and renders the courses associated with a specific lesson.
+     *
+     * This method retrieves the courses associated with a specific lesson by its ID.
+     * It then renders the courses in a view if found.
+     *
+     * @param int $lessonId The ID of the lesson to retrieve courses for.
+     * 
+     * @return void 
+     */
+    public function showTeacherCoursesByLessonId(int $lessonId): void 
+    {
+        // Instantiate the LessonManager to retrieve the lesson by its unique identifier
+        $lessonManager = new LessonManager();
+        $currentLesson = $lessonManager->findLessonById($lessonId);
+
+        // Check if the lesson is found
+        if ($currentLesson) {
+            // Retrieve the ID and name of the lesson
+            $idLesson = $currentLesson->getId();
+            $lessonName = $currentLesson->getName(); 
+        
+            // Instantiate the CourseManager to retrieve courses by lesson unique identifier
+            $courseManager = new CourseManager();
+            $courses = $courseManager->findCoursesByLessonId($idLesson);
+        
+            // Check if courses were found
+            if ($courses) {
+                // Render courses in a view
+                $this->render("teacherCourses.html.twig", [
+                    "courses" => $courses,
+                    "lessonName" => $lessonName 
+                ]);
+            } else {
+                //No courses were found for the lesson
+                echo "error";
+            }
+        } else {
+            // Handle case where the lesson was not found
+            echo "error";
+        }
         
     }
 

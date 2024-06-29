@@ -170,36 +170,40 @@ class LessonManager extends AbstractManager
      *
      * @return Lesson|null The retrieved lesson or null if not found.
      */
-    public function findLessonByIdTeacher(int $lessonIdTeacher): ?Lesson
+    public function findLessonsByIdTeacher(int $lessonIdTeacher): ?array
     {
-        $query = $this->db->prepare("SELECT lessons.*, teachers.* 
+        $query = $this->db->prepare("SELECT 
+        lessons.* 
         FROM lessons
         JOIN teachers 
-        ON idTeacher = teachers.id 
-        WHERE id = :id");
+        ON lessons.idTeacher = teachers.id 
+        WHERE teachers.id = :teacherId");
         
         // Bind parameters
         $parameters = [
-            ":id" => $lessonIdTeacher
+            ":teacherId" => $lessonIdTeacher
             ];
         
         $query->execute($parameters);
         
-        $lessonData = $query->fetch(PDO::FETCH_ASSOC);
-        
-        if($lessonData)
-        {
-            $lesson = new Lesson(
-                $lessonData["id"],
-                $lessonData["name"],
-                $lessonData["idClass"],
-                $lessonData["idTeacher"],
-                $lessonData["idTimeTable"],
+        $lessonsData = $query->fetchAll(PDO::FETCH_ASSOC);
+
+        if($lessonsData) {
+            $lessons = [];
+            foreach($lessonsData as $lessonData) {
+                $lesson = new Lesson(
+                    $lessonData["id"],
+                    $lessonData["name"],
+                    $lessonData["idClass"],
+                    $lessonData["idTeacher"],
+                    $lessonData["idTimeTable"]
                 );
-                
-            return $lesson;
+                $lessons[] = $lesson;
+            }
+
+            return $lessons;
         }
-        // lesson not found
+        // No lessons found for the given day
         return null;
     }
     

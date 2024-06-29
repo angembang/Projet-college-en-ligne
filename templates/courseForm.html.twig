@@ -1,5 +1,30 @@
 {% extends "layout.html.twig" %}
 
+{%block head %}
+    <!-- Include parent block content -->
+    {{ parent() }}
+    <!-- Include additional stylesheet -->
+    <link rel="stylesheet" type="text/css" href="./assets/styles/css/home.css">    
+{% endblock %}
+
+
+{% block header %}
+    
+    <!-- Menu -->
+    <nav id="menu">
+        <!-- Hamburger menu icon -->
+        <button id="menu-icon">
+            <i class="fas fa-bars"></i>
+        </button>
+        <ul class="display-none">
+            <li><a href="index.php?route=about">A Propos</a></li>
+        </ul>
+    </nav>
+    <!-- Title of the plateform-->
+    <h1>Collège en ligne</h1>
+    
+{% endblock %}
+
 {% block main %}
     <!-- Title of the page -->
     <h1>Formulaire d'ajout de cours</h1>
@@ -71,5 +96,13 @@
     </form>
     <!-- Importing JavaScript module for client-side validation -->
     <script type="module" src="./assets/js/main.js"></script>
+    
+{% endblock %}
+
+{% block footer %}
+    <!-- Footer links -->
+    <a href="#">Mentions légales</a>
+    <a href="#">Politique de confidentialité</a>
+    <a href="#">Gestion des cookies</a>
     
 {% endblock %}

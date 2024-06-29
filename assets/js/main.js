@@ -1,15 +1,17 @@
-// Import the form validation function from validator.js
+// Import the necessary modules
 import {burgerMenu} from "./modules/home.js";
 import {validateRolesForm} from "./modules/validator.js";
 import {updateRemainingTime} from "./modules/countdown.js";
-import {configureTinyMCE} from "./modules/tinyMCE-config.js";
+//import {configureTinyMCE} from "./modules/tinyMCE-config.js";
 import {showLoginError} from "./modules/login.js";
 import {completionSearchCoursesByLessonName} from "./modules/searchLessonCourses.js";
 import {registerLogin} from "./modules/registerLogin.js";
+import {updateCourseModal} from "./modules/updateCoursesModal.js";
 
 
 // Listen for the DOMContentLoaded event
 document.addEventListener("DOMContentLoaded", () => {
+    console.log("DOM fully loaded and parsed");
     
     // Select all inputs fields in the form
     const roles = document.querySelectorAll("#role select");
@@ -23,20 +25,28 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     });
     
-    // Call the function for menu burger
-    burgerMenu();
     
     // Call the function to update the remaining time for lesson links
     updateRemainingTime();
     
+    // Call the function for menu burger
+    burgerMenu();
+    
     // Call the function to set up TinyMCE
-    configureTinyMCE();
+    //configureTinyMCE();
+    
+    // Call the function to display connection error
+    updateCourseModal();
     
     // Call the function to display connection error
     showLoginError();
     
+    
     // Call the function to display connection error
     registerLogin();
+    
+    
+    
     
     // Call the function for lesson name autocompletion
     completionSearchCoursesByLessonName();

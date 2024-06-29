@@ -166,7 +166,7 @@ class CourseManager extends AbstractManager
         {
             $course = new Course(
                 $courseData["id"],
-                $courseData["IdLesson"],
+                $courseData["idLesson"],
                 $courseData["unlockDate"],
                 $courseData["subject"],
                 $courseData["summary"],
@@ -248,13 +248,13 @@ class CourseManager extends AbstractManager
             subject = :subject,
             summary = :summary,
             content = :content,
-            images = :image,
+            image = :image,
             audio = :audio,
             video = :video,
             fichierpdf = :fichierpdf,
-            link = :link
-            created-_at = :created_at
-            WHERE subject = :subject");
+            link = :link,
+            created_at = :created_at
+            WHERE id = :id");
 
         // Bind parameters with their values
         $parameters = [
@@ -264,7 +264,7 @@ class CourseManager extends AbstractManager
             ":subject" => $course->getSubject(),
             ":summary" => $course->getSummary(),
             ":content" => $course->getContent(),
-            ":images" => $course->getImages(),
+            ":image" => $course->getImage(),
             ":audio" => $course->getAudio(),
             ":video" => $course->getVideo(),
             ":fichierpdf" => $course->getFichierpdf(),
@@ -281,22 +281,23 @@ class CourseManager extends AbstractManager
        return null;
         
     }
+    
 
     /**
      * Deletes a Course from the database.
      *
-     * @param string $courseSubject The subject of the course to be deleted.
+     * @param int $courseId The unique identifier of the course to be deleted.
      *
      * @return bool True if the operation is successful, false if not.
      */
-    public function deleteCourseBySubject(string $courseSubject): bool
+    public function deleteCourseById(int $courseId): bool
     {
         // Prepare the DELETE query
-        $query = $this->db->prepare("DELETE FROM courses WHERE subject = :subject");
+        $query = $this->db->prepare("DELETE FROM courses WHERE id = :id");
 
         // Bind parameters with their values
         $parameters = [
-            ":subject" => $courseSubject
+            ":id" => $courseId
             ];
 
         // Execute the query with parameters

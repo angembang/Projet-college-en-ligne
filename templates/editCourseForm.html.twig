@@ -1,0 +1,98 @@
+{% extends "layout.html.twig" %}
+
+{%block head %}
+    <!-- Include parent block content -->
+    {{ parent() }}
+    <!-- Include additional stylesheet -->
+    <link rel="stylesheet" type="text/css" href="./assets/styles/css/home.css">    
+{% endblock %}
+
+
+{% block header %}
+    
+    <!-- Menu -->
+    <nav id="menu">
+        <!-- Hamburger menu icon -->
+        <button id="menu-icon">
+            <i class="fas fa-bars"></i>
+        </button>
+        <ul class="display-none">
+            <li><a href="index.php?route=about">A Propos</a></li>
+        </ul>
+    </nav>
+    <!-- Title of the plateform-->
+    <h1>Collège en ligne</h1>
+    
+{% endblock %}
+
+{% block main %}
+    <h1>Modifier le cours</h1>
+    <!-- Modal -->
+        <div id="messageModal" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="closeModal()">&times;</span>
+                <p id="modalContent"></p>
+            </div>
+        </div>
+        
+    <form id="updateCourseForm" action="index.php?route=checkUpdateCourse" method="POST" enctype="multipart/form-data">
+        <input type="hidden" name="id" value="{{ course.id }}">
+        <fieldset>
+            <label for="idLesson">ID de la leçon :</label>
+            <select id="idLesson" name="idLesson" required>
+                <option value="" disabled>Sélectionner une leçon</option>
+                {% for lesson in lessons %}
+                    <option value="{{ lesson.id }}" {% if lesson.id == course.idLesson %}selected{% endif %}>{{ lesson.name }}</option>
+                {% endfor %}
+            </select>
+        </fieldset>
+        <fieldset>
+            <label for="unlockdate">Date de déblocage :</label>
+            <input type="date" id="unlockdate" name="unlockdate" value="{{ course.unlockDate }}" required>
+        </fieldset>
+        <fieldset>
+            <label for="subject">Sujet :</label>
+            <input type="text" id="subject" name="subject" value="{{ course.subject }}" required>
+        </fieldset>
+        <fieldset>
+            <label for="summary">Résumé :</label>
+            <textarea id="summary" name="summary" required>{{ course.summary }}</textarea>
+        </fieldset>
+        <fieldset>
+            <label for="content">Contenu :</label>
+            <textarea id="content" name="content" charset="utf-8" required>{{ course.content }}</textarea>
+        </fieldset>
+        <fieldset>
+            <label for="image">Image :</label>
+            <input type="file" id="image" name="image" accept="image/*">
+            {% if course.image %}
+                <p>Image actuelle : <img src="{{ course.image }}" alt="Current Image" style="max-width: 200px;"></p>
+            {% endif %}
+        </fieldset>
+        <fieldset>
+            <label for="audio">Audio :</label>
+            <input type="file" id="audio" name="audio" accept="audio/*">
+            {% if course.audio %}
+                <p>Audio actuel : {{ course.audio }}</p>
+            {% endif %}
+        </fieldset>
+        <fieldset>
+            <label for="video">Vidéo (lien YouTube) :</label>
+            <input type="text" id="video" name="video" value="{{ course.video }}" placeholder="Insérez le lien YouTube de la vidéo">
+        </fieldset>
+        <fieldset>
+            <label for="fichierpdf">Fichier PDF :</label>
+            <input type="file" id="fichierpdf" name="fichierpdf" accept=".pdf">
+            {% if course.fichierpdf %}
+                <p>PDF actuel : <a href="{{ course.fichierpdf }}">Voir le PDF</a></p>
+            {% endif %}
+        </fieldset>
+        <fieldset>
+            <label for="link">Lien :</label>
+            <input type="text" id="link" name="link" value="{{ course.link }}">
+        </fieldset>
+        <button type="submit">Modifier le cours</button>
+    </form>
+    
+    <script type="module" src="./assets/js/main.js"></script> 
+{% endblock %}

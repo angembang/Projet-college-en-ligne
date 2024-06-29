@@ -1,1 +1,17 @@
-<h2>page sub admin</h2>
+{% extends "layout.html.twig" %}
+
+{% block main %}
+    {% for class in classes %}
+        <h2>{{ class.classLevel }}</h2>
+        {% for lesson in class.lessons %}
+        <ul>
+            <li>
+                <h3>{{ lesson.lessonName }}</h3>
+            </li>
+        </ul>
+        <p><a href="index.php?route=ajouter-cours">Ajouter</a></p>
+        <!-- Link for showing all courses of the lesson -->
+        <p><a href="index.php?route=teacher-courses&lesson_id={{ lesson.lessonId }}">Voir</a></p>
+        {% endfor %}
+    {% endfor %}
+{% endblock %}

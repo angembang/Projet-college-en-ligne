@@ -72,8 +72,80 @@ class PageController extends AbstractController
      *
      * @return void
      */
-    public function homeTeacher(): void {
-        $this->render("subAdmin.html.twig", []);    
+    public function homeTeacher(): void 
+    {
+        // Start the session if it is not already started
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+        // Check if the user is logged in and is a teacher
+        if (isset($_SESSION["user"]) && 
+        ($_SESSION["role"] === "Professeur")) {
+            $teacherId = (int) $_SESSION["user"];
+        
+            // Instantiate the TeacherManager and the teacher referent
+            $teacherManager = new TeacherManager();
+        
+            // Find the teacher by its ID
+            $teacher = $teacherManager->findTeacherById($teacherId);
+
+            // Check if the teacher or teacher is found
+            if ($teacher) {
+            $idTeacher = $teacher->getId();
+            
+            // Instantiate the LessonManager and find lessons by the teacher's ID
+            $lessonManager = new LessonManager();
+            $lessons = $lessonManager->findLessonsByIdTeacher($idTeacher);
+
+            // Check if any lessons are found
+            if (!empty($lessons)) {
+                $classesData = [];
+
+                foreach ($lessons as $lesson) {
+                    $lessonId = $lesson->getId();
+                    $lessonName = $lesson->getName();
+                    $lessonIdClass = $lesson->getIdClass();
+
+                    // Instantiate the ClasseManager and find the class by its ID
+                    $classeManager = new ClasseManager();
+                    $class = $classeManager->findClasseById($lessonIdClass);
+                    
+                    if ($class) {
+                        $classLevel = $class->getLevel();
+
+                        // Prepare lesson data for rendering
+                        $lessonData = [
+                            "lessonName" => $lessonName,
+                            "lessonId" => $lessonId
+                        ];
+
+                        if (!isset($classesData[$class->getId()])) {
+                            $classesData[$class->getId()] = [
+                                "classLevel" => $classLevel,
+                                "lessons" => []
+                            ];
+                        }
+
+                        $classesData[$class->getId()]["lessons"][] = $lessonData;
+                    }
+                }
+
+                // Render the subAdminHome view with the data
+                $this->render("subAdmin.html.twig", [
+                    "classes" => $classesData
+                ]);
+            } else {
+                // No lessons found for the teacher
+                $this->renderJson(["error" => "Aucune leçon trouvée pour ce professeur."]);
+            }
+        } else {
+            // Teacher not found
+            $this->renderJson(["error" => "Professeur non trouvé."]);
+        }
+    } else {
+        // User not authenticated or incorrect role
+        $this->renderJson(["error" => "Utilisateur non authentifié ou rôle incorrect."]);
+    }
     }
     
     
@@ -115,6 +187,8 @@ class PageController extends AbstractController
         if (session_status() === PHP_SESSION_NONE) {
             session_start();
         }
+        // Debug: Log session data for debugging
+        error_log(print_r($_SESSION, true));
         // Check if the user is logged in and is a referent teacher
         if (isset($_SESSION["user"]) && isset($_SESSION["role"]) && $_SESSION["role"] === "Professeur référent") {
             $idTeacherReferent = (int) $_SESSION["user"];

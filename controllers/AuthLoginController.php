@@ -71,16 +71,22 @@ class AuthLoginController extends AbstractController
                             switch ($roleName) {
                                 case "Principal":
                                     $_SESSION["user"] = $principal->getId();
+                                    $_SESSION["role"] = "Principal";
                                     $this->renderJson(["success" => true, "role" => "Principal"]);
                                     break;
                                 
                                 case "Professeur référent":
+                                    $teacherReferentId = $teacherReferent->getIdClass();
                                     $_SESSION["user"] = $teacherReferent->getId();
-                                    $this->renderJson(["success" => true, "role" => "Professeur référent"]);
+                                    $_SESSION['classId'] = $teacherReferentId;
+                                    $_SESSION["role"] = "Professeur référent";
+                                    $this->renderJson(["success" => true, "role" => "Professeur référent", "classId" => $teacherReferentId]);
                                     break;
                                     
                                 case "Professeur":
-                                     $this->renderJson(["success" => true, "role" => "Professeur"]);
+                                    $_SESSION["user"] = $teacher->getId();
+                                    $_SESSION["role"] = "Professeur";
+                                    $this->renderJson(["success" => true, "role" => "Professeur"]);
                                     break;
                                 
                                 case "Collégien":
