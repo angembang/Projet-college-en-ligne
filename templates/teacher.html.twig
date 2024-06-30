@@ -6,13 +6,23 @@
     <ul>
         {% for teacher in teachers %}
             <li>{{teacher.firstName}}  {{teacher.lastName}}</li>
+            <!-- Lien pour modifier le professeur -->
+                <a href="index.php?route=update-teacher&id={{ teacher.id }}" title="Modifier"><i class="fas fa-edit"></i></a>
+                <!-- Lien pour supprimer le professeur -->
+                <a href="index.php?route=delete-teacher&id={{ teacher.id }}" onclick="return confirm('Êtes-vous sûr de vouloir supprimer ce professeur référent ?');" title="Supprimer"><i class="fas fa-trash-alt"></i></a>
         {% endfor %}
     </ul>
     
      <h1>Professeurs référents</h1>
      <ul>
         {% for teacherReferent in teachersReferents %}
-            <li>{{teacherReferent.firstName}} {{teacherReferent.lastName}}</li>
+            <li>
+                {{teacherReferent.firstName}} {{teacherReferent.lastName}}
+                <!-- Lien pour modifier le professeur référent -->
+                <a href="index.php?route=update-teacher-referent&id={{ teacherReferent.id }}" title="Modifier"><i class="fas fa-edit"></i></a>
+                <!-- Lien pour supprimer le professeur référent -->
+                <a href="index.php?route=delete-teacher-referent&id={{ teacherReferent.id }}" onclick="return confirm('Êtes-vous sûr de vouloir supprimer ce professeur référent ?');" title="Supprimer"><i class="fas fa-trash-alt"></i></a>
+                </li>
         {% endfor %}
     </ul>
     

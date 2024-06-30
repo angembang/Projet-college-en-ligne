@@ -1,0 +1,42 @@
+{% extends "layout.html.twig" %}
+
+{% block main %}
+<h2>Mis à jour du professeur</h2>
+<form method="POST" action="index.php?route=checkUpdateTeacher">
+    <input type="hidden" name="id" value="{{ teacher.id }}">
+
+    <fieldset>
+        <label for="firstName">Prénom :</label>
+        <input type="text" id="firstName" name="firstName" value="{{ teacher.firstName }}" required>
+    </fieldset>
+    
+    <fieldset>
+        <label for="lastName">Nom :</label>
+        <input type="text" id="lastName" name="lastName" value="{{ teacher.lastName }}" required>
+    </fieldset>
+    
+    <fieldset>
+        <label for="email">Email :</label>
+        <input type="email" id="email" name="email" value="{{ teacher.email }}" required>
+    </fieldset>
+    
+    <fieldset>
+        <label for="password">Mot de passe :</label>
+        <input type="password" id="password" name="password" placeholder="Enter new password" required>
+    </fieldset>
+    
+    <fieldset>
+        <label for="confirmPassword">Confirmer le mot de passe :</label>
+        <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Confirm new password" required>
+    </fieldset>
+
+    <fieldset>
+        <label for="idRole">Rôle :</label>
+        <input type="text" id="idRole" name="idRole" value="{{ teacher.idRole }}" required readonly>
+    </fieldset>
+
+    <fieldset>
+        <button type="submit">Mettre à jour</button>
+    </fieldset>
+</form>
+{% endblock %}

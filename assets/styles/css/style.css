@@ -34,7 +34,7 @@ main {
 }
 
 
-.modal {
+.modal, .registerModal {
     display: none;
     position: fixed;
     z-index: 1;
@@ -47,7 +47,7 @@ main {
     background-color: rgba(0,0,0,0.4);
 }
 
-.modal-content {
+.modal-content, .register-modal-content {
     background-color: #fefefe;
     margin: 15% auto;
     padding: 20px;
@@ -55,7 +55,7 @@ main {
     width: 80%;
 }
 
-.close {
+.close, .registerClose {
     color: #aaa;
     float: right;
     font-size: 28px;
@@ -63,8 +63,12 @@ main {
 }
 
 .close:hover,
-close:focus {
+close:focus,
+.registerClose:hover, 
+.registerClose:focus {
     color: black;
     text-decoration: none;
     cursor: pointer;
 }
+
+

@@ -24,8 +24,10 @@ class Router
         
         // Check if a route is provided
         if(isset($get["route"])) {
+            
             // Switch statement for routing
             switch($get["route"]) {
+                
                 case "inscription":
                     $authRegisterController->register(); 
                     break;
@@ -67,8 +69,33 @@ class Router
                     break;
                     
                 case "edit-collegian":
-                    $pageController->editCollegian();
+                    $pageController->updateCollegian();
                     break;
+                    
+                case "checkUpdateCollegian":
+                    $pageController->checkUpdateCollegian();
+                    break;
+                    
+                case "delete-teacher":
+                    $pageController->deleteTeacher();
+                    break;
+                    
+                case "update-teacher":
+                    $pageController->updateTeacher();
+                    break;
+                    
+                case "checkUpdateTeacher":
+                    $pageController->checkUpdateTeacher();
+                    break;
+                    
+                case "delete-teacher-referent":
+                    $pageController->deleteTeacherReferent();
+                    break;
+                    
+                case "edit-teacher-referent":
+                    $pageController->editTeacherReferent();
+                    break;
+                    
                     
                 case "admin":
                     $pageController->homeTeacherReferent();
@@ -84,7 +111,7 @@ class Router
                         $lessonController->showTeacherCoursesByLessonId((int)$get["lesson_id"]);
                     } else {
                         // Redirect to error page if lesson_id is not provided
-                        echo "error";
+                        $pageController->error(); 
                     }
                     break;
                     
@@ -94,7 +121,7 @@ class Router
                         $lessonController->showCoursesByIdLesson((int)$get["lesson_id"]);
                     } else {
                         // Redirect to error page if lesson_id is not provided
-                        echo "error";
+                        $pageController->error();
                     }
                     break;
                 
@@ -138,12 +165,20 @@ class Router
                     $lessonController->searchCoursesByLessonName();
                     break;
                     
+                case "search-course-keyword":
+                    $lessonController->searchCoursesByKeyword();
+                    break;
+                    
                 case "classe-lessons":
                     $lessonController->getAllLessonsByLoggedInCollegianClassId();    
                     break;
                     
                 case "about":
                     $pageController->about();    
+                    break;
+                    
+                case "error":
+                    $pageController->error();    
                     break;
                     
                 default:

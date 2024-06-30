@@ -25,15 +25,16 @@
     
     <h2>Inscription</h2>
     
-    {% if error_message is defined %}
-        <section class="alert-message">
-            <h3 id="error-message"></h3>
-            <button type="button" class="close-btn-error">Fermer</button>
-        </section>
-    {% endif %}
+    <!-- Modal -->
+        <div id="registerMessageModal" class="registerModal">
+            <div class="register-modal-content">
+                <span class="registerClose" onclick="closeModal()">&times;</span>
+                <p id="registerModalContent"></p>
+            </div>
+        </div>
     
     <!-- Registration Form -->
-    <form action="index.php?route=checkRegister" method="POST" id="register-form">
+    <form action="index.php?route=checkRegister" method="POST" id="registerForm">
         <fieldset>
             
             <!-- Token field -->

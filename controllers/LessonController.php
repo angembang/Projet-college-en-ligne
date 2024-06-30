@@ -15,24 +15,19 @@ class LessonController extends AbstractController
      */
     public function addLesson(): void
     {
-        // Retrieve all teachers from the database
+        // Instantiate teacher and teacher referent managers
         $teacherManager = new TeacherManager();
+        $teacherReferentManager = new TeacherReferentManager();
+        
+        // Retrieve all teachers and teachers referent from the database
         $teachers = $teacherManager->findAll();
-        
-         // Retrieve all classes from the database
-        $classeManager = new ClasseManager();
-        $classes = $classeManager->findAll();
-        
-        // Retrieve all timetables from the database
-        $timeTable = new TimeTableManager();
-        $timesTables = $timeTable->findAll();
+        $teachersreferent = $teacherReferentManager->findAll();
         
         // Render the lesson form view with necessary data passed as parameters
         $this->render("lessonForm.html.twig", [
             "teachers" => $teachers,
-            "classes" => $classes,
-            "timesTables" => $timesTables
-            ]);
+            "teachersReferent" => $teachersreferent
+        ]);
     }
     
     
@@ -40,27 +35,78 @@ class LessonController extends AbstractController
      * Adds a new lesson to the database.
      *
      * @param Lesson|null $lesson The lesson object to be added.
-     * @return Lesson|null The added lesson object if successful, otherwise null.
+     * @return void
      */
-    public function checkAddLesson(Lesson $lesson): ?Lesson
+    public function checkAddLesson(): void
     {
-        // Check if the lesson passed as parameter is valid
-        if($lesson !== null && 
-        $lesson->getName() !== null && 
-        $lesson->getIdClass() !== null && 
-        $lesson->getIdTeacher() !== null && 
-        $lesson->getIdTimeTable() !== null) 
-        {
-            // Instantiate the LessonManager to add the lesson to the database
-            $lessonManager = new LessonManager();
-    
-            // Add the lesson to the database using the createLesson method of the lesson manager
-            $lessonManager->createLesson($lesson);
-        
-            return $lesson;
-        } else {
-            // If the lesson passed as parameter is not valid, return null or handle the error as needed
-            return null;
+        try {
+            // Check if the form is submitted via POST method
+            if ($_SERVER["REQUEST_METHOD"] === "POST") {
+                // Check if all required fields are present and not empty
+                if((isset($_POST["name"])) && 
+                (isset($_POST["classLevel"])) && 
+                (isset($_POST["idTeacher"])) && 
+                (isset($_POST["dayOfWeek"])) && 
+                (isset($_POST["startTime"])) && 
+                (isset($_POST["endTime"]))) {
+                    // Retrieve and sanitize input data
+                    $lessonName = htmlspecialchars($_POST["name"]);
+                    $classLevel = htmlspecialchars($_POST["classLevel"]);
+                    $idTeacher = htmlspecialchars($_POST["idTeacher"]);
+                    $dayOfWeek = htmlspecialchars($_POST["dayOfWeek"]);
+                    $startTime = htmlspecialchars($_POST["startTime"]);
+                    $endTime = htmlspecialchars($_POST["endTime"]);
+                    
+                    // Instanciate necessary managers for handling database operations
+                    $classeManager = new ClasseManager();
+                    $timeTableManager = new TimeTableManager();
+                    $lessonManager = new LessonManager();
+                    
+                    // Check and create class if necessary
+                    $class = $classeManager->findClasseByLevel($classLevel);
+                    if (!$class) {
+                        $classData = new Classe(null, $classLevel);
+                        $class = $classeManager->createClasse($classData);
+                        if (!$class) {
+                            $this->renderJson(["success" => false, "message" => "Échec lors de l'ajout de la classe"]);
+                            return;
+                        }
+                    }
+                    $idClass = $class->getId();
+
+                    // Check and create timetable if necessary
+                    $timeTable = $timeTableManager->findTimeTableByWeekDayStartTimeAndEndTime($dayOfWeek, $startTime, $endTime);
+                    if (!$timeTable) {
+                        $timeTableData = new TimeTable(null, $dayOfWeek, $startTime, $endTime);
+                        $timeTable = $timeTableManager->createTimeTable($timeTableData);
+                        if (!$timeTable) {
+                            $this->renderJson(["success" => false, "message" => "Échec lors de l'ajout de l'horaire"]);
+                            return;
+                        }
+                    }
+                    $idTimeTable = $timeTable->getId();
+
+                    // Create the lesson using identifiers of class, teacher, and timetable
+                    $lessonData = new Lesson(null, $lessonName, $idClass, $idTeacher, $idTimeTable);
+                    $lesson = $lessonManager->createLesson($lessonData);
+                    if (!$lesson) {
+                        $this->renderJson(["success" => false, "message" => "Échec lors de l'ajout du cours"]);
+                        return;
+                    }
+
+                    // If all operations were successful
+                    $this->renderJson(["success" => true, "message" => "Cours ajouté avec succès"]);
+                } else {
+                    // If not all fields are filled
+                    $this->renderJson(["success" => false, "message" => "Veuillez renseigner tous les champs obligatoires"]);
+                }
+            } else {
+                // If not submitted via POST
+                $this->renderJson(["success" => false, "message" => "Le formulaire n'est pas soumis par la methode POST"]);
+            }
+        } catch (Exception $e) {
+            // Catch any thrown exceptions and display the error message
+            $this->renderJson(["success" => false, "message" => "An error occurred: " . $e->getMessage()]);
         }
     }
     
@@ -447,8 +493,9 @@ class LessonController extends AbstractController
     
     
     /**
+     * Display the update course form with necessary data
      * 
-     * 
+     * @return void
      */
     public function updateCourse(): void
     {
@@ -475,7 +522,8 @@ class LessonController extends AbstractController
     
     
     /**
-     * Updates the course
+     * Process form submission to update a course.
+     * Handles form validation, file uploads, and database update.
      * 
      */
     public function checkUpdateCourse(): void 
@@ -642,6 +690,36 @@ class LessonController extends AbstractController
         echo "Une erreur s'est produite lors de l'opération: " . $e->getMessage();
     }
         
+    }
+    
+    
+    /**
+     * Searches for courses by keyword and renders the corresponding view. 
+     * 
+     */
+    public function searchCoursesByKeyword(): void
+    {
+        try {
+            if (isset($_GET["keyword"])) {
+                $keyword = htmlspecialchars($_GET["keyword"]);
+            
+                $courseManager = new CourseManager();
+                $courses = $courseManager->searchCoursesByKeyword($keyword);
+            
+                if ($courses) {
+                    $this->render('searchCourseByKeyword.html.twig', [
+                        'courses' => $courses,
+                        'searchKeyword' => $keyword
+                    ]);
+                } else {
+                    $this->render("error.html.twig", ['keyword' => $keyword]);
+                }
+            } else {
+                $this->render("error.html.twig", []);
+            }
+        } catch (Exception $e) {
+            echo "Une erreur s'est produite lors de l'opération: " . $e->getMessage();
+        }
     }
     
     

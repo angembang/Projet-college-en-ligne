@@ -121,6 +121,46 @@ class TimeTableManager extends AbstractManager
     }
     
     
+    /**
+     * 
+     * 
+     */ 
+    public function findTimeTableByWeekDayStartTimeAndEndTime(string $weekDay, string $startTime, string $endTime): ?TimeTable
+    {
+        // Prepare the query to retrieve a timeTable by its weekDay, startTime and endTime
+        $query = $this->db->prepare("SELECT * FROM timesTables 
+        WHERE weekDay = :weekDay  
+        AND startTime = :startTime 
+        AND endTime = :endTime");
+        
+        // Bind the parameters with their values
+        $parameters = [
+            ":weekDay" => $weekDay,
+            ":startTime" => $startTime,
+            ":endTime" => $endTime
+            ];
+            
+             $query->execute($parameters);
+        
+            $timeTableData = $query->fetch(PDO::FETCH_ASSOC);
+        
+            if($timeTableData) {
+                $timeTable = new TimeTable(
+                $timeTableData["id"],
+                $timeTableData["weekDay"],
+                $timeTableData["startTime"],
+                $timeTableData["endTime"]
+                );
+            
+                return $timeTable;
+            }
+            // $timeTable not found
+            return null;
+        
+    
+    }
+    
+    
     /*
     * Retrieves all timesTables from the database
     *

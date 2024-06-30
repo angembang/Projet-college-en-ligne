@@ -1,39 +1,66 @@
 {% extends "layout.html.twig" %}
 
 {% block main %}
-    <h2>Edit Collegian</h2>
-    <form method="post" action="index.php?route=edit-collegian">
-        <input type="hidden" name="id" value="{{ collegian.id }}">
-        <div>
-            <label for="firstName">Prénom :</label>
-            <input type="text" id="firstName" name="firstName" value="{{ collegian.firstName }}" required>
-        </div>
-        <div>
-            <label for="lastName">Nom :</label>
-            <input type="text" id="lastName" name="lastName" value="{{ collegian.lastName }}" required>
-        </div>
-        <div>
-            <label for="email">Email :</label>
-            <input type="email" id="email" name="email" value="{{ collegian.email }}" required>
-        </div>
-        <div>
-            <label for="password">Mot de passe :</label>
-            <input type="password" id="password" name="password" value="{{ collegian.password }}" required>
-        </div>
-        <div>
-            <label for="classId">Classe :</label>
-            <input type="text" id="classId" name="classId" value="{{ collegian.idClass }}" required>
-        </div>
-        <div>
-            <label for="idLanguage">Langue :</label>
-            <input type="text" id="idLanguage" name="idLanguage" value="{{ collegian.idLanguage }}" required>
-        </div>
-        <div>
-            <label for="idRole">Rôle :</label>
-            <input type="text" id="idRole" name="idRole" value="{{ collegian.idRole }}" required>
-        </div>
-        <div>
-            <button type="submit">Sauvegarder</button>
-        </div>
-    </form>
+<h2>Edit Collegian</h2>
+<form method="POST" action="index.php?route=checkUpdateCollegian">
+    <input type="hidden" name="id" value="{{ collegian.id }}">
+
+    <fieldset>
+        <label for="firstName">Prénom :</label>
+        <input type="text" id="firstName" name="firstName" value="{{ collegian.firstName }}" required>
+    </fieldset>
+    
+    <fieldset>
+        <label for="lastName">Nom :</label>
+        <input type="text" id="lastName" name="lastName" value="{{ collegian.lastName }}" required>
+    </fieldset>
+    
+    <fieldset>
+        <label for="email">Email :</label>
+        <input type="email" id="email" name="email" value="{{ collegian.email }}" required>
+    </fieldset>
+    
+    <fieldset>
+        <label for="password">Mot de passe :</label>
+        <input type="password" id="password" name="password" placeholder="Enter new password" required>
+    </fieldset>
+    
+    <fieldset>
+        <label for="confirmPassword">Confirmer le mot de passe :</label>
+        <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Confirm new password" required>
+    </fieldset>
+
+    <fieldset>
+        <label for="idClass">Classe :</label>
+        <select id="idClass" name="idClass" required>
+            <option value="" disabled {{ collegian.idClass ? '' : 'selected' }}>Choisissez une classe</option>
+            {% for class in classes %}
+            <option value="{{ class.id }}" {{ collegian.idClass == class.id ? 'selected' : '' }}>
+                {{ class.level }}
+            </option>
+            {% endfor %}
+        </select>
+    </fieldset>
+
+    <fieldset>
+        <label for="idLanguage">Langue :</label>
+        <select id="idLanguage" name="idLanguage" required>
+            <option value="" disabled {{ collegian.idLanguage ? '' : 'selected' }}>Choisissez une langue</option>
+            {% for language in languages %}
+            <option value="{{ language.id }}" {{ collegian.idLanguage == language.id ? 'selected' : '' }}>
+                {{ language.name }}
+            </option>
+            {% endfor %}
+        </select>
+    </fieldset>
+
+    <fieldset>
+        <label for="idRole">Rôle :</label>
+        <input type="text" id="idRole" name="idRole" value="{{ collegian.idRole }}" required readonly>
+    </fieldset>
+
+    <fieldset>
+        <button type="submit">Mettre à jour</button>
+    </fieldset>
+</form>
 {% endblock %}

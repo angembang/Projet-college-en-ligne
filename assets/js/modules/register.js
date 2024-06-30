@@ -1,62 +1,51 @@
 function showRegisterError() 
 {
-    // Get the login form element
-    const registerForm = document.getElementById("register-form");
-    // Get the alert message element
-    const alertMessage = document.querySelector(".alert-message");
-    // Get the error message element
-    const errorMessageElement = document.getElementById("error-message");
-    // Get the close button element for error message
-    const closeBtnError = document.querySelector(".close-btn-error");
+    const form = document.getElementById("registerForm");
 
-    // Add event listener for form submission
-    registerForm.addEventListener("submit", function(event) {
-        // Prevent default form submission behavior
-        event.preventDefault();
+    if (form) {
+        console.log("Form found and event listener added");
+        form.addEventListener("submit", function(event) {
+            event.preventDefault();
+             console.log("Form submission intercepted");
 
-        const formData = new FormData(registerForm);
-        
-        const options = {
-          // Set request method to POST
-          method: "POST",
-          body: formData
-        }
-        // Retrieve information from the server to validate register credentials
-        fetch("index.php?route=checkRegister", options)
-        .then(response => {
-            // Check if the response is different than ok
-            if(!response.ok) {
-              throw new Error("Reponse du serveur non valide")
-            }
-            // Parse response as JSON
-            return response.json();
-        })
-        .then(data => {
-            // Check if register is successful
-            if(data && data.success) {
-              alert("Inscription réussie !");
-              window.location.href = "index.php?route=lesson";
-            } else if(data && data.error) {
-              // Display error message
-              errorMessageElement.textContent = data.error;
-              alertMessage.style.display = "block";
-            } else {
-              // Handle unexpected server response
-              console.error("Réponse inattendue du serveur:", data);
-            }
-        })
-        .catch(error => {
-            console.error("Erreur lors de la vérification de l'insciption':", error);
-            // Handle others errors : display a generic error message
-            errorMessageElement.textContent = "Une erreur s'est produite lors de la vérification de l'inscription'.";
+            const formData = new FormData(form);
+
+            fetch("index.php?route=checkRegister", {
+                method: "POST",
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log("Fetch response received", data);
+                showModal(data.message);
+            })
+            .catch(error => {
+                console.error("Error:", error);
+                showModal("Une erreur s'est produite lors de la mise à jour du cours.");
+                console.error("Error:", error);
+            });
         });
+    }
 
-    })
-    // Add event listener for click on the close button
-    closeBtnError.addEventListener("click", function() {
-      // Hide alert message
-      alertMessage.style.display = "none";
-    })
+    function showModal(message) {
+        const modal = document.getElementById("registerMessageModal");
+        const modalContent = document.getElementById("registerModalContent");
+        modalContent.innerHTML = message;
+        modal.style.display = "block";
+    }
+
+    window.closeModal = function() {
+        const modal = document.getElementById("registerMessageModal");
+        modal.style.display = "none";
+    }
+
+    // Close the modal when the user click out of it
+    window.onclick = function(event) {
+        const modal = document.getElementById("registerMessageModal");
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+    }
 
 }
 export {showRegisterError};

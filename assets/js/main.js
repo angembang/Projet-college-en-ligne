@@ -7,6 +7,8 @@ import {showLoginError} from "./modules/login.js";
 import {completionSearchCoursesByLessonName} from "./modules/searchLessonCourses.js";
 import {registerLogin} from "./modules/registerLogin.js";
 import {updateCourseModal} from "./modules/updateCoursesModal.js";
+import {showRegisterError} from "./modules/register.js";
+
 
 
 // Listen for the DOMContentLoaded event
@@ -35,20 +37,19 @@ document.addEventListener("DOMContentLoaded", () => {
     // Call the function to set up TinyMCE
     //configureTinyMCE();
     
-    // Call the function to display connection error
+    // Call the function to display update course form error
     updateCourseModal();
+    
+    // Call the function to display register error
+    showRegisterError();
     
     // Call the function to display connection error
     showLoginError();
     
-    
     // Call the function to display connection error
     registerLogin();
     
-    
-    
-    
     // Call the function for lesson name autocompletion
     completionSearchCoursesByLessonName();
-   
+    
 });

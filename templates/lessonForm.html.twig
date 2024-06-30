@@ -1,69 +1,66 @@
 {% extends "layout.html.twig" %}
 
-
 {% block main %}
 
-    
     <h1>Ajout des cours</h1>
-    
+
     <!-- Add lesson form -->
     <form action="index.php?route=checkAddLesson" method="post">
-        
         <fieldset>
-            
-            <!-- The lesson name field  -->
+            <!-- The lesson name field -->
             <fieldset>
                 <label for="name">Nom du cours:</label>
-                <input type="text" id="name" name="name">
+                <input type="text" id="name" name="name" placeholder="Entrez le nom du cours" required>
             </fieldset>
-            
-            <!-- The classe field  -->
-            <fieldset>
-                <label for="idClass">Classe :</label>
-                <select id="idClass" name="idClass">
-                    <!-- loop to display classe selection options -->
-                    {% for lesson in lessons %}
-                        <option value ="{{classe.getId()}}">
-                            {{ classe.getLevel }}
-                        </option>
-                    {% endfor %}
-                </select>
-            </fieldset>
-            
-            <!-- The teacher fiel -->
+
+            <!-- The teacher field including both regular and referent teachers -->
             <fieldset>
                 <label for="idTeacher">Professeur :</label>
-                <select id="idTeacher" name="idTeacher">
-                    <!-- Loop to display teacher selection optiobs -->
+                <select id="idTeacher" name="idTeacher" required>
+                    <option value="" disabled selected>Choisissez le professeur</option>
                     {% for teacher in teachers %}
-                        <option value = "{{ teacher.getId() }}">
-                            {{ teacher.getFirstName() }} 
-                            {{ teacher.getLastName }}
+                        <option value="{{ teacher.getId() }}">
+                            {{ teacher.getFirstName() }} {{ teacher.getLastName() }}
                         </option>
                     {% endfor %}
                 </select>
             </fieldset>
             
-            <!-- the timeTable field -->
+            <!-- The class name field -->
             <fieldset>
-                <label for="idTimeTable">Horaire :</label>
-                <select id="idTimeTable" name="idTimeTable">
-                    <!-- Loop to display timeTable selection options -->
-                    {% for timeTable in timesTables %}
-                        <option value = "{{ timeTable.getId() }}">
-                            {{ timeTable.getWeekDay() }} 
-                            {{ timeTable.getStartTime() }} 
-                            {{ timeTable.getEndTime() }}
-                        </option>
-                    {% endfor %}
+                <label for="classLevel">Classe :</label>
+                <input type="text" id="classLevel" name="classLevel" placeholder="Entrez la classe" required>
+            </fieldset>
+            
+            <!-- The day of the week field -->
+            <fieldset>
+                <label for="dayOfWeek">Jour de la semaine :</label>
+                <select id="dayOfWeek" name="dayOfWeek" required>
+                    <option value="" disabled selected>Choisissez le jour de la semaine</option>
+                    <option value="Lundi">Lundi</option>
+                    <option value="Mardi">Mardi</option>
+                    <option value="Mercredi">Mercredi</option>
+                    <option value="Jeudi">Jeudi</option>
+                    <option value="Vendredi">Vendredi</option>
                 </select>
             </fieldset>
-        
+
         </fieldset>
         
+        <!-- The start time field -->
+        <fieldset>
+            <label for="startTime">Heure de début :</label>
+            <input type="time" id="startTime" name="startTime" min="08:00" max="17:00" required>
+        </fieldset>
+
+        <!-- The end time field -->
+        <fieldset>
+            <label for="endTime">Heure de fin :</label>
+            <input type="time" id="endTime" name="endTime" min="08:00" max="17:00" required>
+        </fieldset>
+
         <!-- Registration button -->
         <button type="submit" value="Submit">Ajouter</button>
-    
     </form>
-    
+
 {% endblock %}

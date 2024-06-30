@@ -280,7 +280,7 @@ class PageController extends AbstractController
      *
      * @return void
      */
-    public function editCollegian(): void 
+    public function updateCollegian(): void 
     {
         // Check if the request method is GET and the collegian ID is set in the GET parameters
         if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET["id"])) {
@@ -290,35 +290,227 @@ class PageController extends AbstractController
             $collegianManager = new CollegianManager();
             // Find the collegian by their ID
             $collegian = $collegianManager->findCollegianById($collegianId);
-            // Render the edit form with the collegian's data
+            // Instantiate neccessary classes managers
+            $classeManager = new ClasseManager();
+            $roleManager = new RoleManager();
+            $languageManager = new LanguageManager();
+            // Get all classes, roles, and languages from the database
+            $classes = $classeManager->findAll();
+            $roles = $roleManager->findAll();
+            $languages = $languageManager->findAll();
+
+            // Render the registration form with necessary data
             $this->render("editCollegian.html.twig", [
+                "classes" => $classes,
+                "roles" => $roles,
+                "languages" => $languages,
                 "collegian" => $collegian
             ]);
-        } 
-        // Check if the request method is POST and the collegian ID is set in the POST parameters
-        elseif ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST["id"])) {
-            // Retrieve the collegian ID from the POST parameters and cast it to an integer
-            $collegianId = (int) $_POST["id"];
-            // Instantiate the CollegianManager
-            $collegianManager = new CollegianManager();
-            // Create a new Collegian object with the updated information from the POST parameters
-            $collegian = new Collegian(
-                $collegianId,
-                $_POST["firstName"],
-                $_POST["lastName"],
-                $_POST["email"],
-                $_POST["password"],
-                $_POST["classId"],
-                $_POST["idLanguage"],
-                $_POST["idRole"]
-            );
-            // Update the collegian in the database
-            $collegianManager->updateCollegian($collegian);
-        
-            // Redirect to the collegian listing page after updating
-            header("Location: index.php?route=collegian");
-            exit();
         }
+    }
+    
+    
+    /**
+     * Updates collegian information based on POST request data.
+     * Validates and sanitizes input data, checks for the existence of the collegian in the database,
+     * and updates the collegian's information if validation passes. 
+     */
+    public function checkUpdateCollegian(): void 
+    {
+        // Check if the request method is POST
+        if ($_SERVER["REQUEST_METHOD"] === "POST") {
+            // Ensure all required fields are present
+            if (isset($_POST["id"], $_POST["firstName"], $_POST["lastName"], $_POST["email"], $_POST["password"], $_POST["confirmPassword"], $_POST["idClass"], $_POST["idRole"])) {
+                // Check if the ID is an integer
+                $collegianId = filter_var($_POST["id"], FILTER_VALIDATE_INT);
+                if (!$collegianId) {
+                    $this->renderJson(["success" => false, "message" => "Identifiant invalide."]);
+                    return;
+                }
+
+                // Retrieve the collegian from the database to check existence
+                $collegianManager = new CollegianManager();
+                $existingCollegian = $collegianManager->findCollegianById($collegianId);
+                if (!$existingCollegian) {
+                    $this->renderJson(["success" => false, "message" => "Collégien non trouvé."]);
+                    return;
+                }
+
+                // Verify that the provided passwords match.
+                if ($_POST["password"] !== $_POST["confirmPassword"]) {
+                    $this->renderJson(["success" => false, "message" => "Passwords do not match."]);
+                    return;
+                }
+
+                // Validate the email address format.
+                if (!filter_var($_POST["email"], FILTER_VALIDATE_EMAIL)) {
+                    $this->renderJson(["success" => false, "message" => "Invalid email address."]);
+                    return;
+                }
+
+                // Check the strength of the provided password against the defined regex pattern.
+                $passwordRegex = '/^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*()-_=+{};:,<.>]).{8,}$/';
+                if (!preg_match($passwordRegex, $_POST["password"])) {
+                    $this->renderJson(["success" => false, "message" => "Password must contain at least 8 characters, including a digit, an uppercase letter, a lowercase letter, and a special character."]);
+                    return;
+                }
+
+                // Only hash the password if it is new to avoid unnecessary processing.
+                $hashedPassword = password_verify($_POST["password"], $existingCollegian->getPassword()) ? 
+                $existingCollegian->getPassword() : 
+                    password_hash($_POST["password"], PASSWORD_BCRYPT);
+
+                // Retrieve and check the class details from the database.
+                $classManager = new ClasseManager();
+                $class = $classManager->findClasseById($_POST["idClass"]);
+                if (!$class) {
+                    $this->renderJson(["success" => false, "message" => "Class not found."]);
+                    return;
+                }
+
+                // Determine if the idLanguage should be updated based on the class level.
+                $idLanguage = null;
+                if ($class->getLevel() !== "6ème") {
+                    $idLanguage = isset($_POST["idLanguage"]) ? htmlspecialchars($_POST["idLanguage"]) : null;
+                }
+
+                // Update the collegian with sanitized and validated input.
+                $updatedCollegian = new Collegian(
+                    $collegianId,
+                    htmlspecialchars($_POST["firstName"]),
+                    htmlspecialchars($_POST["lastName"]),
+                    htmlspecialchars($_POST["email"]),
+                    $hashedPassword,
+                    htmlspecialchars($_POST["idClass"]),
+                    $idLanguage,
+                    htmlspecialchars($_POST["idRole"])
+                );
+
+                // Perform the update in the database and check the result.
+                if ($collegianManager->updateCollegian($updatedCollegian)) {
+                    $this->renderJson(["success" => true, "message" => "Collegian update successful."]);
+                } else {
+                    $this->renderJson(["success" => false, "message" => "Failed to update collegian."]);
+                }
+            } else {
+                $this->renderJson(["success" => false, "message" => "All fields are required."]);
+            }
+        } else {
+            $this->renderJson(["success" => false, "message" => "Form must be submitted via POST method."]);
+        }
+    }
         
+        
+    
+    
+    
+    /**
+     * Display the update teacher form with necessary data
+     * 
+     */
+    public function updateTeacher(): void 
+    {
+        // Check if the request method is GET and the teacher ID is set in the GET parameters
+        if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET["id"])) {
+            // Retrieve the teacher ID from the GET parameters and cast it to an integer
+            $teacherId = (int) $_GET["id"];
+            // Instantiate the TeacherManager
+            $teacherManager = new TeacherManager();
+            // Find the teacher by its identifier
+            $teacher = $teacherManager->findTeacherById($teacherId);
+            // Render the edit form with the teacher's data
+            $this->render("editTeacher.html.twig", [
+                "teacher" => $teacher
+            ]);
+        } 
+        
+    }
+    
+    
+    /**
+     * Updates teacher information based on POST request data.
+     * Validates and sanitizes input data, checks for the existence of the teacher in the database,
+     * and updates the teacher's information if validation passes.  
+     */
+    public function checkUpdateTeacher(): void 
+    {
+        // Check if the request method is POST
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            // Ensure all required fields are present
+            if (isset($_POST["id"], $_POST["firstName"], $_POST["lastName"], $_POST["email"], $_POST["password"], $_POST["confirmPassword"], $_POST["idRole"])) {
+                // Validate the teacher ID
+                $teacherId = filter_var($_POST["id"], FILTER_VALIDATE_INT);
+                if (!$teacherId) {
+                    $this->renderJson(["success" => false, "message" => "Identifiant invalide."]);
+                    return;
+                }
+
+                // Instantiate the TeacherManager
+                $teacherManager = new TeacherManager();
+                // Check if the teacher exists
+                $existingTeacher = $teacherManager->findTeacherById($teacherId);
+                if (!$existingTeacher) {
+                    $this->renderJson(["success" => false, "message" => "Professeur non trouvé."]);
+                    return;
+                }
+
+                // Check if passwords match
+                if ($_POST["password"] !== $_POST["confirmPassword"]) {
+                    $this->renderJson(["success" => false, "message" => "Les mots de passe ne correspondent pas."]);
+                    return;
+                }
+
+                // Validate the email address
+                if (!filter_var($_POST["email"], FILTER_VALIDATE_EMAIL)) {
+                    $this->renderJson(["success" => false, "message" => "Adresse email invalide."]);
+                    return;
+                }
+
+                // Password strength check
+                $passwordRegex = '/^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*()-_=+{};:,<.>]).{8,}$/';
+                if (!preg_match($passwordRegex, $_POST["password"])) {
+                    $this->renderJson(["success" => false, "message" => "Le mot de passe doit contenir au moins 8 caractères, un chiffre, une lettre en majuscule, une lettre en minuscule et un caractère spécial."]);
+                    return;
+                }
+
+                // Hash the password if it's new
+                $hashedPassword = password_verify($_POST["password"], $existingTeacher->getPassword()) ? 
+                $existingTeacher->getPassword() : // Use old password if unchanged 
+                password_hash($_POST["password"], PASSWORD_BCRYPT); // Otherwise, hash new
+
+                // Update the teacher with sanitized input
+                $teacher = new Teacher(
+                    $teacherId,
+                    htmlspecialchars($_POST["firstName"]),
+                    htmlspecialchars($_POST["lastName"]),
+                    htmlspecialchars($_POST["email"]),
+                    $hashedPassword,
+                    htmlspecialchars($_POST["idRole"])
+                );
+
+                // Perform the update
+                if ($teacherManager->updateTeacher($teacher)) {
+                    $this->renderJson(["success" => true, "message" => "Mise à jour du professeur réussie"]);
+                } else {
+                    $this->renderJson(["success" => false, "message" => "Échec lors de la mise à jour du professeur."]);
+                }
+            } else {
+                $this->renderJson(["success" => false, "message" => "Tous les champs sont requis."]);
+            }
+        } else {
+            $this->renderJson(["success" => false, "message" => "Le formulaire doit être soumis par méthode POST."]);
+        }
+    }
+    
+    
+    /**
+     * Display error page
+     * 
+     * @return void
+     * 
+     */
+    public function error(): void 
+    {
+        $this->render("error.html.twig", []);
     }
 }

@@ -57,11 +57,15 @@ class CourseManager extends AbstractManager
      */
     public function findCoursesByLessonId(int $courseLessonId): ?array
     {
-        $query = $this->db->prepare("SELECT * FROM courses WHERE idLesson = :idLesson ORDER BY created_at DESC");
+        $query = $this->db->prepare("SELECT * FROM courses 
+        WHERE idLesson = :idLesson 
+        AND unlockDate <= :today 
+        ORDER BY created_at DESC");
         
         // Bind parameters
         $parameters = [
-            ":idLesson" => $courseLessonId
+            ":idLesson" => $courseLessonId,
+            ":today" => date('Y-m-d') // Actual date
             ];
         
         $query->execute($parameters);
@@ -139,6 +143,65 @@ class CourseManager extends AbstractManager
         }
         // course not found
         return null;
+    }
+    
+    
+    /**
+     * Retrieves a Course by keyword.
+     * 
+     * @param String $keyword The keyword of the course.
+     * 
+     * @return array|null The retrieved course or null if not found.
+     * 
+     */
+    public function searchCoursesByKeyword(string $keyword): ?array
+    {
+        // Prepare the query to retrieve course by keyword where unlock date is past or today
+        $query = $this->db->prepare("SELECT * FROM courses 
+        WHERE (subject LIKE :keyword OR content LIKE :keyword) 
+        AND unlockDate <= :today  
+        ORDER BY created_at DESC"
+        );
+        // Prepare keyword for search
+        $keywordFormatted = '%' . $keyword . '%';
+        // Bind parameters
+        $parameters = [
+            ":keyword" => $keywordFormatted,
+            ":today" => date('Y-m-d') // Actual date
+            ];
+        // Execute the query with the parameter
+        $query->execute($parameters); 
+        // Fetch the course data from the database
+        $coursesData = $query->fetchAll(PDO::FETCH_ASSOC);
+        
+        if($coursesData)
+        {
+            $courses = [];
+            
+            foreach($coursesData as $courseData)
+            {
+                $course = new Course(
+                $courseData["id"],
+                $courseData["idLesson"],
+                $courseData["unlockDate"],
+                $courseData["subject"],
+                $courseData["summary"],
+                $courseData["content"],
+                $courseData["image"],
+                $courseData["audio"],
+                $courseData["video"],
+                $courseData["fichierpdf"],
+                $courseData["link"],
+                $courseData["created_at"]
+                );
+                $courses[] = $course;
+            }
+                
+            return $courses;
+        }
+        // course not found
+        return null;
+        
     }
     
     

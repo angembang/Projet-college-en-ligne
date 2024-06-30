@@ -155,10 +155,10 @@ class AuthRegisterController extends AbstractController
                                                     createPrincipal($principal);
                                                     // Check if the principal is create
                                                     if($createdPrincipal) {
-                                                        $this->render("login.html.twig", []);    
+                                                        $this->renderJson(["success" => true, "message" => "Utilisateur enregistrer avec succes"]);
                                                     } 
-                                                    throw new Exception("Une erreur s'est produite lors 
-                                                    de la création de votre compte.");
+                                                    $this->renderJson(["success" => false, "message" => "Une erreur s'est produite lors 
+                                                    de la création de votre compte."]);
                                                     break;
                                             
                                             case "Professeur":
@@ -183,13 +183,14 @@ class AuthRegisterController extends AbstractController
                                                     changer votre mot de passe.");
                                                     // Check if the mail is send
                                                     if($success) {
-                                                        echo "message envoyé";
-                                                        $this->render("superAdminHome.html.twig", []);
+                                                        $this->renderJson(["success" => true, "message" => "Message envoyé"]);
                                                     }
-                                                    throw new Exception("échec de l'envoi du mail");    
+                                                    $this->renderJson(["success" => false, "message" => "Echec de l'envoi du mail"]);
+                                                    return;
+                                                    
                                                 }
-                                                throw new Exception("Une erreur s'est produite lors 
-                                                de la création de votre compte.");
+                                                $this->renderJson(["success" => false, "message" => "Une erreur s'est produite lors 
+                                                de la création de votre compte."]);
                                                 break;
                                             
                                             case "Professeur référent":
@@ -221,16 +222,18 @@ class AuthRegisterController extends AbstractController
                                                             changer votre mot de passe.");
                                                             // Check if the mail is send
                                                             if($success) {
-                                                                echo "message envoyé";
-                                                                $this->render("superAdminHome.html.twig", []);
+                                                                $this->renderJson(["success" => true, "message" => "Message envoyé"]);
+                                                                return;    
                                                             }
-                                                            throw new Exception("échec de l'envoi du mail");
+                                                            $this->renderJson(["success" => false, "message" => "Echec de l'envoi du mail"]);
+                                                            return;
                                                         }
-                                                        throw new Exception("Une erreur s'est produite lors de la création de votre compte.");
+                                                        $this->renderJson(["success" => false, "message" => "Une erreur s'est produite lors de la création de votre compte."]);
+                                                        return;
                                                     }
                                                     
                                                 }
-                                                throw new Exception("Veuillez sélectionner la classe");
+                                                $this->renderJson(["success" => false, "message" => "Une erreur s'est produite lors de la création de votre compte."]);
                                                 break;
                                             
                                             case "Collégien":
@@ -269,12 +272,16 @@ class AuthRegisterController extends AbstractController
                                                                     changer votre mot de passe.");
                                                                     // Check if the mail is send
                                                                     if($success) {
-                                                                        echo "message envoyé";
-                                                                        $this->render("superAdminHome.html.twig", []);
+                                                                        $this->renderJson(["success" => true, "message" => "Message envoyé."]);
+                                                                        return;
+                                                                        
                                                                     }
-                                                                    throw new Exception("échec de l'envoi du mail");        
-                                                                } 
-                                                                throw new Exception("Echec lors de la création de compte");
+                                                                    $this->renderJson(["success" => false, "message" => "Echec de l'envoi du mail"]);
+                                                                    return;
+                                                                }
+                                                                $this->renderJson(["success" => false, "message" => "Echec lors de la création de compte"]);
+                                                                return;
+                                                                
                                                             } 
                                                             // Check if the language unique identifier is set
                                                             if(isset($_POST["idLanguage"])) {
@@ -304,47 +311,73 @@ class AuthRegisterController extends AbstractController
                                                                     changer votre mot de passe.");
                                                                     // Check if the mail is send
                                                                     if($success) {
-                                                                        echo "message envoyé";
-                                                                        $this->render("superAdminHome.html.twig", []);
-                                                                            
+                                                                        $this->renderJson(["success" => true, "message" => "Message envoyé"]);
+                                                                        return;
+                                                                                
                                                                     }
-                                                                    throw new Exception("échec de l'envoi du mail");
-                                            
-                                                                } 
-                                                                throw new Exception("Langue non trouvée");
+                                                                    $this->renderJson(["success" => false, "message" => "Echec de l'envoi du mail"]);
+                                                                    return;
+                                                                    
+                                                                }
+                                                                $this->renderJson(["success" => false, "message" => "Langue non trouvée"]);
+                                                                return;
+                                                              
                                                             }
-                                                            throw new Exception("Veuillez sélectionner une langue");
+                                                            $this->renderJson(["success" => false, "message" => "Veuillez sélectionner une langue"]);
+                                                            return;
+                                                           
                                                         } 
-                                                        throw new Exception("Nom de la classe non trouvé");
+                                                        $this->renderJson(["success" => false, "message" => "Nom de la classe non trouvé"]);
+                                                        return;
+                                                        
                                                     }
-                                                    throw new Exception("la classe sélectionnée n'existe pas");
+                                                    $this->renderJson(["success" => false, "message" => "la classe sélectionnée n'existe pas"]);
+                                                    return;
+                                            
                                                 }
-                                                throw new Exception("Veuillez sélectionner la classe");
+                                                $this->renderJson(["success" => false, "message" => "Veuillez sélectionner la classe"]);
                                                 break;
+                                            
                                             default:
-                                                throw new Exception("Le rôle non trouvé");
-}
-                                    } 
-                                    throw new Exception("Veuillez sélectionner le rôle");
+                                                $this->renderJson(["success" => false, "message" => "Le rôle non trouvé"]);
+                                                return;
+                                                
+                                        }
+                                    }
+                                    $this->renderJson(["success" => false, "message" => "Veuillez sélectionner le rôle"]);
+                                    return;
+                                   
                                 }
-                                throw new Exception("L'utilisateur existe dejà");
+                                $this->renderJson(["success" => false, "message" => "L'utilisateur existe dejà"]);
+                                return;
+                                
                             } 
-                            throw new Exception("Le mot de passe doit contenir au 
+                            $this->renderJson(["success" => false, "message" => "Le mot de passe doit contenir au 
                             moins 8 caractères, un chiffre, une lettre en majuscule, 
-                            une lettre en minuscule et un caractère spécial.");
-                        } 
-                        throw new Exception("Les mots de passe ne correspondent pas");
+                            une lettre en minuscule et un caractère spécial."]);
+                            return;
+                            
+                        }
+                        $this->renderJson(["success" => false, "message" => "Les mots de passe ne correspondent pas"]);
+                        return;
+                        
                     }
-                    throw new Exception("Jeton CSRF invalide");
+                    $this->renderJson(["success" => false, "message" => "Jeton CSRF invalide"]);
+                    return;
+                   
                 }
-                throw new Exception("Veuillez remplir tous les champs");
+                $this->renderJson(["success" => false, "message" => "Veuillez remplir tous les champs"]);
+                return;
+                
             }    
         }
-        throw new Exception("Le formulaire n'est pas soumis par la méthode POST");
+        $this->renderJson(["success" => false, "message" => "Le formulaire n'est pas soumis par la méthode POST"]);
+        return;
+        
         }
         catch (Exception $e) {
-            $_SESSION["error-message"] = $e->getMessage();
-            //$this->renderRegistrationForm();
+            $this->renderJson(["success" => false, "message" => $e->getMessage()]);
+            
         }
     }
 

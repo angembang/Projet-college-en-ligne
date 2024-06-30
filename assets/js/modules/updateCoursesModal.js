@@ -27,20 +27,20 @@ function updateCourseModal() {
     }
 
     function showModal(message) {
-        const modal = document.getElementById("messageModal");
-        const modalContent = document.getElementById("modalContent");
+        const modal = document.getElementById("registerMessageModal");
+        const modalContent = document.getElementById("registerModalContent");
         modalContent.innerHTML = message;
         modal.style.display = "block";
     }
 
     window.closeModal = function() {
-        const modal = document.getElementById("messageModal");
+        const modal = document.getElementById("registerMessageModal");
         modal.style.display = "none";
     }
 
     // Close the modal when the user click out of it
     window.onclick = function(event) {
-        const modal = document.getElementById("messageModal");
+        const modal = document.getElementById("registerMessageModal");
         if (event.target == modal) {
             modal.style.display = "none";
         }
