@@ -181,6 +181,10 @@ class Router
                     $pageController->error();    
                     break;
                     
+                case "logout":
+                    $authLoginController->logout();    
+                    break;
+                    
                 default:
                     $pageController->home(); 
                     break;

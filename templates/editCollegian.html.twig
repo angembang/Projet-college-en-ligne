@@ -1,5 +1,9 @@
 {% extends "layout.html.twig" %}
 
+{% block header %}
+    {% include "header.html.twig" %}
+{% endblock %}
+
 {% block main %}
 <h2>Edit Collegian</h2>
 <form method="POST" action="index.php?route=checkUpdateCollegian">
@@ -63,4 +67,8 @@
         <button type="submit">Mettre à jour</button>
     </fieldset>
 </form>
+{% endblock %}
+
+{% block footer %}
+    {% include "footer.html.twig" %}
 {% endblock %}

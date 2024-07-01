@@ -9,58 +9,40 @@
 
 
 {% block header %}
-    
-    <!-- Menu -->
-    <nav id="menu">
-        <!-- Hamburger menu icon -->
-        <button id="menu-icon">
-            <i class="fas fa-bars"></i>
-        </button>
-        <ul class="display-none">
-            <li><a href="index.php?route=about">A Propos</a></li>
-        </ul>
-    </nav>
-    <!-- Title of the plateform-->
-    <h1>Collège en ligne</h1>
-    
+    {% include "header.html.twig" %}
 {% endblock %}
 
 {% block main %}
+<section class="collegian-page">
     <h2>Collégiens de la {{ className }}</h2>
-    <table>
+    <table class="table table-bordered border-primary">
         <thead>
+             <tr>
+            <th scope="col">Prénom</th>
+            <th scope="col">Nom</th>
+            <th scope="col">Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for collegian in collegians %}
             <tr>
-                <th>ID</th>
-                <th>Prénom</th>
-                <th>Nom</th>
-                <th>Actions</th>
+                <td>{{ collegian.firstName }}</td>
+                <td>{{ collegian.lastName }}</td>
+                <td>
+                    <a href="index.php?route=edit-collegian&id={{ collegian.id }}" title="Edit" class="btn btn-sm btn-primary">
+                        <i class="fas fa-edit"></i>
+                    </a>
+                    <a href="index.php?route=delete-collegian&id={{ collegian.id }}" title="Delete" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure you want to delete this collegian?');">
+                        <i class="fas fa-trash"></i>
+                    </a>
+                </td>
             </tr>
-        </thead>
-        <tbody>
-            {% for collegian in collegians %}
-                <tr>
-                    <td>{{ collegian.id }}</td> 
-                    <td>{{ collegian.firstName }}</td>
-                    <td>{{ collegian.lastName }}</td> 
-                    <td>
-                        <a href="index.php?route=edit-collegian&id={{ collegian.id }}" title="Edit">
-                            <i class="fas fa-edit"></i>
-                        </a>
-                        <a href="index.php?route=delete-collegian&id={{ collegian.id }}" title="Delete" onclick="return confirm('Are you sure you want to delete this collegian?');">
-                            <i class="fas fa-trash"></i>
-                        </a>
-                    </td>
-                </tr>
-            {% endfor %}
-        </tbody>
+        {% endfor %}
+    </tbody>
     </table>
-    
+</section>    
 {% endblock %}
 
 {% block footer %}
-    <!-- Footer links -->
-    <a href="#">Mentions légales</a>
-    <a href="#">Politique de confidentialité</a>
-    <a href="#">Gestion des cookies</a>
-    
+   {% include "footer.html.twig" %}
 {% endblock %}

@@ -9,20 +9,7 @@
 
 
 {% block header %}
-    
-    <!-- Menu -->
-    <nav id="menu">
-        <!-- Hamburger menu icon -->
-        <button id="menu-icon">
-            <i class="fas fa-bars"></i>
-        </button>
-        <ul class="display-none">
-            <li><a href="index.php?route=about">A Propos</a></li>
-        </ul>
-    </nav>
-    <!-- Title of the plateform-->
-    <h1>Collège en ligne</h1>
-    
+    {% include "header.html.twig" %}
 {% endblock %}
 
 {% block main %}
@@ -100,9 +87,5 @@
 {% endblock %}
 
 {% block footer %}
-    <!-- Footer links -->
-    <a href="#">Mentions légales</a>
-    <a href="#">Politique de confidentialité</a>
-    <a href="#">Gestion des cookies</a>
-    
+    {% include "footer.html.twig" %}
 {% endblock %}

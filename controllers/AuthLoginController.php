@@ -149,6 +149,7 @@ class AuthLoginController extends AbstractController
         // Destroy session 
         session_destroy();
         // Render home page
-        $this->render("home.html.twig");
+        header('Location: index.php?route=home');
+        exit();
    }
 }

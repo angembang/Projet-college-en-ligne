@@ -1,82 +1,59 @@
 {% extends "layout.html.twig" %}
 
-{%block head %}
-    <!-- Include parent block content -->
-    {{ parent() }}
-    <!-- Include additional stylesheet -->
-    <link rel="stylesheet" type="text/css" href="./assets/styles/css/lesson.css">    
-{% endblock %}
-
-
 {% block header %}
-    
-    <!-- Menu -->
-    <nav id="menu">
-        <!-- Hamburger menu icon -->
-        <button id="menu-icon">
-            <i class="fas fa-bars"></i>
-        </button>
-        <ul class="display-none">
-            <li><a href="index.php?route=about">A Propos</a></li>
-        </ul>
-    </nav>
-    <!-- Title of the plateform-->
-    <h1>Collège en ligne</h1>
-    
+    {% include "header.html.twig" %}
 {% endblock %}
 
 
 {% block main %}
 
-    <!-- Container for search form and logout button -->
-    <div class="search-logout-container">
+    <div class="home-page">
+        <!-- Container for search form and logout button -->
+        <div class="search-logout-container">
         
-        <!-- Form for searching course -->
-        <form action="index.php?route=search-course" method="GET">
-            <input type="hidden" name="route" value="search-course">
-            <!-- Input field for entering search query -->
-            <input type="search" name="lesson_name" id="lesson_name" placeholder="Rechercher cours par nom">
-            <!-- Button to submit the search query with a search icon -->
-            <button type="submit"><i class="fas fa-search"></i></button>
-        </form>
+            <!-- Form for searching course -->
+            <form action="index.php?route=search-course" method="GET">
+                <input type="hidden" name="route" value="search-course">
+                <!-- Input field for entering search query -->
+                <input type="search" name="lesson_name" id="lesson_name" placeholder="Rechercher cours par nom">
+                <!-- Button to submit the search query with a search icon -->
+                <button type="submit"><i class="fas fa-search"></i></button>
+            </form>
     
-        <!-- Logout button with an icon -->
-        <button type="button" onclick="logout()">
-            <!-- Logout icon -->
-            <i class="fa-solid fa-power-off"></i>
-        </button>
-    </div>
+            <!-- Logout link with an icon -->
+            <a href="index.php?route=logout">
+                <!-- Logout icon -->
+                <i class="fa-solid fa-power-off"></i>
+            </a>
+        </div>
 
-    <!-- Title for the current day's lessons -->
-    <h2 class="lesson-title">Cours de la journée</h2>
-    <!-- Loop through lessons grouped by class level -->
-    {% for classLevel, lessons in lessonsByClass %}
-        <!-- Display class level -->
-        <h3>{{ classLevel }}</h3>
-        <!-- List of lessons for the current class level -->
-        <ul class="courses-of-day">
-            {% for lesson in lessons %}
-                <li>
-                    <section class="lesson-info">
-                        <!-- Lesson name -->
-                        <h4>{{ lesson.name }}</h4>
-                        <!-- Link to view details of the lesson -->
-                        <a href="index.php?route=cours&lesson_id={{ lesson.id }}" 
-                        class="lesson-link" data-remaining-time=
-                        "{{ remainsTimeByLesson[lesson.id] }}"></a>
-                    </section>
-                </li>
-            {% endfor %}
-        </ul>
-    {% endfor %}
+        <!-- Title for the current day's lessons -->
+        <h2 class="lesson-title">Cours de la journée</h2>
+        <!-- Loop through lessons grouped by class level -->
+        {% for classLevel, lessons in lessonsByClass %}
+            <!-- Display class level -->
+            <h3>{{ classLevel }}</h3>
+            <!-- List of lessons for the current class level -->
+            <ul class="courses-of-day">
+                {% for lesson in lessons %}
+                    <li>
+                        <section class="lesson-info">
+                            <!-- Lesson name -->
+                            <h4>{{ lesson.name }}</h4>
+                            <!-- Link to view details of the lesson -->
+                            <a href="index.php?route=cours&lesson_id={{ lesson.id }}" 
+                            class="lesson-link" data-remaining-time=
+                            "{{ remainsTimeByLesson[lesson.id] }}"></a>
+                        </section>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% endfor %}
+    </div>
 
 {% endblock %}
 
 
 {% block footer %}
-    <!-- Footer links -->
-    <a href="#">Mentions légales</a>
-    <a href="#">Politique de confidentialité</a>
-    <a href="#">Gestion des cookies</a>
-    
+    {% include "footer.html.twig" %}
 {% endblock %}

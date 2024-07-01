@@ -9,26 +9,26 @@
         
         <!-- Title and Description -->
         <title>Collège en ligne</title>
-        <meta name="description" content="Plateforme en ligne pour les collégiens, permettant l'inscription, la connexion et l'accès aux cours.">
+        <meta name="description" content="Plateforme d'accès aux cours en ligne pour les collégiens.">
         
         <!-- Keywords for SEO -->
-        <meta name="keywords" content="collège, cours en ligne, éducation, accès cours">
+        <meta name="keywords" content="collège, cours en ligne, enseignement, éducation, accès cours">
         
         <!-- Author -->
         <meta name="author" content="Ange Kamwang Mbang">
         
         <!-- Social Media Integration -->
         <meta property="og:title" content="Collège en Ligne">
-        <meta property="og:description" content="Plateforme en ligne pour les collégiens, permettant l'accès aux cours.">
+        <meta property="og:description" content="Plateforme d'accès aux cours en ligne pour les collégiens.">
         <meta property="og:type" content="website">
         <meta property="og:url" content="https://www.college-en-ligne.fr">
-        <meta property="og:image" content="https://www.college-en-ligne.fr/path/to/image.jpg">
+        <meta property="og:image" content="./assets/images/college.png">
         
         <!-- Twitter Card -->
         <meta name="twitter:card" content="summary_large_image">
         <meta name="twitter:title" content="Collège en Ligne">
-        <meta name="twitter:description" content="Plateforme en ligne pour les collégiens, permettant l'accès aux cours.">
-        <meta name="twitter:image" content="https://www.college-en-ligne.fr/path/to/image.jpg">
+        <meta name="twitter:description" content="Plateforme d'accès aux cours en ligne pour les collégiens.">
+        <meta name="twitter:image" content="./assets/images/college.png">
         
         <!-- Favicons -->
         <link rel="icon" href="./assets/images/favicon.png" type="image/png">
@@ -44,21 +44,24 @@
         <!-- TinyMCE script for rich text editing -->
         <!--<script src="https://cdn.tiny.cloud/1/tezye03wmjsy94ybj3g8ccpeytbwk52p08mdwxp73zvujffe/tinymce/7/tinymce.min.js" referrerpolicy="origin"></script> -->
         
+        <!-- Include local stylesheet file -->
+        <link rel="stylesheet" href="./assets/css/style.css">
+        
         <!-- Open Graph Meta Tags -->
         <meta property="og:title" content="Collège en Ligne">
         <meta property="og:type" content="website">
         <meta property="og:url" content="https://www.college-en-ligne.fr">
-        <meta property="og:image" content="https://www.college-en-ligne.fr/path/to/image.jpg">
-        <meta property="og:description" content="Plateforme en ligne pour les collégiens, permettant l'accès aux cours.">
+        <meta property="og:image" content="./assets/images/college.png">
+        <meta property="og:description" content="Plateforme d'accès aux cours en ligne pour les collégiens.">
         <meta property="og:site_name" content="Collège en Ligne">
         <meta property="og:locale" content="fr_FR">
         
         <!-- Twitter Meta Tags -->
         <meta name="twitter:card" content="summary_large_image">
         <meta name="twitter:title" content="Collège en Ligne">
-        <meta name="twitter:description" content="Plateforme en ligne pour les collégiens, l'accès aux cours.">
-        <meta name="twitter:image" content="https://www.college-en-ligne.fr/path/to/image.jpg">
-        <meta name="twitter:site" content="@college_en_ligne">
+        <meta name="twitter:description" content="Plateforme d'accès aux cours en ligne pour les collégiens.">
+        <tent="./assets/images/college.png">
+        <meta nmeta name="twitter:image" coname="twitter:site" content="@college_en_ligne">
         <meta name="twitter:creator" content="@auteur">
         
         <!-- Additional SEO Meta Tags -->
@@ -67,15 +70,18 @@
         
         {% endblock %}
     </head>
+    
     <body>
         <header>
             <!-- Header content block -->
             {% block header %} {% endblock %}
         </header>
+        
         <main>
             <!-- Main content block -->
             {% block main %} {% endblock %}
         </main>
+        
         <footer>
             <!-- Footer content block -->
             {% block footer %} {% endblock %}

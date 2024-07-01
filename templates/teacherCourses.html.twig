@@ -1,5 +1,9 @@
 {% extends "layout.html.twig" %}
 
+{% block header %}
+   {% include "header.html.twig" %}
+{% endblock %}
+
 {% block main %}
     
     <section class="course-title">
@@ -56,5 +60,9 @@
         {% endfor %}
     </section>
 
+{% endblock %}
+
+{% block footer %}
+    {% include "footer.html.twig" %}
 {% endblock %}
 

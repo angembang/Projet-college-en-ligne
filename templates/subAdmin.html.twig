@@ -1,5 +1,9 @@
 {% extends "layout.html.twig" %}
 
+{% block header %}
+    {% include "header.html.twig" %}
+{% endblock %}
+
 {% block main %}
     {% for class in classes %}
         <h2>{{ class.classLevel }}</h2>
@@ -14,4 +18,8 @@
         <p><a href="index.php?route=teacher-courses&lesson_id={{ lesson.lessonId }}">Voir</a></p>
         {% endfor %}
     {% endfor %}
+{% endblock %}
+
+{% block footer %}
+    {% include "footer.html.twig" %}
 {% endblock %}

@@ -9,20 +9,7 @@
 
 
 {% block header %}
-    
-    <!-- Menu -->
-    <nav id="menu">
-        <!-- Hamburger menu icon -->
-        <button id="menu-icon">
-            <i class="fas fa-bars"></i>
-        </button>
-        <ul class="display-none">
-            <li><a href="index.php?route=about">A Propos</a></li>
-        </ul>
-    </nav>
-    <!-- Title of the plateform-->
-    <h1>Collège en ligne</h1>
-    
+    {% include "header.html.twig" %}
 {% endblock %}
 
 {% block main %}
@@ -95,4 +82,8 @@
     </form>
     
     <script type="module" src="./assets/js/main.js"></script> 
+{% endblock %}
+
+{% block footer %}
+    {% include "footer.html.twig" %}
 {% endblock %}

@@ -5,19 +5,140 @@ html {
     /*font-size: 62.5%;*/
 }
 body {
+    box-sizing: border-box;
     max-width: 430px;
-    height: auto;
+    min-height: 100vh;
     padding: auto;
     margin: auto;
     font-family: "Lato", sans-serif;
     font-weight: 400;
     font-style: normal;
-}
-main {
-    height: auto;
+    display: flex;
+    flex-direction: column;
 }
 
-/* register form*/
+/******************  Style pour block header et block footer ***********/
+header, 
+footer {
+    flex-shrink: 0; 
+    background-color: #A30707;
+    height: 10vh;
+    display: flex;
+    align-items: center;
+}
+
+header i,
+header nav ul li a, 
+header h1 {
+    color: white;
+    margin: 0.5rem 1rem 0.5rem 1.5rem; 
+}
+
+header i, 
+h1 {
+    font-size: 2rem;    
+}
+
+header nav ul {
+    list-style: none;
+    margin: 0;
+    padding: 0.5rem;
+    font-size: 14px;
+}
+
+#menu .display-none {
+    display: none;
+}
+
+#menu-icon {
+    border: none;
+    background-color: inherit;
+}
+
+footer {
+    flex-direction: column;
+    justify-content: center;
+    height: 75px;
+}
+footer a {
+    color: white;
+    font-size: 12px;
+}
+header {
+   height: 75px;   
+}
+/*******************************************************************/
+
+
+
+
+/******************************** Main *****************************/
+main {
+    min-height: 90vh;
+}
+/*******************************************************************/
+
+
+
+
+
+/********************* style for home page ************************/
+.home, 
+.superAdminHome-page, 
+.admin-home-page {
+    background-color: #1F203E;
+    min-height: 90vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.home p, 
+.superAdminHome-page p, 
+.admin-home-page p{
+    font-size: 2rem;
+}
+.home p a, 
+.superAdminHome-page p a, 
+.admin-home-page p a {
+    color: white;
+    font-family: "Lato", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+}
+/******************************************************************/
+
+
+
+
+
+/**************************** style for register form **************/
+.register-form fieldset {
+    flex-direction: column;
+    border: none;    
+}
+
+.register-form select, 
+.addLesson-page select {
+    width: 230px;
+    padding: 1rem;
+    background-color: #D9D9D9;
+    border: 1px solid #1F203E; 
+    border-radius: 4px;
+    -webkit-appearance: none; /* Remove default arrow in WebKit browsers */
+    -moz-appearance: none; /* Remove default arrow in Firefox */
+    appearance: none; /* Remove default arrow in other browsers */
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="%231F203E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-down"><polyline points="6 9 12 15 18 9"></polyline></svg>');
+    background-repeat: no-repeat;
+    background-position: calc(100% - 1rem) center; /* Adjust the position of the arrow */
+    background-size: 1em; /* Adjust the size of the arrow */
+}
+
+.register-form button {
+    margin-left: 3rem;
+}
+
 .firstNameField,
 .lastNameField,
 .emailField,
@@ -27,12 +148,82 @@ main {
 .idLanguageField{
     display: none;
 }
+/*******************************************************************/
 
-/* login form */
+
+
+
+
+/****************** style for login and register page *****************/
+.login-form, 
+.register-form, 
+.update-teacher-page {
+    background-image: url("../../../images/background-image.png");
+    background-size: cover;
+    background-position: center;
+    min-height: 90vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+.login-form h2,
+.register-form h2 {
+    color: #1F203E;
+    font-size: 2.5rem;
+    text-align: center;
+}
+.login-form form, 
+.register-form form, 
+.update-teacher-page form, 
+.addLesson-page form{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1.5rem;
+}
+.login-form fieldset, 
+.update-teacher-page fieldset, 
+.addLesson-page fieldset {
+    display: flex;
+    flex-direction: column;
+    border: none;
+}
+.login-form fieldset label, 
+.register-form fieldset label, 
+.update-teacher-page fieldset label {
+    display: none;
+}
+.login-form input, 
+.register-form input, 
+.update-teacher-page input, 
+.addLesson-page input{
+    padding: 1rem;
+    background-color: #D9D9D9;
+    border: 1px solid #1F203E;
+    border-radius: 4px;
+}
+.login-form form button, 
+.register-form button, 
+.update-teacher-page button, 
+.addLesson-page button {
+    background-color: #1F203E;
+    color: white;
+    width: 150px;
+    padding: 0.5rem;
+    border-radius: 10px;
+    align-self: center;
+    font-size: 1.2rem;
+}
+
+.login-form #error-message {
+    font-size: 1.2rem;
+}
+
 .alert-message {
     display: none;
 }
-
 
 .modal, .registerModal {
     display: none;
@@ -41,7 +232,7 @@ main {
     left: 0;
     top: 0;
     width: 100%;
-    height: 100%;
+    height: auto;
     overflow: auto;
     background-color: rgb(0,0,0);
     background-color: rgba(0,0,0,0.4);
@@ -70,5 +261,374 @@ close:focus,
     text-decoration: none;
     cursor: pointer;
 }
+/******************************************************************/
+
+
+
+
+
+/************** style for regidterLogin page **********************/
+.register-login-form .hidden {
+    display: none;
+}
+.register-login-form .toggle-link {
+    cursor: pointer;
+}
+
+.register-login-form p .section-form-a, 
+.register-login-form p {
+    color: #1F203E;
+    font-weight: 700;
+    background-color: #D9D9D9;
+    padding:0.5rem; 
+    border-radius: 5px;
+}
+/******************************************************************/
+
+
+
+
+
+
+/************** style for lesson page ******************************/
+.home-page {
+    background-color: #1F203E;
+    height: auto;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    color: white;
+}
+
+.search-logout-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.1rem;
+    position: relative; 
+    margin-bottom: 1.2rem;
+}
+
+.search-logout-container form input, 
+.search-logout-container form button {
+    padding: 0.5rem;  
+    border: none;
+    background: inherit;
+}
+
+.search-logout-container a {
+    font-size: 2rem;
+    color: #A30707;
+    text-decoration: none; 
+    display: flex;
+    align-items: center; /* Center the icon vertically */
+    justify-content: center; /* Center the icon horizontally */
+}
+
+.search-logout-container form input {
+    background-color: #D9D9D9;
+    border-radius: 10px;
+    padding: 1rem 2rem 1rem 4rem;
+    margin-left: 0.8rem;
+    position: relative;
+}
+
+.search-logout-container form i {
+    color: #072D67;
+    font-size: 1.5rem;
+    position: absolute; 
+    left: 3rem; 
+    top: 50%; 
+    transform: translateY(-50%); 
+}
+
+.home-page ul {
+    color: white;
+    font-size: 1.5rem;
+}
+
+.home-page .lesson-title {
+    text-align: center;
+    font-size: 2rem;
+    border-bottom: 2px solid red; /* Adds a red solid border at the bottom */
+    width: 80%; /* Adjusts the width of the bottom border */
+    margin: auto; /* Centers the title horizontally */
+}
+.home-page .lesson-title::after {
+    content: "";
+    display: block;
+    border-bottom: 2px solid red;
+    margin-top: 10px;
+}
+
+.home-page .lesson-info {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+}
+
+.home-page .lesson-info a {
+    color: white;
+    background-color: #3D12E0;
+    padding: 0.3rem 1rem 0.5rem 1rem;
+    text-decoration: none;
+    border-radius: 15px;
+}
+
+.home-page h3 {
+    font-size: 2rem;
+    margin-left: 0.8rem;
+}
+/*******************************************************************/
+
+
+
+
+
+/****************** style for lessonCourse page *******************/
+.lessonCourse-page {
+    background-color: #1F203E;
+    min-height: 90vh;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    color: white;
+}
+
+.lessonCourse-page ul {
+    color: white;
+    font-size: 1.5rem;
+}
+
+.lessonCourse-page .course-summary-section {
+    background-color: #D9D9D9;
+    color: #333; 
+    font-size: 1.5rem;
+    
+}
+
+.lessonCourse-page .course-summary {
+    margin-top: -1rem;
+}
+
+.lessonCourse-page .course-summary-section h4 {
+   
+    margin-top: 0.8Rem;
+}
+.lessonCourse-page .youtube-video {
+    margin: 0.5rem 1rem 0.5rem 1rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.lessonCourse-page .course-title h2 {
+    text-align: center;
+    font-size: 2rem;
+    /*border-bottom: 2px solid red; /* Adds a red solid border at the bottom */
+    width: 100%; /* Adjusts the width of the bottom border */
+    margin: auto; /* Centers the title horizontally */
+    
+}
+.lessonCourse-page .course-title h3 {
+    font-size: 1.8rem;
+    /*padding-top: 1rem;*/
+    text-align: center;
+    margin: 0.5rem;
+    padding: 0;
+}
+
+.lessonCourse-page .course-render h5 {
+    font-size: 1.5rem; 
+    margin-bottom: 1rem;
+    font-weight: bold;
+}
+.lessonCourse-page .course-render {
+    display: flex;
+    flex-direction: column;
+    /*justify-content: center;*/
+    /*align-items: center;*/
+    background-color: #D9D9D9;
+    color: #333;
+    padding: 1rem;
+    margin-top: 1.3rem;
+    max-height: 500px;
+    overflow-y: auto;
+    padding-right: 15px;
+    font-size: 1.5rem;
+    border-radius: 15px;
+}
+
+.lessonCourse-page .course-render img {
+    width: 100%;
+    height: auto;
+    text-align: center;
+    margin :0;
+    padding: 0;
+}
+.course-render a, .course-link a {
+    align-self: center;
+    padding-bottom: 0.5rem;
+    
+}
+/******************************************************************/
+
+
+
+
+
+/********************** style for teacher page ******************/
+.teacher-page {
+    background-color: #1F203E;
+    min-height: 90vh;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    color: white; 
+    font-size: 1.5rem;
+}
+.teacher-page a i {
+    color: red;
+}
+
+.teacher-page h2 {
+    text-align: center;
+    margin-bottom: 0;
+    border-bottom: 2px solid red; /* Adds a red solid border at the bottom */
+    width: 99%; /* Adjusts the width of the bottom border */
+    margin: auto; /* Centers the title horizontally */
+}
+
+.teacher-page ul li {
+    margin-bottom: 2rem;
+}
+
+.teacher-page .action-links {
+ display: flex;
+ justify-content: end;
+ gap: 2.5rem;
+ margin-top: -1.7rem;
+}
+
+.teacher-page h2::after {
+    content: "";
+    display: block;
+    border-bottom: 2px solid red;
+    margin-top: 10px;
+}
+/****************************************************************/
+
+
+
+
+
+/******************** style for edit teacher page **************/
+.update-teacher-page h2 {
+    color: #1F203E;
+    font-size: 2rem;
+    text-align: center;
+    font-weight: bold;
+}   
+/***************************************************************/
+
+
+
+
+
+
+/************************ style for lesson form page ***********/
+.addLesson-page {
+    min-height: 90vh;
+    background-color:#1F203E;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    padding-bottom: 1rem;
+}
+
+.addLesson-page input {
+    width: 250px;
+}
+
+.addLesson-page select {
+    width: 280px;    
+}
+.addLesson-page .start-time {
+    margin-top: -1.7rem;
+}
+.addLesson-page form button {
+    background-color: #3D12E0;
+}
+.addLesson-page fieldset label {
+    font-size: 1rem;
+}
+.addLesson-page h2 {
+    font-size: 2rem;
+    text-align: center;
+    margin-bottom: 0;
+    border-bottom: 2px solid white; /* Adds a red solid border at the bottom */
+    width: 95%; /* Adjusts the width of the bottom border */
+    
+}
+.addLesson-page h2::after {
+    content: "";
+    display: block;
+    border-bottom: 2px solid red;
+    margin-top: 10px;   
+}
+
+/***************************************************************/
+
+
+
+
+
+
+/************************* collegian page *********************/
+.collegian-page {
+    background-color: #1F203E;
+    min-height: 90vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 1.2rem;
+}
+
+.collegian-page i {
+    color: red;
+}
+.collegian-page table {
+    width: 350px;
+    background-color: white;
+    color: black;
+    padding: 1rem;
+}
+
+.collegian-page table th, 
+.collegian-page table td {
+    padding: 1rem;
+}
+
+.collegian-page table td a {
+    margin-left: 0.6rem;
+}
+
+.collegian-page h2 {
+    font-size: 2rem;
+}
+/**************************************************************/
+
+
+
+
+
 
 

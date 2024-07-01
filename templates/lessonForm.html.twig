@@ -1,8 +1,13 @@
 {% extends "layout.html.twig" %}
 
+{% block header %}
+    {% include "header.html.twig" %}
+{% endblock %}
+
 {% block main %}
 
-    <h1>Ajout des cours</h1>
+<section class="addLesson-page">   
+    <h2>Formulaire d'ajout des cours</h2>
 
     <!-- Add lesson form -->
     <form action="index.php?route=checkAddLesson" method="post">
@@ -48,13 +53,13 @@
         </fieldset>
         
         <!-- The start time field -->
-        <fieldset>
+        <fieldset class="start-time">
             <label for="startTime">Heure de début :</label>
             <input type="time" id="startTime" name="startTime" min="08:00" max="17:00" required>
         </fieldset>
 
         <!-- The end time field -->
-        <fieldset>
+        <fieldset class="start-time">
             <label for="endTime">Heure de fin :</label>
             <input type="time" id="endTime" name="endTime" min="08:00" max="17:00" required>
         </fieldset>
@@ -62,5 +67,9 @@
         <!-- Registration button -->
         <button type="submit" value="Submit">Ajouter</button>
     </form>
+</section> 
+{% endblock %}
 
+{% block footer %}
+    {% include "footer.html.twig" %}
 {% endblock %}

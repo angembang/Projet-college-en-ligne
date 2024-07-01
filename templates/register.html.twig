@@ -1,128 +1,110 @@
 {% extends "layout.html.twig" %}
 
-{% block head %}
-    <!-- Include parent block content -->
-    {{ parent () }}
-    <!-- Include additional stylesheet -->
-    <link rel="stylesheet" type="text/css" href="./assets/styles/css/login.css"> 
-{% endblock %}
-
 {% block header %}
-    <!-- Hamburger menu icon -->
-    <i class="fas fa-bars" id="menu-icon"></i>
-    
-    <!-- Menu -->
-    <nav id="menu">
-        <ul>
-            <li><a href="#">A Propos</a></li>
-        </ul>
-    </nav>
-    <!-- Title of the plateform-->
-    <h1>Collège en ligne</h1>
+    {% include "header.html.twig" %}
 {% endblock %}
 
 {% block main %}
     
-    <h2>Inscription</h2>
+    <section class="register-form">
+        <h2>Inscription</h2>
     
-    <!-- Modal -->
-        <div id="registerMessageModal" class="registerModal">
-            <div class="register-modal-content">
-                <span class="registerClose" onclick="closeModal()">&times;</span>
-                <p id="registerModalContent"></p>
+        <!-- Modal -->
+            <div id="registerMessageModal" class="registerModal">
+                <div class="register-modal-content">
+                    <span class="registerClose" onclick="closeModal()">&times;</span>
+                    <p id="registerModalContent"></p>
+                </div>
             </div>
-        </div>
     
-    <!-- Registration Form -->
-    <form action="index.php?route=checkRegister" method="POST" id="registerForm">
-        <fieldset>
+        <!-- Registration Form -->
+        <form action="index.php?route=checkRegister" method="POST" id="registerForm">
+            <fieldset>
             
-            <!-- Token field -->
-            <input type="hidden" name="csrf-token" id="csrf-token" value="{{ csrf_token }}" >
+                <!-- Token field -->
+                <input type="hidden" name="csrf-token" id="csrf-token" value="{{ csrf_token }}" >
             
-            <!-- Role selection field -->
-            <fieldset id="role">
-                <label for="idRole">Role :</label>
-                <select id="idRole" name="idRole">
-                    <option value="" disabled selected>Choisissez un rôle</option>
-                    <!-- Loop to display role selection options -->
-                    {% for role in roles %}
-                        <option value="{{ role.id }}">
-                            {{ role.name }}
-                        </option>
-                    {% endfor %}
-                </select>
-            </fieldset>
+                <!-- Role selection field -->
+                <fieldset id="role">
+                    <label for="idRole">Role :</label>
+                    <select id="idRole" name="idRole">
+                        <option value="" disabled selected>Choisissez un rôle</option>
+                        <!-- Loop to display role selection options -->
+                        {% for role in roles %}
+                            <option value="{{ role.id }}">
+                                {{ role.name }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </fieldset>
                 
-            <!-- First name field (displayed based on selected role) -->
-            <fieldset class="firstNameField">
-                <label for="firstName">Prénom :</label>
-                <input type="text" id="firstName" name="firstName" placeholder="Prenom">
+                <!-- First name field (displayed based on selected role) -->
+                <fieldset class="firstNameField">
+                    <label for="firstName">Prénom :</label>
+                    <input type="text" id="firstName" name="firstName" placeholder="Prenom">
+                </fieldset>
+            
+                <!-- Last name field (displayed based on selected role) -->
+                <fieldset class="lastNameField">
+                    <label for="lastName">Nom :</label>
+                    <input type="text" id="lastName" name="lastName" placeholder="Nom">
+                </fieldset>
+            
+                <!-- Email field (displayed based on selected role) -->
+                <fieldset class="emailField">
+                    <label for="email">Email :</label>
+                    <input type="email" id="email" name="email" placeholder="Email">
+                </fieldset>
+            
+                <!-- Password field (displayed based on selected role) -->
+                <fieldset class="passwordField">
+                    <label for="password">Mot de passe :</label>
+                    <input type="password" id="password" name="password" placeholder="Mot de passe">
+                </fieldset>
+            
+                <!-- Confirm password field (displayed based on selected role) -->
+                <fieldset class="confirmPasswordField">
+                    <label for="confirmPassword">Confirmer le mot de passe :</label>
+                    <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Confirmer mot de pass">
+                </fieldset>
+            
+                <!-- Class field (displayed based on selected role) -->
+                <fieldset class="idClassField">
+                    <label for="idClass">Classe :</label>
+                    <select id="idClass" name="idClass">
+                        <option value="" disabled selected>Choisissez une classe</option>
+                        <!-- Loop to display class selection options -->
+                        {% for classe in classes %}
+                            <option value="{{ classe.getId() }}">
+                                {{ classe.getLevel() }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </fieldset>
+            
+                <!-- Language field (displayed based on selected role) -->
+                <fieldset class="idLanguageField">
+                    <label for="idLanguage">Langue :</label>
+                    <select id="idLanguage" name="idLanguage">
+                        <option value="" disabled selected>Choisissez une langue</option>
+                        <!-- Loop to display language selection options -->
+                        {% for language in languages %}
+                            <option value="{{ language.getId() }}">
+                                {{ language.getName() }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </fieldset>
+            
+                <!-- Registration button -->
+                <button type="submit" id="submitButton">S'inscrire</button>
+            
             </fieldset>
-            
-            <!-- Last name field (displayed based on selected role) -->
-            <fieldset class="lastNameField">
-                <label for="lastName">Nom :</label>
-                <input type="text" id="lastName" name="lastName" placeholder="Nom">
-            </fieldset>
-            
-            <!-- Email field (displayed based on selected role) -->
-            <fieldset class="emailField">
-                <label for="email">Email :</label>
-                <input type="email" id="email" name="email" placeholder="Email">
-            </fieldset>
-            
-            <!-- Password field (displayed based on selected role) -->
-            <fieldset class="passwordField">
-                <label for="password">Mot de passe :</label>
-                <input type="password" id="password" name="password" placeholder="Mot de passe">
-            </fieldset>
-            
-            <!-- Confirm password field (displayed based on selected role) -->
-            <fieldset class="confirmPasswordField">
-                <label for="confirmPassword">Confirmer le mot de passe :</label>
-                <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Confirmer mot de pass">
-            </fieldset>
-            
-            <!-- Class field (displayed based on selected role) -->
-            <fieldset class="idClassField">
-                <label for="idClass">Classe :</label>
-                <select id="idClass" name="idClass">
-                    <option value="" disabled selected>Choisissez une classe</option>
-                    <!-- Loop to display class selection options -->
-                    {% for classe in classes %}
-                        <option value="{{ classe.getId() }}">
-                            {{ classe.getLevel() }}
-                        </option>
-                    {% endfor %}
-                </select>
-            </fieldset>
-            
-            <!-- Language field (displayed based on selected role) -->
-            <fieldset class="idLanguageField">
-                <label for="idLanguage">Langue :</label>
-                <select id="idLanguage" name="idLanguage">
-                    <option value="" disabled selected>Choisissez une langue</option>
-                    <!-- Loop to display language selection options -->
-                    {% for language in languages %}
-                        <option value="{{ language.getId() }}">
-                            {{ language.getName() }}
-                        </option>
-                    {% endfor %}
-                </select>
-            </fieldset>
-            
-            <!-- Registration button -->
-            <button type="submit" id="submitButton">S'inscrire</button>
-            
-        </fieldset>
         
-    </form>
+        </form>
+    </section>
 
 {% endblock %}
 {% block footer %}
-    <!-- Footer links -->
-    <a href="#">Mentions légales</a>
-    <a href="#">Politique de confidentialité</a>
-    <a href="#">Gestion des cookies</a>
+    {% include "footer.html.twig" %}
 {% endblock %}

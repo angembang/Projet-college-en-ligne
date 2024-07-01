@@ -1,104 +1,81 @@
 {% extends "layout.html.twig" %}
 
-{%block head %}
-    <!-- Include parent block content -->
-    {{ parent() }}
-    <!-- Include additional stylesheet -->
-    <link rel="stylesheet" type="text/css" href="./assets/styles/css/lessonCourses.css">    
-{% endblock %}
-
-
 {% block header %}
-    
-    <!-- Menu -->
-    <nav id="menu">
-        <!-- Hamburger menu icon -->
-        <button id="menu-icon">
-            <i class="fas fa-bars"></i>
-        </button>
-        <ul class="display-none">
-            <li><a href="index.php?route=about">A Propos</a></li>
-        </ul>
-    </nav>
-    <!-- Title of the plateform-->
-    <h1>Collège en ligne</h1>
-    
+    {% include "header.html.twig" %}
 {% endblock %}
 
 
 {% block main %}
 
-    <!-- Container for search form and logout button -->
-    <div class="search-logout-container">
-        <!-- Form for searching course -->
-        <form action="index.php?route=search-course-keyword" method="GET">
-            <input type="hidden" name="route" value="search-course-keyword">
-            <input type="search" name="keyword" id="keyword" placeholder="Rechercher cours par mot-clé">
-            <button type="submit"><i class="fas fa-search"></i></button>
-        </form>
+    <div class="lessonCourse-page">
+        <!-- Container for search form and logout button -->
+        <div class="search-logout-container">
+            <!-- Form for searching course -->
+            <form action="index.php?route=search-course-keyword" method="GET">
+                <input type="hidden" name="route" value="search-course-keyword">
+                <input type="search" name="keyword" id="keyword" placeholder="Rechercher cours par mot-clé">
+                <button type="submit"><i class="fas fa-search"></i></button>
+            </form>
     
-        <!-- Logout button with an icon -->
-        <button type="button" onclick="logout()">
-            <!-- Logout icon -->
-            <i class="fa-solid fa-circle-arrow-up"></i>
-        </button>
+            <!-- Logout link with an icon -->
+            <a href="index.php?route=logout">
+                <!-- Logout icon -->
+                <i class="fa-solid fa-power-off"></i>
+            </a>
+        </div>
+    
+        <section class="course-title">
+            <!-- Title of the lesson -->
+            <h2>{{ lessonName }}</h2>
+        
+            <!-- Loop through courses -->
+            {% for course in courses %}
+            <section class="course-render">
+                <!-- Course subject -->
+                <h3>{{ course.subject }}</h3>
+        
+                <!-- Link to PDF -->
+                {% if course.fichierpdf %}
+                <a href="{{ course.fichierpdf }}" download>Télécharger PDF</a>
+                {% endif %}
+            
+                <!-- Image of the course -->
+                {% if course.image %}
+                <img src="{{ course.image }}" alt="image sur {{ course.title }}">
+                {% endif %}
+        
+                <!-- Course summary -->
+                <section class="course-summary-section">
+                    <h4>Résumé du cours</h4>
+                    <p class="course-summary">{{ course.summary }}</p>
+                </section>
+            
+                <!-- YouTube video -->
+                {% if course.video %}
+                <div class="youtube-video">
+                    <iframe width="350" height="250" src="{{ course.video }}" frameborder="0" allowfullscreen></iframe>
+                </div>
+                {% endif %}
+        
+                <!-- Course content -->
+                <h5>Contenu du cours </h5>
+                <div  class="courses-container overflow-auto pr-3">{{ course.content }}</div>
+            
+                <!-- Course link -->
+                {% if course.link %}
+                <div class="course-link">
+                    <a href="{{ course.link }}" target="_blank">Cliquez ici pour plus de ressources</a>
+                </div>
+                {% endif %}
+            
+            </section> 
+            {% endfor %}
+        </section>
     </div>
-    
-    <section class="course-title">
-        <!-- Title of the lesson -->
-        <h2>{{ lessonName }}</h2>
-        
-        <!-- Loop through courses -->
-        {% for course in courses %}
-        <section class="course-render">
-            <!-- Course subject -->
-            <h3>{{ course.subject }}</h3>
-        
-            <!-- Link to PDF -->
-            {% if course.fichierpdf %}
-            <a href="{{ course.fichierpdf }}" download>Télécharger PDF</a>
-            {% endif %}
-            
-            <!-- Image of the course -->
-            {% if course.image %}
-            <img src="{{ course.image }}" alt="image sur {{ course.title }}">
-            {% endif %}
-        
-            <!-- Course summary -->
-            <section class="course-summary-section">
-                <h4>Résumé du cours</h4>
-                <p class="course-summary">{{ course.summary }}</p>
-            </section>
-            
-            <!-- YouTube video -->
-            {% if course.video %}
-            <div class="youtube-video">
-                <iframe width="350" height="250" src="{{ course.video }}" frameborder="0" allowfullscreen></iframe>
-            </div>
-            {% endif %}
-        
-            <!-- Course content -->
-            <h5>Contenu du cours </h5>
-            <div  class="courses-container overflow-auto pr-3">{{ course.content }}</div>
-            
-            <!-- Course link -->
-            {% if course.link %}
-            <div class="course-link">
-                <a href="{{ course.link }}" target="_blank">Cliquez ici pour plus de ressources</a>
-            </div>
-            {% endif %}
-            
-        </section> 
-        {% endfor %}
-    </section>
 
 {% endblock %}
 
 
 {% block footer %}
-    <!-- Footer links -->
-    <a href="#">Mentions légales</a>
-    <a href="#">Politique de confidentialité</a>
-    <a href="#">Gestion des cookies</a>
-    
+    {% include "footer.html.twig" %}
 {% endblock %}

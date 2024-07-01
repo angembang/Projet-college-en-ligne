@@ -1,1 +1,14 @@
-<h2>error page</h2>
+{% extends "layout.html.twig" %}
+
+{% block header %}
+    {% include "header.html.twig" %}
+{% endblock %}
+
+{% block main %}
+    <h2>Erreur 404</h2>
+    <p>Page non trouvé</p>
+{% endblock %}
+
+{% block footer %}
+    {% include "footer.html.twig" %}
+{% endblock %}
