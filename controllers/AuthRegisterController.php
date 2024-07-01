@@ -106,60 +106,62 @@ class AuthRegisterController extends AbstractController
     {
         try {
             if ($_SERVER["REQUEST_METHOD"] === "POST") {
-                $requiredFields = ["firstName", "lastName", "email", "password", "confirmPassword"];
-                foreach ($requiredFields as $field) {
-                    if (isset($_POST[$field])) {
-                        $tokenManager = new CSRFTokenManager();
-                        if (isset($_POST["csrf-token"]) || !$tokenManager->validateCSRFToken($_POST["csrf-token"])) {
-                            // Check if passwords match
-                            if ($_POST["password"] === $_POST["confirmPassword"]) {
-                                //Validate password against password pattern regex
-                                $passwordRegex = '/^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*()-_=+{};:,<.>]).{8,}$/';
-                                if (preg_match($passwordRegex, $_POST["password"])) {
-                                    // Instantiate all users and Check if user with provided email already exists
-                                    $principalManager = new PrincipalManager();
-                                    $principal = $principalManager->findPrincipalByEmail($_POST["email"]);
+                if((isset($_POST["firstName"]) && !empty($_POST["firstName"])) &&
+                (isset($_POST["lastName"]) && !empty($_POST["lastName"])) &&
+                (isset($_POST["email"]) && !empty($_POST["email"])) &&
+                (isset($_POST["password"]) && !empty($_POST["password"])) &&
+                (isset($_POST["confirmPassword"]) && !empty($_POST["firstName"]))) {
+                    $tokenManager = new CSRFTokenManager();
+                    if (isset($_POST["csrf-token"]) || !$tokenManager->validateCSRFToken($_POST["csrf-token"])) {
+                        // Check if passwords match
+                        if ($_POST["password"] === $_POST["confirmPassword"]) {
+                            //Validate password against password pattern regex
+                            $passwordRegex = '/^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*()-_=+{};:,<.>]).{8,}$/';
+                            if (preg_match($passwordRegex, $_POST["password"])) {
+                                // Instantiate all users and Check if user with provided email already exists
+                                $principalManager = new PrincipalManager();
+                                $principal = $principalManager->findPrincipalByEmail($_POST["email"]);
                                     
-                                    $teacherManager = new TeacherManager();
-                                    $teacher = $teacherManager->findTeacherByEmail($_POST["email"]);
+                                $teacherManager = new TeacherManager();
+                                $teacher = $teacherManager->findTeacherByEmail($_POST["email"]);
                                     
-                                    $teacherReferentManager = new TeacherReferentManager();
-                                    $teacherReferent = $teacherReferentManager->findTeacherReferentByEmail($_POST["email"]);
+                                $teacherReferentManager = new TeacherReferentManager();
+                                $teacherReferent = $teacherReferentManager->findTeacherReferentByEmail($_POST["email"]);
                                     
-                                    $collegianManager = new CollegianManager();
-                                    $collegian = $collegianManager->findCollegianByEmail($_POST["email"]);
+                                $collegianManager = new CollegianManager();
+                                $collegian = $collegianManager->findCollegianByEmail($_POST["email"]);
                                     
-                                    if(($principal === null) && 
-                                    ($teacher === null) && 
-                                    ($teacherReferent === null) &&
-                                    ($collegian === null)) {
-                                        // Check user role and proceed accordingly
-                                        if (isset($_POST["idRole"])) {
-                                            $idRole = $_POST["idRole"];
-                                            $roleManager = new RoleManager();
-                                            $role = $roleManager->getRoleById($idRole);
-                                            $roleName = $role->getName();
+                                if(($principal === null) && 
+                                ($teacher === null) && 
+                                ($teacherReferent === null) &&
+                                ($collegian === null)) {
+                                    // Check user role and proceed accordingly
+                                    if (isset($_POST["idRole"])) {
+                                        $idRole = $_POST["idRole"];
+                                        $roleManager = new RoleManager();
+                                        $role = $roleManager->getRoleById($idRole);
+                                        $roleName = $role->getName();
                                         
-                                            switch ($roleName) {
-                                                case "Principal":
-                                                    // Retrieve and sanitize input data
-                                                    $cleanedFormData = $this->cleanFormData($_POST);
-                                                    // Hash the password
-                                                    $hashedPassword = password_hash($cleanedFormData
-                                                    ["password"], PASSWORD_BCRYPT);
-                                                    // Create a new objet principal with provided data
-                                                    $principal = new Principal(null, $cleanedFormData
-                                                    ["firstName"], $cleanedFormData["lastName"], 
-                                                    $cleanedFormData["email"], $hashedPassword, $idRole);
-                                                    $createdPrincipal = $principalManager->
-                                                    createPrincipal($principal);
-                                                    // Check if the principal is create
-                                                    if($createdPrincipal) {
-                                                        $this->renderJson(["success" => true, "message" => "Utilisateur enregistrer avec succes"]);
-                                                    } 
-                                                    $this->renderJson(["success" => false, "message" => "Une erreur s'est produite lors 
-                                                    de la création de votre compte."]);
-                                                    break;
+                                        switch ($roleName) {
+                                            case "Principal":
+                                                // Retrieve and sanitize input data
+                                                $cleanedFormData = $this->cleanFormData($_POST);
+                                                // Hash the password
+                                                $hashedPassword = password_hash($cleanedFormData
+                                                ["password"], PASSWORD_BCRYPT);
+                                                // Create a new objet principal with provided data
+                                                $principal = new Principal(null, $cleanedFormData
+                                                ["firstName"], $cleanedFormData["lastName"], 
+                                                $cleanedFormData["email"], $hashedPassword, $idRole);
+                                                $createdPrincipal = $principalManager->
+                                                createPrincipal($principal);
+                                                // Check if the principal is create
+                                                if($createdPrincipal) {
+                                                    $this->renderJson(["success" => true, "message" => "Utilisateur enregistrer avec succes"]);
+                                                } 
+                                                $this->renderJson(["success" => false, "message" => "Une erreur s'est produite lors 
+                                                de la création de votre compte."]);
+                                                break;
                                             
                                             case "Professeur":
                                                 
@@ -369,7 +371,7 @@ class AuthRegisterController extends AbstractController
                 $this->renderJson(["success" => false, "message" => "Veuillez remplir tous les champs"]);
                 return;
                 
-            }    
+               
         }
         $this->renderJson(["success" => false, "message" => "Le formulaire n'est pas soumis par la méthode POST"]);
         return;

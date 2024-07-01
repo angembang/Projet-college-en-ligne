@@ -19,7 +19,8 @@ class AuthLoginController extends AbstractController
     {
         if($_SERVER["REQUEST_METHOD"] === "POST") {
             // Check if required fields are set
-            if(isset($_POST["email"]) && isset($_POST["password"])) {
+            if((isset($_POST["email"]) && !empty($_POST["email"])) &&
+            (isset($_POST["password"]) && !empty($_POST["email"]))) {
                 
                 /*
                  * Validate the CSRF token
