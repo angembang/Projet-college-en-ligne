@@ -128,69 +128,62 @@ class LessonController extends AbstractController
         // Retrieve the actual day of the week
         $weekDay = /*$this->getCurrentWeekDay();*/ "Lundi";
 
-        // Instantiate the ClasseManager to retrieve all classes
+        // Retrieve the class ID of the logged-in collegian
+        $loggedInCollegianId = $_SESSION["user"]; 
+        $collegianManager = new CollegianManager();
+        $collegian = $collegianManager->findCollegianById($loggedInCollegianId);
+        $classId = $collegian->getIdClass();
+
+        // Instantiate the ClasseManager to retrieve the class
         $classeManager = new ClasseManager();
-    
-        // Retrieve all classes
-        $classes = $classeManager->findAll();
-    
-        // Check if classes were found
-        if ($classes !== null) {
-        
-            $lessonsByClass = [];
-        
-            foreach ($classes as $classe) {
-                // Get class level for each class
-                $classLevel = /*$classe->getLevel()*/ "5ème";
-            
-                // Instantiate the LessonManager class to retrieve lessons for the current day by class level
-                $lessonManager = new LessonManager();
-            
-                // Retrieve lessons for the current day by class level
-                $lessonList = $lessonManager->findLessonsByClassLevelAndWeekDay($classLevel, $weekDay);
-            
-                // Foreach lesson, retrieve the correspondant time tabe
-                foreach($lessonList as $lesson) {
-                    $lessonIdTimeTable = $lesson->getIdTimeTable();
-                    $timeTableManager = new TimeTableManager();
-                    $timeTable = $timeTableManager->findTimeTableById($lessonIdTimeTable);
-                     
-                    if ($timeTable) {
-                        $startTime = strtotime($timeTable->getStartTime());
-                        $currentTime = time();
-                        $remainsSecondTime = $startTime - $currentTime; // Difference in seconds
-                        $hours = floor($remainsSecondTime / 3600); // Calculate remaining hours
-                        $minutes = floor(($remainsSecondTime % 3600) / 60); // Calculate remaining minutes
-                        $seconds = $remainsSecondTime % 60; // Calculate remaining seconds
+        $classe = $classeManager->findClasseById($classId);
 
-                        // Format the remaining time
-                        $remainsTimeFormatted = sprintf('%dh %02dm %02ds', $hours, $minutes, $seconds);
+        // Check if class was found
+        if ($classe !== null) {
+            $classLevel = $classe->getLevel();
 
-                        $remainsTimeByLesson[$lesson->getId()] = $remainsTimeFormatted;
-                        
-                        
-                    }
-                     
+            // Instantiate the LessonManager to retrieve lessons for the current day by class level
+            $lessonManager = new LessonManager();
+            $lessonList = $lessonManager->findLessonsByClassLevelAndWeekDay($classLevel, $weekDay);
+
+            $remainsTimeByLesson = []; // Initialize the array
+
+            // Foreach lesson, retrieve the corresponding timetable
+            foreach ($lessonList as $lesson) {
+                $lessonIdTimeTable = $lesson->getIdTimeTable();
+                $timeTableManager = new TimeTableManager();
+                $timeTable = $timeTableManager->findTimeTableById($lessonIdTimeTable);
+
+                if ($timeTable) {
+                    $startTime = strtotime($timeTable->getStartTime());
+                    $currentTime = time();
+                    $remainsSecondTime = $startTime - $currentTime; // Difference in seconds
+                    $hours = floor($remainsSecondTime / 3600); // Calculate remaining hours
+                    $minutes = floor(($remainsSecondTime % 3600) / 60); // Calculate remaining minutes
+                    $seconds = $remainsSecondTime % 60; // Calculate remaining seconds
+
+                    // Format the remaining time
+                    $remainsTimeFormatted = sprintf('%dh %02dm %02ds', $hours, $minutes, $seconds);
+
+                    $remainsTimeByLesson[$lesson->getId()] = $remainsTimeFormatted;
                 }
-                // Store lessons in an array indexed by class level
-                $lessonsByClass[$classLevel] = $lessonList;
             }
-            
-            
-        
+
+            // Store lessons in an array indexed by class level
+            $lessonsByClass[$classLevel] = $lessonList;
+
             // Renders the lessons in a view using the render method
             $this->render("lesson.html.twig", [
                 "lessonsByClass" => $lessonsByClass,
                 "remainsTimeByLesson" => $remainsTimeByLesson
-                ]);
-                // Return the lessons array
-                return $lessonsByClass;
+            ]);
 
-            } else {
+            // Return the lessons array
+            return $lessonsByClass;
+        } else {
             // Return null if no classes were found
             return null;
         }
-    
         
     }
     

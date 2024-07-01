@@ -293,7 +293,7 @@ close:focus,
 /************** style for lesson page ******************************/
 .home-page {
     background-color: #1F203E;
-    height: auto;
+    min-height: 90vh;
     flex-direction: column;
     align-items: center;
     justify-content: center;
