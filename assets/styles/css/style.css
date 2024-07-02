@@ -209,7 +209,8 @@ main {
 
 
 /**************************** style for register form **************/
-.register-form fieldset {
+.register-form fieldset, 
+.edit-collegian fieldset {
     flex-direction: column;
     border: none;    
 }
@@ -217,8 +218,9 @@ main {
 .register-form select, 
 .addLesson-page select, 
 .course-form-page select, 
-.update-course-form-page select {
-    width: 230px;
+.update-course-form-page select, 
+.edit-collegian select {
+    width: 200px;
     padding: 1rem;
     background-color: #D9D9D9;
     border: 1px solid #1F203E; 
@@ -254,7 +256,8 @@ main {
 /****************** style for login and register page *****************/
 .login-form, 
 .register-form, 
-.update-teacher-page {
+.update-teacher-page, 
+.edit-collegian {
     background-image: url("../../../images/background-image.png");
     background-size: cover;
     background-position: center;
@@ -270,12 +273,17 @@ main {
     font-size: 2.5rem;
     text-align: center;
 }
+.edit-collegian h2 {
+    color: #1F203E;
+    font-size: 2rem;   
+}
 .login-form form, 
 .register-form form, 
 .update-teacher-page form, 
 .addLesson-page form, 
 .course-form-page form, 
-.update-course-form-page form {
+.update-course-form-page form, 
+.edit-collegian form {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -286,14 +294,16 @@ main {
 .update-teacher-page fieldset, 
 .addLesson-page fieldset, 
 .course-form-page form fieldset, 
-.update-course-form-page form fieldset {
+.update-course-form-page form fieldset, 
+.edit-collegian form fieldset {
     display: flex;
     flex-direction: column;
     border: none;
 }
 .login-form fieldset label, 
 .register-form fieldset label, 
-.update-teacher-page fieldset label {
+.update-teacher-page fieldset label, 
+.edit-collegian fieldset label {
     display: none;
 }
 .login-form input, 
@@ -302,7 +312,9 @@ main {
 .addLesson-page input, 
 .course-form-page input, 
 .course-form-page textarea, 
-.update-course-form-page textarea {
+.update-course-form-page textarea, 
+.edit-collegian textarea, 
+.edit-collegian input {
     padding: 1rem;
     background-color: #D9D9D9;
     border: 1px solid #1F203E;
@@ -313,7 +325,8 @@ main {
 .update-teacher-page button, 
 .addLesson-page button, 
 .course-form-page form button, 
-.update-course-form-page button {
+.update-course-form-page button, 
+.edit-collegian button {
     background-color: #1F203E;
     color: white;
     width: 150px;
@@ -792,6 +805,9 @@ close:focus,
 .teacher-courses-page .course-actions a {
     color: white;   
 }
+.editCourse button {
+    margin-bottom: 1rem
+}
 /*****************************************************************/
 
 
@@ -800,10 +816,13 @@ close:focus,
 
 
 /************************** style for error page *****************/
-.error-page {
+.error-page, .about-page {
     display: flex;
     flex-direction: column;
     align-items: center;
+    background-color: #1F203E;
+    color: white;
+    min-height: 90vh;
 }
 /*****************************************************************/
 

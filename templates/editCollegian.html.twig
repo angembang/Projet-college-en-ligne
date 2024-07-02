@@ -5,7 +5,8 @@
 {% endblock %}
 
 {% block main %}
-<h2>Edit Collegian</h2>
+<section class="edit-collegian">
+<h2>Mise à jour du collégien</h2>
 <form method="POST" action="index.php?route=checkUpdateCollegian">
     <input type="hidden" name="id" value="{{ collegian.id }}">
 
@@ -67,6 +68,7 @@
         <button type="submit">Mettre à jour</button>
     </fieldset>
 </form>
+</section>
 {% endblock %}
 
 {% block footer %}
