@@ -1,18 +1,11 @@
 {% extends "layout.html.twig" %}
 
-{%block head %}
-    <!-- Include parent block content -->
-    {{ parent() }}
-    <!-- Include additional stylesheet -->
-    <link rel="stylesheet" type="text/css" href="./assets/styles/css/home.css">    
-{% endblock %}
-
-
 {% block header %}
     {% include "header.html.twig" %}
 {% endblock %}
 
 {% block main %}
+<section class="course-form-page">
     <h1>Modifier le cours</h1>
     <!-- Modal -->
         <div id="registerMessageModal" class="registerModal">
@@ -41,11 +34,11 @@
             <label for="subject">Sujet :</label>
             <input type="text" id="subject" name="subject" value="{{ course.subject }}" required>
         </fieldset>
-        <fieldset>
+        <fieldset class="big">
             <label for="summary">Résumé :</label>
             <textarea id="summary" name="summary" required>{{ course.summary }}</textarea>
         </fieldset>
-        <fieldset>
+        <fieldset class="big">
             <label for="content">Contenu :</label>
             <textarea id="content" name="content" charset="utf-8" required>{{ course.content }}</textarea>
         </fieldset>
@@ -78,10 +71,10 @@
             <label for="link">Lien :</label>
             <input type="text" id="link" name="link" value="{{ course.link }}">
         </fieldset>
-        <button type="submit">Modifier le cours</button>
+        <button type="submit">Enregistrer</button>
     </form>
     
-    <script type="module" src="./assets/js/main.js"></script> 
+</section>
 {% endblock %}
 
 {% block footer %}

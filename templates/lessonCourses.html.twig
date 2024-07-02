@@ -1,7 +1,7 @@
 {% extends "layout.html.twig" %}
 
 {% block header %}
-    {% include "header.html.twig" %}
+    {% include "headerCourses.html.twig" %}
 {% endblock %}
 
 
@@ -11,7 +11,7 @@
         <!-- Container for search form and logout button -->
         <div class="search-logout-container">
             <!-- Form for searching course by keyword -->
-            <form action="index.php?route=search-course-keyword" method="GET">
+            <form action="index.php?route=search-course-keyword" id="search-desktop" method="GET">
                 <input type="hidden" name="route" value="search-course-keyword">
                 <input type="search" name="keyword" id="keyword" placeholder="Rechercher cours par mot-clé">
                 <button type="submit"><i class="fas fa-search"></i></button>
@@ -23,8 +23,8 @@
                 <i class="fa-solid fa-power-off"></i>
             </a>
         </div>
-    
-        <section class="course-title">
+
+            <section class="course-title">
             <!-- Title of the lesson -->
             <h2>{{ lessonName }}</h2>
         
@@ -74,8 +74,6 @@
     </div>
 
 {% endblock %}
-
-
 {% block footer %}
    {% include "footer.html.twig" %}
 {% endblock %}

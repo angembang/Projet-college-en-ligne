@@ -177,6 +177,10 @@ class Router
                     $pageController->about();    
                     break;
                     
+                case "legacy-policy":
+                    $pageController->legacyPolicy();    
+                    break;
+                    
                 case "error":
                     $pageController->error();    
                     break;

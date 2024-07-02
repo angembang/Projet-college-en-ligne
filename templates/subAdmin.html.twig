@@ -5,19 +5,26 @@
 {% endblock %}
 
 {% block main %}
+<section class="sub-admin-home">
     {% for class in classes %}
-        <h2>{{ class.classLevel }}</h2>
-        {% for lesson in class.lessons %}
-        <ul>
-            <li>
-                <h3>{{ lesson.lessonName }}</h3>
-            </li>
-        </ul>
-        <p><a href="index.php?route=ajouter-cours">Ajouter</a></p>
-        <!-- Link for showing all courses of the lesson -->
-        <p><a href="index.php?route=teacher-courses&lesson_id={{ lesson.lessonId }}">Voir</a></p>
-        {% endfor %}
+        <div class="class-section">
+            <section class="class-grid">
+                <h2 class="class-level">{{ class.classLevel }}</h2>
+                <h3 class="course-title">Cours</h3>
+                <div class="links">
+                    <a href="index.php?route=ajouter-cours">Ajouter</a>
+                </div>
+                <ul class="lesson-list">
+                    {% for lesson in class.lessons %}
+                    <li>
+                        <h4><a href="index.php?route=teacher-courses&lesson_id={{ lesson.lessonId }}">{{ lesson.lessonName }}</a></h4>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </section>
+        </div>
     {% endfor %}
+</section>
 {% endblock %}
 
 {% block footer %}

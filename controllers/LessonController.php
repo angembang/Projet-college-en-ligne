@@ -43,12 +43,12 @@ class LessonController extends AbstractController
             // Check if the form is submitted via POST method
             if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 // Check if all required fields are present and not empty
-                if((isset($_POST["name"])) && 
-                (isset($_POST["classLevel"])) && 
-                (isset($_POST["idTeacher"])) && 
-                (isset($_POST["dayOfWeek"])) && 
-                (isset($_POST["startTime"])) && 
-                (isset($_POST["endTime"]))) {
+                if((isset($_POST["name"]) && !empty($_POST["name"])) &&
+                (isset($_POST["classLevel"]) && !empty($_POST["classLevel"])) &&
+                (isset($_POST["idTeacher"]) && !empty($_POST["idTeacher"])) && 
+                (isset($_POST["dayOfWeek"]) && !empty($_POST["dayOfWeek"])) && 
+                (isset($_POST["startTime"]) && !empty($_POST["startTime"])) && 
+                (isset($_POST["endTime"]) && !empty($_POST["endTime"]))) {
                     // Retrieve and sanitize input data
                     $lessonName = htmlspecialchars($_POST["name"]);
                     $classLevel = htmlspecialchars($_POST["classLevel"]);
@@ -125,30 +125,54 @@ class LessonController extends AbstractController
      */
     public function lessonsListOfTheDay(): ?array
     {
+        // Check if the user is logged in
+        if (!isset($_SESSION["user"])) {
+            // Redirect to the login page
+            header("Location: index.php?route=connexion");
+            exit();
+        }
+
+        // Retrieve the collegian ID from the session
+        $loggedInCollegianId = $_SESSION["user"];
+    
+        // Validate that the collegian ID is an integer
+        if (!is_int($loggedInCollegianId)) {
+            // Redirect to the home page 
+            header("Location: index.php?route=home");
+            exit();
+        }
+
         // Retrieve the actual day of the week
         $weekDay = /*$this->getCurrentWeekDay();*/ "Lundi";
 
-        // Retrieve the class ID of the logged-in collegian
-        $loggedInCollegianId = $_SESSION["user"]; 
+        // Retrieve the collegian by their ID
         $collegianManager = new CollegianManager();
         $collegian = $collegianManager->findCollegianById($loggedInCollegianId);
+    
+        if ($collegian === null) {
+            // Handle the case where the collegian is not found
+            header("Location: index.php?route=home");
+            exit();
+        }
+    
         $classId = $collegian->getIdClass();
 
-        // Instantiate the ClasseManager to retrieve the class
+        // Retrieve the class information by the class ID
         $classeManager = new ClasseManager();
         $classe = $classeManager->findClasseById($classId);
 
-        // Check if class was found
+        // Check if the class was found
         if ($classe !== null) {
             $classLevel = $classe->getLevel();
 
-            // Instantiate the LessonManager to retrieve lessons for the current day by class level
+            // Retrieve the lessons for the current day by class level
             $lessonManager = new LessonManager();
             $lessonList = $lessonManager->findLessonsByClassLevelAndWeekDay($classLevel, $weekDay);
 
             $remainsTimeByLesson = []; // Initialize the array
+            $lessonsByClass = []; // Initialize the array
 
-            // Foreach lesson, retrieve the corresponding timetable
+            // For each lesson, retrieve the corresponding timetable
             foreach ($lessonList as $lesson) {
                 $lessonIdTimeTable = $lesson->getIdTimeTable();
                 $timeTableManager = new TimeTableManager();
@@ -172,7 +196,7 @@ class LessonController extends AbstractController
             // Store lessons in an array indexed by class level
             $lessonsByClass[$classLevel] = $lessonList;
 
-            // Renders the lessons in a view using the render method
+            // Render the lessons in a view using the render method
             $this->render("lesson.html.twig", [
                 "lessonsByClass" => $lessonsByClass,
                 "remainsTimeByLesson" => $remainsTimeByLesson
@@ -450,11 +474,11 @@ class LessonController extends AbstractController
                 ]);
             } else {
                 //No courses were found for the lesson
-                echo "error";
+                $this->render("error.html.twig", []);
             }
         } else {
             // Handle case where the lesson was not found
-            echo "error";
+            $this->render("error.html.twig", []);
         }
     }
     

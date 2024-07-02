@@ -1,7 +1,7 @@
 {% extends "layout.html.twig" %}
 
 {% block header %}
-    {% include "header.html.twig" %}
+    {% include "headerCourses.html.twig" %}
 {% endblock %}
 
 
@@ -26,13 +26,13 @@
                 <i class="fa-solid fa-power-off"></i>
             </a>
         </div>
-
         <!-- Title for the current day's lessons -->
         <h2 class="lesson-title">Cours de la journée</h2>
+        <section class="desktop-home-page">
         <!-- Loop through lessons grouped by class level -->
         {% for classLevel, lessons in lessonsByClass %}
             <!-- Display class level -->
-            <h3>{{ classLevel }}</h3>
+            <h3 class="hidden">{{ classLevel }}</h3>
             <!-- List of lessons for the current class level -->
             <ul class="courses-of-day">
                 {% for lesson in lessons %}
@@ -49,6 +49,7 @@
                 {% endfor %}
             </ul>
         {% endfor %}
+        </section>
     </div>
 
 {% endblock %}

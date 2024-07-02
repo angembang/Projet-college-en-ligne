@@ -8,9 +8,16 @@
 
 <section class="addLesson-page">   
     <h2>Formulaire d'ajout des cours</h2>
+    <!-- Modal -->
+        <div id="registerMessageModal" class="registerModal">
+            <div class="modal-content">
+                <span class="registerClose" onclick="closeModal()">&times;</span>
+                <p id="registerModalContent"></p>
+            </div>
+        </div>
 
     <!-- Add lesson form -->
-    <form action="index.php?route=checkAddLesson" method="post">
+    <form action="index.php?route=checkAddLesson" id="lesson-form" method="post">
         <fieldset>
             <!-- The lesson name field -->
             <fieldset>

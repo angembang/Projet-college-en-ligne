@@ -8,6 +8,7 @@ import {completionSearchCoursesByLessonName} from "./modules/searchLessonCourses
 import {registerLogin} from "./modules/registerLogin.js";
 import {updateCourseModal} from "./modules/updateCoursesModal.js";
 import {showRegisterError} from "./modules/register.js";
+//import {addLessonModal} from "./modules/lesson.js";
 
 
 
@@ -26,11 +27,13 @@ document.addEventListener("DOMContentLoaded", () => {
             
         });
     });
-    
+     
+    // Call the function to display add lesson form form error
+    //addLessonModal();
     
     // Call the function to update the remaining time for lesson links
     updateRemainingTime();
-    
+   
     // Call the function for menu burger
     burgerMenu();
     

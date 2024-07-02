@@ -513,4 +513,13 @@ class PageController extends AbstractController
     {
         $this->render("error.html.twig", []);
     }
+    
+    
+    /**
+     * Display the legacy policy page
+     * 
+     */ 
+    public function legacyPolicy() {
+        $this->render("legacyPolicy.html.twig", []);
+    }
 }
