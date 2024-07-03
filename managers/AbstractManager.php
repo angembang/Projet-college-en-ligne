@@ -18,14 +18,14 @@ abstract class AbstractManager
     public function __construct()
     {
         // Construct the connection string
-        $connectionString = "mysql:host=" . $_ENV["DB_HOST"] .
-            ";port=3306; charset=" . $_ENV["DB_CHARSET"] . ";dbname=" . $_ENV["DB_NAME"];
+        $connectionString = "mysql:host=" . getenv("DB_HOST") .
+            ";port=3306; charset=" . getenv("DB_CHARSET") . ";dbname=" . getenv("DB_NAME");
         
         // Initialize the PDO instance for database connection
         $this->db = new PDO(
             $connectionString,
-            $_ENV["DB_USER"],
-            $_ENV["DB_PASSWORD"]
+            getenv("DB_USER"),
+            getenv("DB_PASSWORD")
         );
         
         // Set the PDO connection to use UTF-8 (utf8mb4 for full Unicode support)
